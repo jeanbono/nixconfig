@@ -1,0 +1,13 @@
+{ pkgs, ... }:
+
+{
+  imports = [ ./plasma-wayland.nix ];
+
+  fonts.packages = with pkgs; [
+    nerd-fonts.symbols-only
+    nerd-fonts.fira-code
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+  ];
+}
