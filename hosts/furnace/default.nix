@@ -34,11 +34,6 @@ in
 
   home-manager.users.pierre = import ../../home/furnace/pierre.nix;
 
-  # Nettoyage des doublons/options déjà gérées dans les modules
-  # (networkmanager, pipewire, etc. sont maintenant dans modules/system/core)
-
-  services.logrotate.checkConfig = false;
-
   programs = {
     _1password.enable = true;
     _1password-gui.enable = true;
