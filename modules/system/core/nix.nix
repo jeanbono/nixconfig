@@ -1,14 +1,21 @@
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
+let
+  cfg = config.modules.system.nix;
+in
 {
-  nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-    auto-optimise-store = true;
-  };
+  options.modules.system.nix.enable = lib.mkEnableOption "Nix flakes, auto-GC and store optimisation";
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
+  config = lib.mkIf cfg.enable {
+    nix.settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      auto-optimise-store = true;
+    };
+
+    nix.gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
   };
 }

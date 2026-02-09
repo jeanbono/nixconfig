@@ -26,6 +26,9 @@
           # NUR overlay
           ({ ... }: { nixpkgs.overlays = [ inputs.nur.overlays.default ]; })
 
+          # Tous les modules système (chacun activable via modules.system.<name>.enable)
+          ./modules/system
+
           ./hosts/${hostName}
         ];
       };

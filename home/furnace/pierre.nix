@@ -4,11 +4,16 @@ let
   onePassPath = "~/.1password/agent.sock";
 in {
   imports = [
-    ../../modules/home/core.nix
-    ../../modules/home/zsh.nix
-    ../../modules/home/kitty.nix
-    ../../modules/home/plasma.nix
+    ../../modules/home
   ];
+
+  # --- Modules home composables ---
+  modules.home = {
+    core.enable = true;
+    zsh.enable = true;
+    kitty.enable = true;
+    plasma.enable = true;
+  };
 
   home.username = "pierre";
   home.homeDirectory = "/home/pierre";

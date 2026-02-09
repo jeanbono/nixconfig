@@ -6,14 +6,19 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-
-    ../../modules/system/core
-    ../../modules/system/home-manager
-    ../../modules/system/desktop
-    ../../modules/system/gpu
-    ../../modules/system/gaming
-    ../../modules/system/shell
   ];
+
+  # --- Modules système composables ---
+  modules.system = {
+    core.enable = true;
+    nix.enable = true;
+    plasma.enable = true;
+    fonts.enable = true;
+    nvidia.enable = true;
+    gaming.enable = true;
+    zsh.enable = true;
+    kitty.enable = true;
+  };
 
   networking.hostName = "furnace";
   time.timeZone = "Europe/Paris";
