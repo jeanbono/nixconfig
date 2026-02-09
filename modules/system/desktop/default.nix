@@ -4,7 +4,7 @@ let
   cfg = config.modules.system.fonts;
 in
 {
-  imports = [ ./plasma-wayland.nix ];
+  imports = import ../../../lib.nix ./.;
 
   options.modules.system.fonts.enable = lib.mkEnableOption "Polices (Nerd Fonts, Noto)";
 

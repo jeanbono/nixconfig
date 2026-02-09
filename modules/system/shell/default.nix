@@ -1,6 +1,3 @@
 {
-  imports = [
-    ./zsh.nix
-    ./kitty.nix
-  ];
+  imports = import ../../../lib.nix ./.;
 }

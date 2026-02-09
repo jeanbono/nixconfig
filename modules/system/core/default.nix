@@ -4,9 +4,7 @@ let
   cfg = config.modules.system.core;
 in
 {
-  imports = [
-    ./nix.nix
-  ];
+  imports = import ../../../lib.nix ./.;
 
   options.modules.system.core.enable = lib.mkEnableOption "Core system config (locale FR, réseau, audio, SSH, paquets de base)";
 

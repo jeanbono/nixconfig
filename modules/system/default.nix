@@ -1,10 +1,3 @@
 {
-  imports = [
-    ./core
-    ./desktop
-    ./gpu
-    ./gaming
-    ./home-manager
-    ./shell
-  ];
+  imports = import ../../lib.nix ./.;
 }

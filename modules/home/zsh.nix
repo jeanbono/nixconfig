@@ -14,7 +14,8 @@ in
       syntaxHighlighting.enable = true;
 
       initContent = ''
-        source ~/.nixconfig/modules/home/prompt.zsh
+        autoload -U colors && colors
+        PROMPT=$'%F{221}%n%f %F{white}in%f %F{75}%1~%f\n \u203A '
         export EDITOR=vim
       '';
     };

@@ -1,3 +1,3 @@
 {
-  imports = [ ./steam.nix ];
+  imports = import ../../../lib.nix ./.;
 }

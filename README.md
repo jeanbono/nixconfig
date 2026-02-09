@@ -4,12 +4,15 @@ Configuration NixOS modulaire basée sur les **Nix Flakes** et **Home Manager**.
 
 Chaque fonctionnalité est un module activable via une option `enable`, ce qui permet de **composer** chaque host à la carte.
 
+Les modules sont **découverts automatiquement** : il suffit de déposer un fichier `.nix` ou un dossier dans `modules/system/` ou `modules/home/` pour qu'il soit importé (via `lib.nix`).
+
 ## Structure du projet
 
 ```
 .
 ├── flake.nix                  # Point d'entrée — mkHost importe tous les modules
 ├── flake.lock
+├── lib.nix                    # importDir — auto-discovery des modules
 ├── hosts/
 │   └── furnace/               # Config spécifique au host "furnace"
 │       ├── default.nix        #   Active les modules + config machine
@@ -18,22 +21,18 @@ Chaque fonctionnalité est un module activable via une option `enable`, ce qui p
 │   └── furnace/
 │       └── pierre.nix         # Config Home Manager de l'utilisateur pierre
 └── modules/
-    ├── system/                # Modules NixOS (niveau système)
-    │   ├── default.nix        #   Agrégateur — importe tous les sous-modules
-    │   ├── core/              #   modules.system.core — locale FR, réseau, audio, SSH
-    │   │   └── nix.nix        #   modules.system.nix — flakes, GC auto, store
-    │   ├── desktop/           #   modules.system.plasma — Plasma 6 + SDDM Wayland
-    │   │   └── ...            #   modules.system.fonts — Nerd Fonts, Noto
-    │   ├── gpu/               #   modules.system.nvidia — pilote NVIDIA
-    │   ├── gaming/            #   modules.system.gaming — Steam, Proton, Wine
+    ├── system/                # Modules NixOS (auto-discovery)
+    │   ├── core/              #   modules.system.core + modules.system.nix
+    │   ├── desktop/           #   modules.system.plasma + modules.system.fonts
+    │   ├── gpu/               #   modules.system.nvidia
+    │   ├── gaming/            #   modules.system.gaming
     │   ├── home-manager/      #   Intégration Home Manager (toujours actif)
-    │   └── shell/             #   modules.system.zsh / modules.system.kitty
-    └── home/                  # Modules Home Manager (niveau utilisateur)
-        ├── default.nix        #   Agrégateur — importe tous les sous-modules
-        ├── core.nix           #   modules.home.core — CLI tools, variables Wayland
-        ├── zsh.nix            #   modules.home.zsh — autosuggestion, prompt custom
-        ├── kitty.nix          #   modules.home.kitty — thème sombre, opacité
-        └── plasma.nix         #   modules.home.plasma — placeholder
+    │   └── shell/             #   modules.system.zsh + modules.system.kitty
+    └── home/                  # Modules Home Manager (auto-discovery)
+        ├── core.nix           #   modules.home.core
+        ├── zsh.nix            #   modules.home.zsh
+        ├── kitty.nix          #   modules.home.kitty
+        └── plasma.nix         #   modules.home.plasma
 ```
 
 ## Modules disponibles
@@ -121,3 +120,12 @@ nix flake update
    };
    ```
 5. Rebuild : `sudo nixos-rebuild switch --flake .#<nom>`
+
+### Ajouter un nouveau module
+
+Il suffit de créer un fichier `.nix` (ou un dossier avec `default.nix`) dans le répertoire concerné :
+
+- **Système** : `modules/system/<catégorie>/mon-module.nix`
+- **Home** : `modules/home/mon-module.nix`
+
+Le module sera automatiquement importé grâce à `lib.nix`. Il ne reste qu'à l'activer dans le host avec `modules.<system|home>.<nom>.enable = true;`.

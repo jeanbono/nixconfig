@@ -1,5 +1,3 @@
 {
-  imports = [
-    ./nvidia.nix
-  ];
+  imports = import ../../../lib.nix ./.;
 }
