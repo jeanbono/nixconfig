@@ -1,20 +1,10 @@
-# Scanne un répertoire et retourne la liste des modules à importer :
-#   - fichiers .nix (sauf default.nix)
-#   - sous-dossiers (importés via leur default.nix)
+# Importe tous les fichiers .nix d'un dossier (sauf default.nix).
 dir:
 let
   entries = builtins.readDir dir;
-  names = builtins.attrNames entries;
-  hasSuffix = suffix: s:
-    let
-      sLen = builtins.stringLength s;
-      suffLen = builtins.stringLength suffix;
-    in
-      sLen >= suffLen && builtins.substring (sLen - suffLen) suffLen s == suffix;
   isModule = name:
-    let type = entries.${name}; in
-    (type == "directory") ||
-    (type == "regular" && name != "default.nix" && hasSuffix ".nix" name);
-  modulePaths = builtins.filter isModule names;
+    entries.${name} == "regular"
+    && name != "default.nix"
+    && builtins.match ".*\.nix" name != null;
 in
-  map (name: dir + "/${name}") modulePaths
+  map (name: dir + "/${name}") (builtins.filter isModule (builtins.attrNames entries))

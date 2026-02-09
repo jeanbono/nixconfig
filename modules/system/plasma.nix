@@ -4,7 +4,7 @@ let
   cfg = config.modules.system.plasma;
 in
 {
-  options.modules.system.plasma.enable = lib.mkEnableOption "KDE Plasma 6 + SDDM Wayland";
+  options.modules.system.plasma.enable = lib.mkEnableOption "KDE Plasma 6 + SDDM Wayland + polices";
 
   config = lib.mkIf cfg.enable {
     services.displayManager.sddm.enable = true;
@@ -17,5 +17,13 @@ in
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";
     };
+
+    fonts.packages = with pkgs; [
+      nerd-fonts.symbols-only
+      nerd-fonts.fira-code
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-color-emoji
+    ];
   };
 }

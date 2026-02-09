@@ -1,12 +1,25 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.home.kitty;
+  cfg = config.modules.home.shell;
 in
 {
-  options.modules.home.kitty.enable = lib.mkEnableOption "Terminal Kitty (thème sombre, opacité, padding)";
+  options.modules.home.shell.enable = lib.mkEnableOption "Zsh + Kitty (shell complet)";
 
   config = lib.mkIf cfg.enable {
+    programs.zsh = {
+      enable = true;
+      enableCompletion = true;
+      autosuggestion.enable = true;
+      syntaxHighlighting.enable = true;
+
+      initContent = ''
+        autoload -U colors && colors
+        PROMPT=$'%F{221}%n%f %F{white}in%f %F{75}%1~%f\n \u203A '
+        export EDITOR=vim
+      '';
+    };
+
     programs.kitty = {
       enable = true;
       settings = {

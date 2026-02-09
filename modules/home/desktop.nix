@@ -1,14 +1,13 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.home.core;
+  cfg = config.modules.home.desktop;
 in
 {
-  options.modules.home.core.enable = lib.mkEnableOption "Paquets CLI de base (ripgrep, fd, jq…) et variables Wayland";
+  options.modules.home.desktop.enable = lib.mkEnableOption "Paquets CLI de base et variables Wayland";
 
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-      git
       curl
       wget
       ripgrep

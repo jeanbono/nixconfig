@@ -10,14 +10,14 @@ in
 
   # --- Modules système composables ---
   modules.system = {
-    core.enable = true;
     nix.enable = true;
+    locale.enable = true;
+    network.enable = true;
+    audio.enable = true;
+    printing.enable = true;
     plasma.enable = true;
-    fonts.enable = true;
     nvidia.enable = true;
     gaming.enable = true;
-    zsh.enable = true;
-    kitty.enable = true;
   };
 
   networking.hostName = "furnace";
@@ -45,7 +45,13 @@ in
     java.enable = true;
   };
 
+  programs.zsh.enable = true;
+
   environment.systemPackages = with pkgs; [
+    vim
+    git
+    pciutils
+    usbutils
     jetbrains.idea
   ];
 
