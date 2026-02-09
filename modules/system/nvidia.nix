@@ -17,7 +17,7 @@ in
 
     hardware.nvidia = {
       package = config.boot.kernelPackages.nvidiaPackages.beta;
-      open = true; # Recommandé pour les cartes récentes (RTX 2000+)
+      open = false; # Recommandé pour les cartes récentes (RTX 2000+)
       modesetting.enable = true;
       nvidiaSettings = true;
       powerManagement.enable = false;
