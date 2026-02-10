@@ -25,5 +25,18 @@ in
       noto-fonts-cjk-sans
       noto-fonts-color-emoji
     ];
+
+    fonts.fontconfig = {
+      enable = true;
+      antialias = true;
+      hinting = {
+        enable = true;
+        style = "slight";
+      };
+      subpixel = {
+        rgba = "none";      # IMPORTANT pour Wayland
+        lcdfilter = "default";
+      };
+    };
   };
 }

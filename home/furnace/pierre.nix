@@ -10,9 +10,11 @@
     shell.enable = true;
     git.enable = true;
     ssh.enable = true;
-    browser.enable = true;
+    brave.enable = true;
     messaging.enable = true;
     desktop.enable = true;
+    dev.enable = true;
+    onepassword.enable = true;
   };
 
   home.username = "pierre";

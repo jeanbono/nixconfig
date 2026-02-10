@@ -30,14 +30,19 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
     │   ├── plasma.nix         #   modules.system.plasma
     │   ├── nvidia.nix         #   modules.system.nvidia
     │   ├── gaming.nix         #   modules.system.gaming
+    │   ├── onepassword.nix    #   modules.system.onepassword
+    │   ├── shell.nix          #   modules.system.shell
+    │   ├── dev.nix            #   modules.system.dev
     │   └── home-manager.nix   #   Intégration Home Manager (toujours actif)
     └── home/                  # Modules Home Manager (auto-discovery, structure plate)
         ├── shell.nix          #   modules.home.shell
         ├── git.nix            #   modules.home.git
         ├── ssh.nix            #   modules.home.ssh
-        ├── browser.nix        #   modules.home.browser
+        ├── brave.nix          #   modules.home.brave
         ├── messaging.nix      #   modules.home.messaging
-        └── desktop.nix        #   modules.home.desktop
+        ├── desktop.nix        #   modules.home.desktop
+        ├── dev.nix            #   modules.home.dev
+        └── onepassword.nix    #   modules.home.onepassword
 ```
 
 ## Modules disponibles
@@ -54,6 +59,9 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 | `modules.system.plasma.enable` | KDE Plasma 6 + SDDM Wayland + polices |
 | `modules.system.nvidia.enable` | Pilote NVIDIA beta, open kernel module, modesetting |
 | `modules.system.gaming.enable` | Steam, Proton, MangoHud, Gamemode, Wine |
+| `modules.system.onepassword.enable` | 1Password CLI + GUI |
+| `modules.system.shell.enable` | Zsh (niveau système) |
+| `modules.system.dev.enable` | Environnement de développement (Java) |
 
 ### Home Manager (`modules.home.*`)
 
@@ -62,9 +70,11 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 | `modules.home.shell.enable` | Zsh (autosuggestion, prompt custom) + Kitty |
 | `modules.home.git.enable` | Git + Jujutsu (identité configurée) |
 | `modules.home.ssh.enable` | SSH + agent 1Password |
-| `modules.home.browser.enable` | Brave browser |
+| `modules.home.brave.enable` | Brave browser + policies hardening |
 | `modules.home.messaging.enable` | Discord, Zulip, Element |
 | `modules.home.desktop.enable` | Paquets CLI (ripgrep, fd, jq…), variables Wayland |
+| `modules.home.dev.enable` | Outils de développement (IntelliJ IDEA) |
+| `modules.home.onepassword.enable` | Extension 1Password pour Brave (requiert modules.home.brave) |
 
 ## Inputs du flake
 
@@ -89,6 +99,9 @@ modules.system = {
   plasma.enable = true;
   nvidia.enable = true;
   gaming.enable = true;
+  onepassword.enable = true;
+  shell.enable = true;
+  dev.enable = true;
 };
 ```
 
@@ -98,15 +111,15 @@ modules.home = {
   shell.enable = true;
   git.enable = true;
   ssh.enable = true;
-  browser.enable = true;
+  brave.enable = true;
   messaging.enable = true;
   desktop.enable = true;
+  dev.enable = true;
+  onepassword.enable = true;
 };
 ```
 
 - **Boot** : systemd-boot, kernel latest, module `atlantic`
-- **Apps host** : 1Password, IntelliJ IDEA, Java
-- **Brave** : policies hardening (désactivation rewards, wallet, VPN, Tor, AI)
 
 ## Utilisation
 
