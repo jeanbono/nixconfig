@@ -20,5 +20,6 @@ in
     modules.system.brave.extraExtensions = [
       "${extensionId};https://clients2.google.com/service/update2/crx"
     ];
+    modules.system.brave.extraPinnedExtensions = [ extensionId ];
   };
 }
