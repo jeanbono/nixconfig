@@ -17,10 +17,8 @@ in
     programs._1password.enable = true;
     programs._1password-gui.enable = true;
 
-    environment.etc."brave/policies/managed/01-1password.json".text = builtins.toJSON {
-      ExtensionInstallForcelist = [
-        "${extensionId};https://clients2.google.com/service/update2/crx"
-      ];
-    };
+    modules.system.brave.extraExtensions = [
+      "${extensionId};https://clients2.google.com/service/update2/crx"
+    ];
   };
 }
