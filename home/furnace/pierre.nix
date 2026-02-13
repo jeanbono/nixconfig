@@ -14,7 +14,6 @@
     messaging.enable = true;
     desktop.enable = true;
     dev.enable = true;
-    onepassword.enable = true;
   };
 
   home.username = "pierre";
