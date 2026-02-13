@@ -19,7 +19,7 @@ in
       gamemode
       protonplus
       vulkan-tools
-      wineWowPackages.stable
+      wineWow64Packages.stable
     ];
 
     programs.gamemode.enable = true;

@@ -10,5 +10,9 @@ in
     home.packages = with pkgs; [
       jetbrains.idea
     ];
+
+    programs = {
+      vscode.enable = true;
+    };
   };
 }
