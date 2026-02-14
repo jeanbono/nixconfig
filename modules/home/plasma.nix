@@ -15,6 +15,12 @@ in
     programs.plasma.enable = true;
     programs.plasma.overrideConfig = true;
 
+    programs.plasma.workspace = {
+      lookAndFeel = "org.kde.breezedark.desktop";
+      colorScheme = "BreezeDark";
+      theme = "breeze-dark";
+    };
+
     programs.plasma.panels = [
       # Top bar : menu | spacer | system tray | horloge
       {
@@ -22,17 +28,21 @@ in
         height = 32;
         widgets = [
           "org.kde.plasma.kickoff"
+          "org.kde.plasma.appmenu"
           "org.kde.plasma.panelspacer"
           "org.kde.plasma.systemtray"
           "org.kde.plasma.digitalclock"
         ];
       }
-      # Dock en bas : icon-only task manager (apps)
+      # Dock en bas : style macOS
       {
         location = "bottom";
-        height = 56;
+        height = 48;
         floating = true;
         lengthMode = "fit";
+        alignment = "center";
+        hiding = "dodgewindows";
+        opacity = "translucent";
         widgets = [
           "org.kde.plasma.icontasks"
         ];
