@@ -17,6 +17,15 @@ in
     programs._1password.enable = true;
     programs._1password-gui.enable = true;
 
+    environment.etc."xdg/autostart/1password-silent.desktop".text = ''
+      [Desktop Entry]
+      Name=1Password (Silent)
+      Exec=1password --silent
+      Terminal=false
+      Type=Application
+      StartupNotify=false
+    '';
+
     modules.system.brave.extraExtensions = [
       "${extensionId};https://clients2.google.com/service/update2/crx"
     ];
