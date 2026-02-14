@@ -12,8 +12,9 @@
     ssh.enable = true;
     brave.enable = true;
     messaging.enable = true;
-    desktop.enable = true;
+    tools.enable = true;
     dev.enable = true;
+    plasma.enable = true;
   };
 
   home.username = "pierre";
