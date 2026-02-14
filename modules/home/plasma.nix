@@ -12,6 +12,9 @@ in
       NIXOS_OZONE_WL = "1";
     };
 
+    programs.plasma.enable = true;
+    programs.plasma.overrideConfig = true;
+
     programs.plasma.panels = [
       # Top bar : menu | spacer | system tray | horloge
       {
