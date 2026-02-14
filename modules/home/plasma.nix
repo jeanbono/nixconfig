@@ -12,41 +12,57 @@ in
       NIXOS_OZONE_WL = "1";
     };
 
-    programs.plasma.enable = true;
-    programs.plasma.overrideConfig = true;
+    programs.plasma = {
+      enable = true;
+      overrideConfig = true;
 
-    programs.plasma.workspace = {
-      lookAndFeel = "org.kde.breezedark.desktop";
-      colorScheme = "BreezeDark";
-      theme = "breeze-dark";
+      workspace = {
+        lookAndFeel = "org.kde.breezedark.desktop";
+        colorScheme = "BreezeDark";
+        theme = "breeze-dark";
+      };
+
+      kwin.effects.blur.enable = true;
+
+      panels = [
+        # Top bar : menu | spacer | system tray | horloge
+        {
+          location = "top";
+          screen = 0;
+          height = 32;
+          widgets = [
+            "org.kde.plasma.kickoff"
+            "org.kde.plasma.appmenu"
+            "org.kde.plasma.panelspacer"
+            "org.kde.plasma.systemtray"
+            "org.kde.plasma.digitalclock"
+          ];
+        }
+        # Dock en bas : style macOS
+        {
+          location = "bottom";
+          screen = 0;
+          height = 48;
+          floating = true;
+          lengthMode = "fit";
+          alignment = "center";
+          hiding = "dodgewindows";
+          opacity = "translucent";
+          widgets = [
+            {
+              name = "org.kde.plasma.icontasks";
+              config = {
+                General = {
+                  fill = false;
+                  iconSpacing = 4;
+                  indicateAudioStreams = false;
+                  highlightWindows = false;
+                };
+              };
+            }
+          ];
+        }
+      ];
     };
-
-    programs.plasma.panels = [
-      # Top bar : menu | spacer | system tray | horloge
-      {
-        location = "top";
-        height = 32;
-        widgets = [
-          "org.kde.plasma.kickoff"
-          "org.kde.plasma.appmenu"
-          "org.kde.plasma.panelspacer"
-          "org.kde.plasma.systemtray"
-          "org.kde.plasma.digitalclock"
-        ];
-      }
-      # Dock en bas : style macOS
-      {
-        location = "bottom";
-        height = 48;
-        floating = true;
-        lengthMode = "fit";
-        alignment = "center";
-        hiding = "dodgewindows";
-        opacity = "translucent";
-        widgets = [
-          "org.kde.plasma.icontasks"
-        ];
-      }
-    ];
   };
 }
