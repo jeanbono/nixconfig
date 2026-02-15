@@ -24,7 +24,10 @@ in
 
       settings = {
         # ── Moniteur ──────────────────────────────────────────────
-        monitor = [ ", preferred, auto, 1" ];
+        monitor = [
+          "DP-3, 2560x1440@165, 0x0, 1"
+          "DP-1, 2560x1440@300, 2560x0, 1"
+        ];
 
         # ── Entrée ────────────────────────────────────────────────
         input = {
@@ -77,6 +80,7 @@ in
         misc = {
           force_default_wallpaper = 0;
           disable_hyprland_logo = true;
+          allow_hdr = true;
         };
 
         # ── Nvidia ────────────────────────────────────────────────
