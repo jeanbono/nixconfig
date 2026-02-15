@@ -98,6 +98,7 @@ in
         # ── Autostart ─────────────────────────────────────────────
         exec-once = [
           "waybar"
+          "1password --silent"
         ];
 
         # ── Raccourcis clavier ────────────────────────────────────
