@@ -29,14 +29,28 @@ in
       extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     };
 
-    # Display manager : greetd + tuigreet (léger, Wayland-natif)
-    services.greetd = {
+    # Display manager : greetd + ReGreet (GTK greeter, Wayland-natif)
+    programs.regreet = {
       enable = true;
       settings = {
-        default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
-          user = "greeter";
+        background = {
+          fit = "Cover";
         };
+        GTK = {
+          application_prefer_dark_theme = true;
+        };
+      };
+      font = {
+        name = "FiraCode Nerd Font";
+        size = 14;
+      };
+      cursorTheme = {
+        name = "Adwaita";
+        package = pkgs.adwaita-icon-theme;
+      };
+      iconTheme = {
+        name = "Adwaita";
+        package = pkgs.adwaita-icon-theme;
       };
     };
 

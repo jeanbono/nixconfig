@@ -98,16 +98,18 @@ in
         exec-once = [
           "waybar"
           "1password --silent"
+          "hypridle"
         ];
 
         # ── Raccourcis clavier ────────────────────────────────────
         "$mod" = "SUPER";
 
         bind = [
+          "$mod, Escape, exec, hyprlock"
           "$mod, Return, exec, kitty"
           "$mod, Q, killactive"
           "$mod, M, exit"
-          "$mod, E, exec, dolphin"
+          "$mod, E, exec, thunar"
           "$mod, V, togglefloating"
           "$mod, D, exec, wofi --show drun"
           "$mod, F, fullscreen"
@@ -281,8 +283,148 @@ in
       '';
     };
 
+    # ── Wofi (lanceur d'applications) ───────────────────────────
+    xdg.configFile."wofi/style.css".text = ''
+      window {
+        margin: 0;
+        border: 2px solid rgba(137, 180, 250, 0.4);
+        border-radius: 12px;
+        background-color: rgba(30, 30, 46, 0.92);
+        font-family: "FiraCode Nerd Font", "Noto Sans", sans-serif;
+        font-size: 14px;
+      }
+
+      #input {
+        margin: 8px;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 8px;
+        background-color: rgba(49, 50, 68, 0.9);
+        color: #cdd6f4;
+      }
+
+      #input:focus {
+        border: 2px solid rgba(137, 180, 250, 0.5);
+      }
+
+      #inner-box {
+        margin: 0 8px 8px 8px;
+      }
+
+      #outer-box {
+        margin: 0;
+        padding: 0;
+      }
+
+      #entry {
+        padding: 6px 12px;
+        border-radius: 8px;
+        color: #cdd6f4;
+      }
+
+      #entry:selected {
+        background-color: rgba(137, 180, 250, 0.2);
+        color: #cdd6f4;
+      }
+
+      #entry:hover {
+        background-color: rgba(137, 180, 250, 0.1);
+      }
+
+      #text {
+        color: #cdd6f4;
+      }
+
+      #text:selected {
+        color: #cdd6f4;
+      }
+    '';
+
+    xdg.configFile."wofi/config".text = ''
+      width=500
+      height=350
+      show=drun
+      prompt=Rechercher...
+      allow_markup=true
+      insensitive=true
+      columns=1
+      hide_scroll=true
+      matching=fuzzy
+      sort_order=alphabetical
+    '';
+
+    # ── Hyprlock (écran de verrouillage) ────────────────────────
+    programs.hyprlock = {
+      enable = true;
+      settings = {
+        general = {
+          hide_cursor = true;
+          grace = 5;
+        };
+
+        background = [{
+          path = "screenshot";
+          blur_passes = 3;
+          blur_size = 8;
+        }];
+
+        input-field = [{
+          size = "250, 50";
+          outline_thickness = 2;
+          dots_size = 0.2;
+          dots_spacing = 0.15;
+          outer_color = "rgba(137, 180, 250, 0.5)";
+          inner_color = "rgba(30, 30, 46, 0.9)";
+          font_color = "rgb(205, 214, 244)";
+          fade_on_empty = false;
+          placeholder_text = "Mot de passe...";
+          fail_text = "Incorrect";
+          halign = "center";
+          valign = "center";
+        }];
+
+        label = [{
+          text = "cmd[update:1000] date +\"%H:%M\"";
+          color = "rgba(205, 214, 244, 1.0)";
+          font_size = 64;
+          font_family = "FiraCode Nerd Font";
+          position = "0, 120";
+          halign = "center";
+          valign = "center";
+        }];
+      };
+    };
+
+    # ── Hypridle (verrouillage automatique) ───────────────────
+    services.hypridle = {
+      enable = true;
+      settings = {
+        general = {
+          lock_cmd = "pidof hyprlock || hyprlock";
+          before_sleep_cmd = "loginctl lock-session";
+          after_sleep_cmd = "hyprctl dispatch dpms on";
+        };
+
+        listener = [
+          {
+            timeout = 300;
+            on-timeout = "hyprlock";
+            on-resume = "";
+          }
+          {
+            timeout = 600;
+            on-timeout = "hyprctl dispatch dpms off";
+            on-resume = "hyprctl dispatch dpms on";
+          }
+        ];
+      };
+    };
+
     # ── Paquets complémentaires ─────────────────────────────────
     home.packages = with pkgs; [
+      hypridle      # Verrouillage automatique après inactivité
+      xfce.thunar   # Explorateur de fichiers
+      gvfs          # Support montage/corbeille dans Thunar
       wofi          # Lanceur d'applications
       wl-clipboard  # Copier/coller Wayland
       grim          # Capture d'écran
