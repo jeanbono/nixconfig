@@ -14,7 +14,7 @@
     messaging.enable = true;
     tools.enable = true;
     dev.enable = true;
-    plasma.enable = true;
+    hyprland.enable = true;
   };
 
   home.username = "pierre";

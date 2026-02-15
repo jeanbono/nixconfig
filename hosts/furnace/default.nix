@@ -15,7 +15,7 @@ in
     network.enable = true;
     audio.enable = true;
     printing.enable = true;
-    plasma.enable = true;
+    hyprland.enable = true;
     nvidia.enable = true;
     gaming.enable = true;
     brave.enable = true;

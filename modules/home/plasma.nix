@@ -2,11 +2,16 @@
 
 let
   cfg = config.modules.home.plasma;
+  hyprlandCfg = config.modules.home.hyprland;
 in
 {
   options.modules.home.plasma.enable = lib.mkEnableOption "Configuration Plasma (panels, layout)";
 
   config = lib.mkIf cfg.enable {
+    assertions = [{
+      assertion = !hyprlandCfg.enable;
+      message = "modules.home.plasma et modules.home.hyprland sont mutuellement exclusifs";
+    }];
     # Variables utiles Wayland / Electron (côté user)
     home.sessionVariables = {
       NIXOS_OZONE_WL = "1";

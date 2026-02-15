@@ -2,11 +2,16 @@
 
 let
   cfg = config.modules.system.plasma;
+  hyprlandCfg = config.modules.system.hyprland;
 in
 {
   options.modules.system.plasma.enable = lib.mkEnableOption "KDE Plasma 6 + SDDM Wayland + polices";
 
   config = lib.mkIf cfg.enable {
+    assertions = [{
+      assertion = !hyprlandCfg.enable;
+      message = "modules.system.plasma et modules.system.hyprland sont mutuellement exclusifs";
+    }];
     services.displayManager.sddm.enable = true;
     # Sur versions récentes, SDDM peut tourner en Wayland
     services.displayManager.sddm.wayland.enable = true;
