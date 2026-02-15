@@ -19,6 +19,8 @@ in
 
     xdg.configFile."hypr/hyprland.conf".force = true;
 
+    home.file."wallpaper.png".source = ../../wallpapers/wallpaper.png;
+
     wayland.windowManager.hyprland = {
       enable = true;
       systemd.enable = false;
@@ -112,6 +114,7 @@ in
         # ── Autostart ─────────────────────────────────────────────
         exec-once = [
           "uwsm app -- hyprlock"
+          "uwsm app -- swww-daemon && swww img ~/wallpaper.png --transition-type fade"
           "uwsm app -- waybar"
           "uwsm app -- hypridle"
         ];
@@ -384,7 +387,7 @@ in
         };
 
         background = [{
-          path = "screenshot";
+          path = "~/wallpaper.png";
           blur_passes = 3;
           blur_size = 8;
         }];
