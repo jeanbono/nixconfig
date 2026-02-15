@@ -114,7 +114,8 @@ in
         # ── Autostart ─────────────────────────────────────────────
         exec-once = [
           "uwsm app -- hyprlock"
-          "uwsm app -- swww-daemon && swww img ~/wallpaper.png --transition-type fade"
+          "uwsm app -- swww-daemon"
+          "sleep 1 && uwsm app -- swww img ~/wallpaper.png --transition-type fade"
           "uwsm app -- waybar"
           "uwsm app -- hypridle"
         ];
