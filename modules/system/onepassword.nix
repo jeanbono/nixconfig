@@ -20,7 +20,7 @@ in
     environment.etc."xdg/autostart/1password-silent.desktop".text = ''
       [Desktop Entry]
       Name=1Password (Silent)
-      Exec=1password --silent
+      Exec=bash -c "sleep 3 && 1password --silent"
       Terminal=false
       Type=Application
       StartupNotify=false
