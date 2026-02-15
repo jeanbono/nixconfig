@@ -16,6 +16,7 @@ in
     audio.enable = true;
     printing.enable = true;
     hyprland.enable = true;
+    hyprland.user = username;
     nvidia.enable = true;
     gaming.enable = true;
     brave.enable = true;
@@ -34,14 +35,14 @@ in
   boot.kernelModules = [ "atlantic" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  users.users.pierre = {
+  users.users.${username} = {
     isNormalUser = true;
-    description = "Pierre";
+    description = username;
     extraGroups = [ "wheel" "networkmanager" "video" "audio" "input" ];
     shell = pkgs.zsh;
   };
 
-  home-manager.users.pierre = import ../../home/furnace/pierre.nix;
+  home-manager.users.${username} = import ../../home/furnace/${username}.nix;
 
   environment.systemPackages = with pkgs; [
     vim

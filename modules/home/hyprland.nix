@@ -21,6 +21,7 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
+      systemd.enable = false;
 
       settings = {
         # ── Moniteur ──────────────────────────────────────────────
@@ -96,6 +97,7 @@ in
 
         # ── Autostart ─────────────────────────────────────────────
         exec-once = [
+          "hyprlock"
           "waybar"
           "hypridle"
         ];

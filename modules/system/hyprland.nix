@@ -4,33 +4,15 @@ let
   cfg = config.modules.system.hyprland;
   plasmaCfg = config.modules.system.plasma;
 
-  # Config Hyprland minimale pour le greeter ReGreet
-  greetdHyprlandConfig = pkgs.writeText "greetd-hyprland.conf" ''
-    monitor = DP-3, 2560x1440@165, 0x0, 1
-    monitor = DP-1, 2560x1440@300, 2560x0, 1
-
-    input {
-      kb_layout = fr
-    }
-
-    misc {
-      force_default_wallpaper = 0
-      disable_hyprland_logo = true
-      disable_watchdog_warning = true
-    }
-
-    cursor {
-      no_hardware_cursors = true
-    }
-
-    env = LIBVA_DRIVER_NAME,nvidia
-    env = __GLX_VENDOR_LIBRARY_NAME,nvidia
-
-    exec-once = ${lib.getExe pkgs.regreet}; hyprctl dispatch exit
-  '';
 in
 {
-  options.modules.system.hyprland.enable = lib.mkEnableOption "Hyprland (Wayland compositor) + portails + polices";
+  options.modules.system.hyprland = {
+    enable = lib.mkEnableOption "Hyprland (Wayland compositor) + portails + polices";
+    user = lib.mkOption {
+      type = lib.types.str;
+      description = "Utilisateur pour l'auto-login greetd";
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     assertions = [{
@@ -44,9 +26,6 @@ in
       withUWSM = true;
     };
 
-    # Masquer la session Hyprland classique (garder uniquement uwsm-managed)
-    environment.etc."wayland-sessions/hyprland.desktop".enable = lib.mkForce false;
-
     # Variables d'environnement Nvidia pour Hyprland
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";
@@ -58,34 +37,16 @@ in
       extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     };
 
-    # Display manager : greetd + ReGreet dans une session Hyprland
-    programs.regreet = {
+    # Auto-login via greetd, hyprlock sert d'écran de verrouillage au démarrage
+    services.greetd = {
       enable = true;
       settings = {
-        background = {
-          fit = "Cover";
+        default_session = {
+          command = "Hyprland";
+          user = cfg.user;
         };
-        GTK = {
-          application_prefer_dark_theme = true;
-        };
-      };
-      font = {
-        name = "FiraCode Nerd Font";
-        size = 14;
-      };
-      cursorTheme = {
-        name = "Adwaita";
-        package = pkgs.adwaita-icon-theme;
-      };
-      iconTheme = {
-        name = "Adwaita";
-        package = pkgs.adwaita-icon-theme;
       };
     };
-
-    # Remplacer cage par Hyprland pour le greeter (multi-écran + clavier FR)
-    services.greetd.settings.default_session.command = lib.mkForce
-      "${config.programs.hyprland.package}/bin/Hyprland --config ${greetdHyprlandConfig}";
 
     fonts.packages = with pkgs; [
       nerd-fonts.symbols-only
