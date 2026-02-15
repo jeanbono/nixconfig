@@ -44,9 +44,6 @@ in
       withUWSM = true;
     };
 
-    # Masquer la session Hyprland classique (garder uniquement uwsm-managed)
-    environment.etc."wayland-sessions/hyprland.desktop".text = lib.mkForce "";
-
     # Variables d'environnement Nvidia pour Hyprland
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";
