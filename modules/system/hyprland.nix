@@ -25,7 +25,7 @@ let
     env = LIBVA_DRIVER_NAME,nvidia
     env = __GLX_VENDOR_LIBRARY_NAME,nvidia
 
-    exec-once = ${lib.getExe pkgs.greetd.regreet}; hyprctl dispatch exit
+    exec-once = ${lib.getExe pkgs.regreet}; hyprctl dispatch exit
   '';
 in
 {
