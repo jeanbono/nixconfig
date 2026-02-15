@@ -41,7 +41,7 @@ in
     programs.hyprland = {
       enable = true;
       xwayland.enable = true;
-      withUWSM = false;
+      withUWSM = true;
     };
 
     # Variables d'environnement Nvidia pour Hyprland
