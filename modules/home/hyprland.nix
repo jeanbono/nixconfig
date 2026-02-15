@@ -226,7 +226,9 @@ in
           };
 
           tray = {
+            icon-size = 18;
             spacing = 8;
+            show-passive-items = true;
           };
         };
       };
