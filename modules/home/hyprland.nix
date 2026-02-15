@@ -26,8 +26,8 @@ in
       settings = {
         # ── Moniteur ──────────────────────────────────────────────
         monitor = [
-          "DP-3, 2560x1440@165, 0x0, 1, bitdepth, 10, cm, hdr"
-          "DP-1, 2560x1440@300, 2560x0, 1, bitdepth, 10, cm, hdr"
+          "DP-3, 2560x1440@165, 0x0, 1, bitdepth, 10, cm, hdr, sdrbrightness, 1.5"
+          "DP-1, 2560x1440@300, 2560x0, 1, bitdepth, 10, cm, hdr, sdrbrightness, 1.5"
         ];
 
         # ── Workspaces par défaut (DP-1 = principal) ────────────
