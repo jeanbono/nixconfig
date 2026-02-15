@@ -42,7 +42,7 @@ in
       enable = true;
       settings = {
         default_session = {
-          command = "Hyprland";
+          command = "start-hyprland";
           user = cfg.user;
         };
       };
