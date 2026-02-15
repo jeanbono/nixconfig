@@ -423,7 +423,7 @@ in
     # ── Paquets complémentaires ─────────────────────────────────
     home.packages = with pkgs; [
       hypridle      # Verrouillage automatique après inactivité
-      xfce.thunar   # Explorateur de fichiers
+      thunar        # Explorateur de fichiers
       gvfs          # Support montage/corbeille dans Thunar
       wofi          # Lanceur d'applications
       wl-clipboard  # Copier/coller Wayland
