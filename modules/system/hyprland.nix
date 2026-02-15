@@ -41,11 +41,8 @@ in
     programs.hyprland = {
       enable = true;
       xwayland.enable = true;
-      withUWSM = true;
+      withUWSM = false;
     };
-
-    # Supprimer la session Hyprland classique, garder uniquement uwsm-managed
-    environment.etc."wayland-sessions/hyprland.desktop".enable = false;
 
     # Variables d'environnement Nvidia pour Hyprland
     environment.sessionVariables = {
