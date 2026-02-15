@@ -30,6 +30,20 @@ in
           "DP-1, 2560x1440@300, 2560x0, 1, bitdepth, 10, cm, hdr"
         ];
 
+        # ── Workspaces par défaut (DP-1 = principal) ────────────
+        workspace = [
+          "1, monitor:DP-1, default:true"
+          "2, monitor:DP-1"
+          "3, monitor:DP-1"
+          "4, monitor:DP-1"
+          "5, monitor:DP-1"
+          "6, monitor:DP-3"
+          "7, monitor:DP-3"
+          "8, monitor:DP-3"
+          "9, monitor:DP-3"
+          "10, monitor:DP-3"
+        ];
+
         # ── Entrée ────────────────────────────────────────────────
         input = {
           kb_layout = "fr";
@@ -122,6 +136,10 @@ in
           "$mod, right, movefocus, r"
           "$mod, up, movefocus, u"
           "$mod, down, movefocus, d"
+
+          # Déplacer une fenêtre vers l'autre écran
+          "$mod SHIFT, left, movewindow, mon:-1"
+          "$mod SHIFT, right, movewindow, mon:+1"
           "$mod, H, movefocus, l"
           "$mod, L, movefocus, r"
           "$mod, K, movefocus, u"
