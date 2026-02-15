@@ -97,22 +97,22 @@ in
 
         # ── Autostart ─────────────────────────────────────────────
         exec-once = [
-          "hyprlock"
-          "waybar"
-          "hypridle"
+          "uwsm app -- hyprlock"
+          "uwsm app -- waybar"
+          "uwsm app -- hypridle"
         ];
 
         # ── Raccourcis clavier ────────────────────────────────────
         "$mod" = "SUPER";
 
         bind = [
-          "$mod, Escape, exec, hyprlock"
-          "$mod, Return, exec, kitty"
+          "$mod, Escape, exec, uwsm app -- hyprlock"
+          "$mod, Return, exec, uwsm app -- kitty"
           "$mod, Q, killactive"
           "$mod, M, exit"
-          "$mod, E, exec, thunar"
+          "$mod, E, exec, uwsm app -- thunar"
           "$mod, V, togglefloating"
-          "$mod, D, exec, wofi --show drun"
+          "$mod, D, exec, uwsm app -- wofi --show drun"
           "$mod, F, fullscreen"
           "$mod, P, pseudo"
           "$mod, S, togglesplit"
