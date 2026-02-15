@@ -114,11 +114,36 @@ in
         # ── Autostart ─────────────────────────────────────────────
         exec-once = [
           "uwsm app -- hyprlock"
-          "uwsm app -- swww-daemon"
-          "sleep 1 && uwsm app -- swww img ~/wallpaper.png --transition-type fade"
           "uwsm app -- waybar"
           "uwsm app -- hypridle"
         ];
+
+        systemd.user.services.swww-daemon = {
+          Unit = {
+            Description = "Simple Dynamic Wallpaper";
+            PartOf = [ "graphical-session.target" ];
+            After = [ "graphical-session.target" ];
+          };
+          Service = {
+            ExecStart = "${pkgs.swww}/bin/swww-daemon";
+            Restart = "on-failure";
+          };
+          Install.WantedBy = [ "graphical-session.target" ];
+        };
+
+        systemd.user.services.swww-wallpaper = {
+          Unit = {
+            Description = "Set wallpaper on startup";
+            PartOf = [ "graphical-session.target" ];
+            After = [ "swww-daemon.service" "graphical-session.target" ];
+          };
+          Service = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.swww}/bin/swww img $HOME/wallpaper.png --transition-type fade";
+            RemainAfterExit = true;
+          };
+          Install.WantedBy = [ "graphical-session.target" ];
+        };
 
         # ── Raccourcis clavier ────────────────────────────────────
         "$mod" = "SUPER";
