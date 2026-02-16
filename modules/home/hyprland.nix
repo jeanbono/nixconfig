@@ -44,6 +44,7 @@ in
 
     home.sessionVariables = {
       NIXOS_OZONE_WL = "1";
+      GTK_THEME = "Catppuccin-Macchiato-Standard-Blue-Dark";
     };
 
     xdg.configFile."hypr/hyprland.conf".force = true;
@@ -55,6 +56,27 @@ in
     
     # Curseurs Rose Pine Hyprcursor
     home.file.".local/share/icons/rose-pine-hyprcursor".source = rose-pine-hyprcursor;
+    
+    # Configuration GTK pour Catppuccin
+    gtk = {
+      enable = true;
+      theme = {
+        name = "Catppuccin-Macchiato-Standard-Blue-Dark";
+        package = pkgs.catppuccin-gtk;
+      };
+      iconTheme = {
+        name = "Papirus-Dark";
+        package = pkgs.papirus-icon-theme;
+      };
+      font = {
+        name = "FiraCode Nerd Font";
+        size = 11;
+      };
+      cursorTheme = {
+        name = "rose-pine-hyprcursor";
+        package = rose-pine-hyprcursor;
+      };
+    };
 
     wayland.windowManager.hyprland = {
       enable = true;
@@ -171,7 +193,7 @@ in
           "$mod, Return, exec, uwsm app -- kitty"
           "$mod, Q, killactive"
           "$mod, M, exec, uwsm app -- ~/bin/power-menu.sh"
-          "$mod, E, exec, uwsm app -- thunar"
+          "$mod, E, exec, uwsm app -- nautilus"
           "$mod, V, togglefloating"
           "$mod, D, exec, uwsm app -- wofi --show drun"
           "$mod, F, fullscreen"
@@ -505,8 +527,10 @@ in
     # ── Paquets complémentaires ─────────────────────────────────
     home.packages = with pkgs; [
       hypridle      # Verrouillage automatique après inactivité
-      thunar        # Explorateur de fichiers
-      gvfs          # Support montage/corbeille dans Thunar
+      nautilus      # Explorateur de fichiers GNOME
+      gnome-themes-extra # Thèmes additionnels GNOME
+      catppuccin-gtk # Thème GTK Catppuccin
+      papirus-icon-theme # Thème d'icônes
       wofi          # Lanceur d'applications + menu d'extinction
       wl-clipboard  # Copier/coller Wayland
       grim          # Capture d'écran
