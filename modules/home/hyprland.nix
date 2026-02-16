@@ -80,7 +80,7 @@ in
         };
 
         # ── Import thème Catppuccin Macchiato ───────────────────
-        source = "${catppuccin-macchiato}/themes/macchiato.conf";
+        source = "${catppuccin-hyprland}/themes/macchiato.conf";
 
         # ── Apparence ─────────────────────────────────────────────
         general = {
