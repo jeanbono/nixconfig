@@ -360,6 +360,10 @@ in
         background-color: rgba(137, 180, 250, 0.1);
       }
 
+      #entry image {
+        margin-right: 10px;
+      }
+
       #text {
         color: #cdd6f4;
       }
@@ -381,8 +385,9 @@ in
       matching=fuzzy
       sort_order=alphabetical
       allow_images=true
-      image_size=40
+      image_size=20
       term=kitty
+      no_actions=true
     '';
 
     
