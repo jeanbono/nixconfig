@@ -21,7 +21,7 @@ let
     owner = "catppuccin";
     repo = "waybar";
     rev = "v1.1";
-    sha256 = lib.fakeSha256;
+    sha256 = "sha256-9lY+v1CTbpw2lREG/h65mLLw5KuT8OJdEPOb+NNC6Fo=";
   };
   
   rose-pine-cursor = pkgs.fetchFromGitHub {
