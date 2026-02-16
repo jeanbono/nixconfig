@@ -14,14 +14,14 @@ let
     owner = "catppuccin";
     repo = "hyprland";
     rev = "v1.3";
-    sha256 = "sha256-13d7b4e3db178bb01520eb68e16e4cf4e11da6ab";
+    sha256 = "sha256-xSa/z0Pu+ioZ0gFH9qSo9P94NPkEMovstm1avJ7rvzM=";
   };
   
   catppuccin-waybar = pkgs.fetchFromGitHub {
     owner = "catppuccin";
     repo = "waybar";
     rev = "v1.1";
-    sha256 = "sha256-0830796af6aa64ce8bc7453d42876a628777ac68";
+    sha256 = "sha256-xSa/z0Pu+ioZ0gFH9qSo9P94NPkEMovstm1avJ7rvzN=";
   };
   
   macchiato-theme = builtins.readFile "${catppuccin-hyprland}/themes/macchiato.conf";
