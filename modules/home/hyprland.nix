@@ -9,15 +9,23 @@ let
   cfg = config.modules.home.hyprland;
   plasmaCfg = config.modules.home.plasma;
   
-  # Import Catppuccin Macchiato theme
-  catppuccin-macchiato = pkgs.fetchFromGitHub {
+  # Import Catppuccin Macchiato themes
+  catppuccin-hyprland = pkgs.fetchFromGitHub {
     owner = "catppuccin";
     repo = "hyprland";
-    rev = "main";
-    sha256 = "sha256-xSa/z0Pu+ioZ0gFH9qSo9P94NPkEMovstm1avJ7rvzM=";
+    rev = "v1.3";
+    sha256 = "sha256-13d7b4e3db178bb01520eb68e16e4cf4e11da6ab";
   };
   
-  macchiato-theme = builtins.readFile "${catppuccin-macchiato}/themes/macchiato.conf";
+  catppuccin-waybar = pkgs.fetchFromGitHub {
+    owner = "catppuccin";
+    repo = "waybar";
+    rev = "v1.1";
+    sha256 = "sha256-0830796af6aa64ce8bc7453d42876a628777ac68";
+  };
+  
+  macchiato-theme = builtins.readFile "${catppuccin-hyprland}/themes/macchiato.conf";
+  waybar-macchiato = builtins.readFile "${catppuccin-waybar}/themes/macchiato.css";
 in
 {
   options.modules.home.hyprland.enable = lib.mkEnableOption "Configuration Hyprland (compositor, waybar, keybinds)";
@@ -97,8 +105,6 @@ in
             render_power = 3;
             color = "rgba(0, 0, 0, 0.4)";
           };
-          "col.shadow" = "$base";
-          "col.shadow_inactive" = "$mantle";
         };
 
         animations = {
@@ -280,56 +286,7 @@ in
         };
       };
 
-      style = ''
-        * {
-          font-family: "FiraCode Nerd Font", "Noto Sans", sans-serif;
-          font-size: 13px;
-          min-height: 0;
-        }
-
-        window#waybar {
-          background: rgba(30, 30, 46, 0.85);
-          color: #cdd6f4;
-          border-bottom: 2px solid rgba(137, 180, 250, 0.3);
-        }
-
-        #workspaces button {
-          padding: 0 6px;
-          color: #6c7086;
-          border: none;
-          border-radius: 4px;
-          margin: 3px 2px;
-        }
-
-        #workspaces button.active {
-          color: #cdd6f4;
-          background: rgba(137, 180, 250, 0.25);
-        }
-
-        #workspaces button:hover {
-          background: rgba(137, 180, 250, 0.15);
-        }
-
-        #clock, #cpu, #memory, #pulseaudio, #network, #tray {
-          padding: 0 10px;
-        }
-
-        #clock {
-          font-weight: bold;
-          color: #89b4fa;
-        }
-
-        #cpu { color: #a6e3a1; }
-        #memory { color: #f9e2af; }
-
-        #pulseaudio { color: #f5c2e7; }
-        #pulseaudio.muted { color: #6c7086; }
-
-        #network { color: #89dceb; }
-        #network.disconnected { color: #f38ba8; }
-
-        #tray { padding: 0 6px; }
-      '';
+      style = waybar-macchiato;
     };
 
     # ── Wofi (lanceur d'applications) ───────────────────────────
