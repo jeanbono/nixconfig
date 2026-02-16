@@ -20,6 +20,9 @@ in
     xdg.configFile."hypr/hyprland.conf".force = true;
 
     home.file."wallpaper.png".source = ../../wallpapers/wallpaper.png;
+    
+    home.file."bin/power-menu.sh".source = ../scripts/power-menu.sh;
+    home.file."bin/power-menu.sh".executable = true;
 
     wayland.windowManager.hyprland = {
       enable = true;
@@ -126,7 +129,7 @@ in
           "$mod, Escape, exec, uwsm app -- hyprlock"
           "$mod, Return, exec, uwsm app -- kitty"
           "$mod, Q, killactive"
-          "$mod, M, exec, echo -e "Shutdown\nReboot\nLogout" | wofi --dmenu | uwsm app -- case "$(cat)" in Shutdown) systemctl poweroff ;; Reboot) systemctl reboot ;; Logout) hyprctl dispatch exit ;; esac"
+          "$mod, M, exec, uwsm app -- ~/bin/power-menu.sh"
           "$mod, E, exec, uwsm app -- thunar"
           "$mod, V, togglefloating"
           "$mod, D, exec, uwsm app -- wofi --show drun"
