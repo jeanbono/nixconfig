@@ -480,31 +480,31 @@ in
           "label": "lock",
           "action": "hyprlock",
           "text": "Lock",
-          "key": "l"
+          "keybind": "l"
         },
         {
           "label": "logout", 
           "action": "loginctl terminate-session $XDG_SESSION_ID",
           "text": "Logout",
-          "key": "e"
+          "keybind": "e"
         },
         {
           "label": "suspend",
           "action": "systemctl suspend", 
           "text": "Suspend",
-          "key": "s"
+          "keybind": "s"
         },
         {
           "label": "reboot",
           "action": "systemctl reboot",
           "text": "Reboot", 
-          "key": "r"
+          "keybind": "r"
         },
         {
           "label": "shutdown",
           "action": "systemctl poweroff",
           "text": "Shutdown",
-          "key": "p"
+          "keybind": "p"
         }
       ]
     '';
