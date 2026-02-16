@@ -126,7 +126,7 @@ in
           "$mod, Escape, exec, uwsm app -- hyprlock"
           "$mod, Return, exec, uwsm app -- kitty"
           "$mod, Q, killactive"
-          "$mod, M, exec, uwsm app -- wlogout"
+          "$mod, M, exec, echo -e "Shutdown\nReboot\nLogout" | wofi --dmenu | uwsm app -- case "$(cat)" in Shutdown) systemctl poweroff ;; Reboot) systemctl reboot ;; Logout) hyprctl dispatch exit ;; esac"
           "$mod, E, exec, uwsm app -- thunar"
           "$mod, V, togglefloating"
           "$mod, D, exec, uwsm app -- wofi --show drun"
@@ -377,149 +377,7 @@ in
       sort_order=alphabetical
     '';
 
-    # ── Wlogout (menu d'extinction) ─────────────────────────────
-    xdg.configFile."wlogout/style.css".text = ''
-      * {
-        font-family: "FiraCode Nerd Font", "Noto Sans", sans-serif;
-        font-size: 13px;
-        background-image: none;
-        transition: 0.2s;
-      }
-
-      window {
-        background-color: rgba(30, 30, 46, 0.85);
-        border: 2px solid rgba(137, 180, 250, 0.3);
-        border-radius: 12px;
-      }
-
-      button {
-        color: #cdd6f4;
-        background-color: rgba(49, 50, 68, 0.8);
-        border: 1px solid rgba(137, 180, 250, 0.2);
-        border-radius: 8px;
-        margin: 8px;
-        padding: 8px 16px;
-        font-size: 13px;
-        font-weight: 500;
-        min-width: 80px;
-        min-height: 40px;
-      }
-
-      button:hover {
-        background-color: rgba(137, 180, 250, 0.2);
-        border-color: rgba(137, 180, 250, 0.4);
-        color: #cdd6f4;
-      }
-
-      button:focus {
-        background-color: rgba(137, 180, 250, 0.25);
-        border-color: rgba(137, 180, 250, 0.6);
-        color: #cdd6f4;
-      }
-
-      #lock {
-        background-color: rgba(166, 227, 161, 0.15);
-        border-color: rgba(166, 227, 161, 0.3);
-        color: #a6e3a1;
-      }
-
-      #lock:hover {
-        background-color: rgba(166, 227, 161, 0.25);
-        border-color: rgba(166, 227, 161, 0.5);
-        color: #a6e3a1;
-      }
-
-      #logout {
-        background-color: rgba(249, 226, 175, 0.15);
-        border-color: rgba(249, 226, 175, 0.3);
-        color: #f9e2af;
-      }
-
-      #logout:hover {
-        background-color: rgba(249, 226, 175, 0.25);
-        border-color: rgba(249, 226, 175, 0.5);
-        color: #f9e2af;
-      }
-
-      #suspend {
-        background-color: rgba(137, 180, 250, 0.15);
-        border-color: rgba(137, 180, 250, 0.3);
-        color: #89b4fa;
-      }
-
-      #suspend:hover {
-        background-color: rgba(137, 180, 250, 0.25);
-        border-color: rgba(137, 180, 250, 0.5);
-        color: #89b4fa;
-      }
-
-      #reboot {
-        background-color: rgba(245, 194, 231, 0.15);
-        border-color: rgba(245, 194, 231, 0.3);
-        color: #f5c2e7;
-      }
-
-      #reboot:hover {
-        background-color: rgba(245, 194, 231, 0.25);
-        border-color: rgba(245, 194, 231, 0.5);
-        color: #f5c2e7;
-      }
-
-      #shutdown {
-        background-color: rgba(243, 139, 168, 0.15);
-        border-color: rgba(243, 139, 168, 0.3);
-        color: #f38ba8;
-      }
-
-      #shutdown:hover {
-        background-color: rgba(243, 139, 168, 0.25);
-        border-color: rgba(243, 139, 168, 0.5);
-        color: #f38ba8;
-      }
-
-      button label {
-        margin: 0;
-        padding: 0;
-      }
-
-      button:active {
-        transform: scale(0.95);
-      }
-    '';
-
-    xdg.configFile."wlogout/layout".text = ''
-      {
-        "label": "lock",
-        "action": "hyprlock",
-        "text": "Lock",
-        "keybind": "l"
-      }
-      {
-        "label": "logout", 
-        "action": "loginctl terminate-session $XDG_SESSION_ID",
-        "text": "Logout",
-        "keybind": "e"
-      }
-      {
-        "label": "suspend",
-        "action": "systemctl suspend", 
-        "text": "Suspend",
-        "keybind": "s"
-      }
-      {
-        "label": "reboot",
-        "action": "systemctl reboot",
-        "text": "Reboot", 
-        "keybind": "r"
-      }
-      {
-        "label": "shutdown",
-        "action": "systemctl poweroff",
-        "text": "Shutdown",
-        "keybind": "p"
-      }
-    '';
-
+    
     # ── Hyprlock (écran de verrouillage) ────────────────────────
     programs.hyprlock = {
       enable = true;
@@ -592,8 +450,7 @@ in
       hypridle      # Verrouillage automatique après inactivité
       thunar        # Explorateur de fichiers
       gvfs          # Support montage/corbeille dans Thunar
-      wofi          # Lanceur d'applications
-      wlogout       # Menu d'extinction élégant
+      wofi          # Lanceur d'applications + menu d'extinction
       wl-clipboard  # Copier/coller Wayland
       grim          # Capture d'écran
       slurp         # Sélection de zone
