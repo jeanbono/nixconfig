@@ -129,10 +129,10 @@ in
           "$mod, Escape, exec, uwsm app -- hyprlock"
           "$mod, Return, exec, uwsm app -- kitty"
           "$mod, Q, killactive"
-          "$mod, M, exec, pgrep -f 'power-menu.sh' >/dev/null || uwsm app -- ~/bin/power-menu.sh"
+          "$mod, M, exec, uwsm app -- ~/bin/power-menu.sh"
           "$mod, E, exec, uwsm app -- thunar"
           "$mod, V, togglefloating"
-          "$mod, D, exec, pgrep -f wofi >/dev/null || uwsm app -- wofi --show drun"
+          "$mod, D, exec, uwsm app -- wofi --show drun"
           "$mod, F, fullscreen"
           "$mod, P, pseudo"
           "$mod, S, togglesplit"
@@ -143,13 +143,15 @@ in
           "$mod, up, movefocus, u"
           "$mod, down, movefocus, d"
 
+          # Déplacer une fenêtre dans les directions (HJKL)
+          "$mod SHIFT, H, movewindow, l"
+          "$mod SHIFT, L, movewindow, r"
+          "$mod SHIFT, K, movewindow, u"
+          "$mod SHIFT, J, movewindow, d"
+
           # Déplacer une fenêtre vers l'autre écran
           "$mod SHIFT, left, movewindow, mon:-1"
           "$mod SHIFT, right, movewindow, mon:+1"
-          "$mod, H, movefocus, l"
-          "$mod, L, movefocus, r"
-          "$mod, K, movefocus, u"
-          "$mod, J, movefocus, d"
 
           # Workspaces
           "$mod, ampersand, workspace, 1"
