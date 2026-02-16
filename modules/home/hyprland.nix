@@ -24,11 +24,11 @@ let
     sha256 = "sha256-9lY+v1CTbpw2lREG/h65mLLw5KuT8OJdEPOb+NNC6Fo=";
   };
   
-  rose-pine-cursor = pkgs.fetchFromGitHub {
-    owner = "rose-pine";
-    repo = "cursor";
-    rev = "v1.1.0";
-    sha256 = "sha256-xSa/z0Pu+ioZ0gFH9qSo9P94NPkEMovstm1avJ7rvzM=";
+  rose-pine-hyprcursor = pkgs.fetchFromGitHub {
+    owner = "ndom91";
+    repo = "rose-pine-hyprcursor";
+    rev = "main";
+    sha256 = lib.fakeSha256;
   };
   
   waybar-macchiato = builtins.readFile "${catppuccin-waybar}/themes/macchiato.css";
@@ -53,9 +53,8 @@ in
     home.file."bin/power-menu.sh".source = ./scripts/power-menu.sh;
     home.file."bin/power-menu.sh".executable = true;
     
-    # Curseurs Rose Pine
-    home.file.".local/share/icons/Rose Pine".source = "${rose-pine-cursor}/themes/Rose Pine";
-    home.file.".icons/default".source = "${rose-pine-cursor}/themes/Rose Pine";
+    # Curseurs Rose Pine Hyprcursor
+    home.file.".local/share/icons/rose-pine-hyprcursor".source = rose-pine-hyprcursor;
 
     wayland.windowManager.hyprland = {
       enable = true;
@@ -146,8 +145,8 @@ in
           "ELECTRON_OZONE_PLATFORM_HINT,auto"
           "NVD_BACKEND,direct"
           
-          # Curseurs Rose Pine
-          "HYPRCURSOR_THEME,Rose Pine"
+          # Curseurs Rose Pine Hyprcursor
+          "HYPRCURSOR_THEME,rose-pine-hyprcursor"
           "HYPRCURSOR_SIZE,24"
         ];
 
