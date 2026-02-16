@@ -381,92 +381,105 @@ in
     xdg.configFile."wlogout/style.css".text = ''
       * {
         font-family: "FiraCode Nerd Font", "Noto Sans", sans-serif;
-        font-size: 14px;
+        font-size: 13px;
         background-image: none;
         transition: 0.2s;
       }
 
       window {
-        background-color: rgba(30, 30, 46, 0.92);
-        border: 2px solid rgba(137, 180, 250, 0.4);
+        background-color: rgba(30, 30, 46, 0.85);
+        border: 2px solid rgba(137, 180, 250, 0.3);
         border-radius: 12px;
       }
 
       button {
         color: #cdd6f4;
-        background-color: rgba(49, 50, 68, 0.9);
-        border: 2px solid rgba(137, 180, 250, 0.3);
+        background-color: rgba(49, 50, 68, 0.8);
+        border: 1px solid rgba(137, 180, 250, 0.2);
         border-radius: 8px;
-        margin: 10px;
-        padding: 12px 20px;
-        font-size: 16px;
-        font-weight: bold;
+        margin: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 500;
+        min-width: 80px;
+        min-height: 40px;
       }
 
       button:hover {
+        background-color: rgba(137, 180, 250, 0.2);
+        border-color: rgba(137, 180, 250, 0.4);
+        color: #cdd6f4;
+      }
+
+      button:focus {
         background-color: rgba(137, 180, 250, 0.25);
         border-color: rgba(137, 180, 250, 0.6);
         color: #cdd6f4;
       }
 
-      button:focus {
-        background-color: rgba(137, 180, 250, 0.3);
-        border-color: rgba(137, 180, 250, 0.8);
-        color: #cdd6f4;
-      }
-
       #lock {
-        background-color: rgba(166, 227, 161, 0.2);
-        border-color: rgba(166, 227, 161, 0.5);
+        background-color: rgba(166, 227, 161, 0.15);
+        border-color: rgba(166, 227, 161, 0.3);
+        color: #a6e3a1;
       }
 
       #lock:hover {
-        background-color: rgba(166, 227, 161, 0.3);
-        border-color: rgba(166, 227, 161, 0.7);
+        background-color: rgba(166, 227, 161, 0.25);
+        border-color: rgba(166, 227, 161, 0.5);
+        color: #a6e3a1;
       }
 
       #logout {
-        background-color: rgba(249, 226, 175, 0.2);
-        border-color: rgba(249, 226, 175, 0.5);
+        background-color: rgba(249, 226, 175, 0.15);
+        border-color: rgba(249, 226, 175, 0.3);
+        color: #f9e2af;
       }
 
       #logout:hover {
-        background-color: rgba(249, 226, 175, 0.3);
-        border-color: rgba(249, 226, 175, 0.7);
+        background-color: rgba(249, 226, 175, 0.25);
+        border-color: rgba(249, 226, 175, 0.5);
+        color: #f9e2af;
       }
 
       #suspend {
-        background-color: rgba(137, 180, 250, 0.2);
-        border-color: rgba(137, 180, 250, 0.5);
+        background-color: rgba(137, 180, 250, 0.15);
+        border-color: rgba(137, 180, 250, 0.3);
+        color: #89b4fa;
       }
 
       #suspend:hover {
-        background-color: rgba(137, 180, 250, 0.3);
-        border-color: rgba(137, 180, 250, 0.7);
+        background-color: rgba(137, 180, 250, 0.25);
+        border-color: rgba(137, 180, 250, 0.5);
+        color: #89b4fa;
       }
 
       #reboot {
-        background-color: rgba(245, 194, 231, 0.2);
-        border-color: rgba(245, 194, 231, 0.5);
+        background-color: rgba(245, 194, 231, 0.15);
+        border-color: rgba(245, 194, 231, 0.3);
+        color: #f5c2e7;
       }
 
       #reboot:hover {
-        background-color: rgba(245, 194, 231, 0.3);
-        border-color: rgba(245, 194, 231, 0.7);
+        background-color: rgba(245, 194, 231, 0.25);
+        border-color: rgba(245, 194, 231, 0.5);
+        color: #f5c2e7;
       }
 
       #shutdown {
-        background-color: rgba(243, 139, 168, 0.2);
-        border-color: rgba(243, 139, 168, 0.5);
+        background-color: rgba(243, 139, 168, 0.15);
+        border-color: rgba(243, 139, 168, 0.3);
+        color: #f38ba8;
       }
 
       #shutdown:hover {
-        background-color: rgba(243, 139, 168, 0.3);
-        border-color: rgba(243, 139, 168, 0.7);
+        background-color: rgba(243, 139, 168, 0.25);
+        border-color: rgba(243, 139, 168, 0.5);
+        color: #f38ba8;
       }
 
       button label {
-        margin: 0 10px;
+        margin: 0;
+        padding: 0;
       }
 
       button:active {
