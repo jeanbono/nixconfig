@@ -14,7 +14,7 @@ let
     owner = "catppuccin";
     repo = "hyprland";
     rev = "main";
-    sha256 = lib.fakeSha256;
+    sha256 = "sha256-xSa/z0Pu+ioZ0gFH9qSo9P94NPkEMovstm1avJ7rvzM=";
   };
   
   macchiato-theme = builtins.readFile "${catppuccin-macchiato}/themes/macchiato.conf";
