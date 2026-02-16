@@ -21,7 +21,7 @@ let
     owner = "catppuccin";
     repo = "waybar";
     rev = "v1.1";
-    sha256 = "sha256-xSa/z0Pu+ioZ0gFH9qSo9P94NPkEMovstm1avJ7rvzN=";
+    sha256 = lib.fakeSha256;
   };
   
   waybar-macchiato = builtins.readFile "${catppuccin-waybar}/themes/macchiato.css";
