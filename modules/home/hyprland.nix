@@ -1,8 +1,23 @@
-{ pkgs, lib, config, ... }:
+{ 
+  pkgs, 
+  lib, 
+  config, 
+  ...
+}:
 
 let
   cfg = config.modules.home.hyprland;
   plasmaCfg = config.modules.home.plasma;
+  
+  # Import Catppuccin Macchiato theme
+  catppuccin-macchiato = pkgs.fetchFromGitHub {
+    owner = "catppuccin";
+    repo = "hyprland";
+    rev = "main";
+    sha256 = lib.fakeSha256;
+  };
+  
+  macchiato-theme = builtins.readFile "${catppuccin-macchiato}/themes/macchiato.conf";
 in
 {
   options.modules.home.hyprland.enable = lib.mkEnableOption "Configuration Hyprland (compositor, waybar, keybinds)";
@@ -56,13 +71,16 @@ in
           sensitivity = 0;
         };
 
+        # ── Import thème Catppuccin Macchiato ───────────────────
+        source = "${catppuccin-macchiato}/themes/macchiato.conf";
+
         # ── Apparence ─────────────────────────────────────────────
         general = {
           gaps_in = 4;
           gaps_out = 8;
           border_size = 2;
-          "col.active_border" = "rgba(89b4faee) rgba(cba6f7ee) 45deg";
-          "col.inactive_border" = "rgba(313244aa)";
+          "col.active_border" = "$mauve $blue 45deg";
+          "col.inactive_border" = "$surface0";
           layout = "dwindle";
         };
 
@@ -77,8 +95,10 @@ in
             enabled = true;
             range = 12;
             render_power = 3;
-            color = "rgba(1a1a2eee)";
+            color = "rgba(0, 0, 0, 0.4)";
           };
+          "col.shadow" = "$base";
+          "col.shadow_inactive" = "$mantle";
         };
 
         animations = {
