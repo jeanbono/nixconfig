@@ -28,7 +28,7 @@ let
     owner = "ndom91";
     repo = "rose-pine-hyprcursor";
     rev = "main";
-    sha256 = lib.fakeSha256;
+    sha256 = "sha256-ouuA8LVBXzrbYwPW2vNjh7fC9H2UBud/1tUiIM5vPvM=";
   };
   
   waybar-macchiato = builtins.readFile "${catppuccin-waybar}/themes/macchiato.css";
