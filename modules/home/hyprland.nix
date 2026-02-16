@@ -475,38 +475,36 @@ in
     '';
 
     xdg.configFile."wlogout/layout".text = ''
-      [
-        {
-          "label": "lock",
-          "action": "hyprlock",
-          "text": "Lock",
-          "keybind": "l"
-        },
-        {
-          "label": "logout", 
-          "action": "loginctl terminate-session $XDG_SESSION_ID",
-          "text": "Logout",
-          "keybind": "e"
-        },
-        {
-          "label": "suspend",
-          "action": "systemctl suspend", 
-          "text": "Suspend",
-          "keybind": "s"
-        },
-        {
-          "label": "reboot",
-          "action": "systemctl reboot",
-          "text": "Reboot", 
-          "keybind": "r"
-        },
-        {
-          "label": "shutdown",
-          "action": "systemctl poweroff",
-          "text": "Shutdown",
-          "keybind": "p"
-        }
-      ]
+      {
+        "label": "lock",
+        "action": "hyprlock",
+        "text": "Lock",
+        "keybind": "l"
+      }
+      {
+        "label": "logout", 
+        "action": "loginctl terminate-session $XDG_SESSION_ID",
+        "text": "Logout",
+        "keybind": "e"
+      }
+      {
+        "label": "suspend",
+        "action": "systemctl suspend", 
+        "text": "Suspend",
+        "keybind": "s"
+      }
+      {
+        "label": "reboot",
+        "action": "systemctl reboot",
+        "text": "Reboot", 
+        "keybind": "r"
+      }
+      {
+        "label": "shutdown",
+        "action": "systemctl poweroff",
+        "text": "Shutdown",
+        "keybind": "p"
+      }
     '';
 
     # ── Hyprlock (écran de verrouillage) ────────────────────────
