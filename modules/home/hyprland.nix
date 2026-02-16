@@ -380,6 +380,9 @@ in
       hide_scroll=true
       matching=fuzzy
       sort_order=alphabetical
+      allow_images=true
+      image_size=40
+      term=kitty
     '';
 
     
