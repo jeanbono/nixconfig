@@ -28,7 +28,7 @@ let
     owner = "rose-pine";
     repo = "cursor";
     rev = "v1.1.0";
-    sha256 = "sha256-529d313bcd5eea76fc57e6857c0dede48dbcdeca";
+    sha256 = "sha256-xSa/z0Pu+ioZ0gFH9qSo9P94NPkEMovstm1avJ7rvzM=";
   };
   
   waybar-macchiato = builtins.readFile "${catppuccin-waybar}/themes/macchiato.css";
