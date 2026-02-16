@@ -9,7 +9,7 @@ let
   cfg = config.modules.home.hyprland;
   plasmaCfg = config.modules.home.plasma;
   
-  # Import Catppuccin Macchiato themes
+  # Import themes and cursors
   catppuccin-hyprland = pkgs.fetchFromGitHub {
     owner = "catppuccin";
     repo = "hyprland";
@@ -22,6 +22,13 @@ let
     repo = "waybar";
     rev = "v1.1";
     sha256 = lib.fakeSha256;
+  };
+  
+  rose-pine-cursor = pkgs.fetchFromGitHub {
+    owner = "rose-pine";
+    repo = "cursor";
+    rev = "v1.1.0";
+    sha256 = "sha256-529d313bcd5eea76fc57e6857c0dede48dbcdeca";
   };
   
   waybar-macchiato = builtins.readFile "${catppuccin-waybar}/themes/macchiato.css";
@@ -45,6 +52,10 @@ in
     
     home.file."bin/power-menu.sh".source = ./scripts/power-menu.sh;
     home.file."bin/power-menu.sh".executable = true;
+    
+    # Curseurs Rose Pine
+    home.file.".local/share/icons/Rose Pine".source = "${rose-pine-cursor}/themes/Rose Pine";
+    home.file.".icons/default".source = "${rose-pine-cursor}/themes/Rose Pine";
 
     wayland.windowManager.hyprland = {
       enable = true;
@@ -127,16 +138,22 @@ in
           disable_hyprland_logo = true;
         };
 
-        # ── Nvidia ────────────────────────────────────────────────
+        # ── Variables d'environnement ─────────────────────────────────
         env = [
+          # Nvidia
           "LIBVA_DRIVER_NAME,nvidia"
           "__GLX_VENDOR_LIBRARY_NAME,nvidia"
           "ELECTRON_OZONE_PLATFORM_HINT,auto"
           "NVD_BACKEND,direct"
+          
+          # Curseurs Rose Pine
+          "HYPRCURSOR_THEME,Rose Pine"
+          "HYPRCURSOR_SIZE,24"
         ];
 
         cursor = {
           no_hardware_cursors = true;
+          default_monitor = "DP-1";
         };
 
         # ── Autostart ─────────────────────────────────────────────
@@ -499,6 +516,7 @@ in
       pavucontrol   # Contrôle audio
       brightnessctl # Luminosité
       dunst         # Notifications
+      hyprcursor    # Support curseurs modernes
     ];
 
     # ── Services systemd utilisateur ───────────────────────────────
