@@ -480,25 +480,25 @@ in
         "action": "hyprlock",
         "text": "Lock",
         "key": "l"
-      }
+      },
       {
         "label": "logout", 
         "action": "loginctl terminate-session $XDG_SESSION_ID",
         "text": "Logout",
         "key": "e"
-      }
+      },
       {
         "label": "suspend",
         "action": "systemctl suspend", 
         "text": "Suspend",
         "key": "s"
-      }
+      },
       {
         "label": "reboot",
         "action": "systemctl reboot",
         "text": "Reboot", 
         "key": "r"
-      }
+      },
       {
         "label": "shutdown",
         "action": "systemctl poweroff",
