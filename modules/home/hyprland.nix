@@ -24,7 +24,6 @@ let
     sha256 = "sha256-xSa/z0Pu+ioZ0gFH9qSo9P94NPkEMovstm1avJ7rvzN=";
   };
   
-  macchiato-theme = builtins.readFile "${catppuccin-hyprland}/themes/macchiato.conf";
   waybar-macchiato = builtins.readFile "${catppuccin-waybar}/themes/macchiato.css";
 in
 {
