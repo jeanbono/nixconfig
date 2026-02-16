@@ -438,19 +438,20 @@ in
           outline_thickness = 2;
           dots_size = 0.2;
           dots_spacing = 0.15;
-          outer_color = "rgba(137, 180, 250, 0.5)";
-          inner_color = "rgba(30, 30, 46, 0.9)";
-          font_color = "rgb(205, 214, 244)";
+          outer_color = "$mauve";
+          inner_color = "$base";
+          font_color = "$text";
           fade_on_empty = false;
           placeholder_text = "Mot de passe...";
           fail_text = "Incorrect";
           halign = "center";
           valign = "center";
+          font_family = "FiraCode Nerd Font";
         }];
 
         label = [{
           text = "cmd[update:1000] date +\"%H:%M\"";
-          color = "rgba(205, 214, 244, 1.0)";
+          color = "$text";
           font_size = 64;
           font_family = "FiraCode Nerd Font";
           position = "0, 120";
