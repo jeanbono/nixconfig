@@ -21,7 +21,7 @@ in
 
     home.file."wallpaper.png".source = ../../wallpapers/wallpaper.png;
     
-    home.file."bin/power-menu.sh".source = ../scripts/power-menu.sh;
+    home.file."bin/power-menu.sh".source = ./scripts/power-menu.sh;
     home.file."bin/power-menu.sh".executable = true;
 
     wayland.windowManager.hyprland = {
