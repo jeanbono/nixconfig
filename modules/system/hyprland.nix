@@ -42,11 +42,13 @@ in
       enable = true;
       settings = {
         default_session = {
-          command = "uwsm start hyprland.desktop";
+          command = "uwsm start hyprland-uwsm.desktop";
           user = cfg.user;
         };
       };
     };
+
+    services.displayManager.defaultSession = "hyprland-uwsm";
 
     fonts.packages = with pkgs; [
       nerd-fonts.symbols-only
