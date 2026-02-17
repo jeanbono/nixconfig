@@ -540,6 +540,7 @@ in
       brightnessctl # Luminosité
       dunst         # Notifications
       hyprcursor    # Support curseurs modernes
+      hyprshutdown  # Handle graceful shutdown
     ];
 
     # ── Services systemd utilisateur ───────────────────────────────

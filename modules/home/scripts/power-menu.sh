@@ -5,12 +5,12 @@ CHOICE=$(echo -e "Shutdown\nReboot\nLogout" | wofi --dmenu)
 
 case "$CHOICE" in
     Shutdown)
-        systemctl poweroff
+        hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'
         ;;
     Reboot)
-        systemctl reboot
+        hyprshutdown -t 'Restarting...' --post-cmd 'reboot'
         ;;
     Logout)
-        hyprctl dispatch exit
+        hyprshutdown -t 'Logging out...'
         ;;
 esac
