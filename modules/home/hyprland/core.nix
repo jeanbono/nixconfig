@@ -123,7 +123,7 @@ in
           "$mod, Return, exec, uwsm app -- kitty"
           "$mod, Q, killactive"
           "$mod, M, exec, ~/bin/power-menu.sh"
-          "$mod, E, exec, uwsm app -- nautilus"
+          "$mod, E, exec, uwsm app -- kitty -e yazi"
           "$mod, V, togglefloating"
           "$mod, D, exec, uwsm app -- wofi --show drun"
           "$mod, F, fullscreen"

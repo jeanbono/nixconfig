@@ -15,6 +15,7 @@ in
     ./hypridle.nix
     ./dunst.nix
     ./hyprpaper.nix
+    ./yazi.nix
     ./packages.nix
   ];
 
