@@ -55,6 +55,25 @@ in
       description = "Source du thème Catppuccin pour Waybar";
     };
 
+    dunstSource = lib.mkOption {
+      type = lib.types.package;
+      readOnly = true;
+      default = pkgs.fetchFromGitHub {
+        owner = "catppuccin";
+        repo = "dunst";
+        rev = "main";
+        sha256 = "sha256-rBp9wU6QHpmNAjeaKnI6u8rOUlv8MC70SLUzeKHN/eY=";
+      };
+      description = "Source du thème Catppuccin pour Dunst";
+    };
+
+    dunstThemeFile = lib.mkOption {
+      type = lib.types.str;
+      readOnly = true;
+      default = "${cfg.dunstSource}/themes/${cfg.flavor}.conf";
+      description = "Chemin vers le fichier de thème Dunst";
+    };
+
     # Chemins calculés
     hyprlandThemeFile = lib.mkOption {
       type = lib.types.str;
