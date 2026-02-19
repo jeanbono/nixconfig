@@ -11,7 +11,7 @@ in
         border: 2px solid rgba(137, 180, 250, 0.4);
         border-radius: 12px;
         background-color: rgba(30, 30, 46, 0.92);
-        font-family: "FiraCode Nerd Font", "Noto Sans", sans-serif;
+        font-family: "MonaspiceNe Nerd Font", "Noto Sans", sans-serif;
         font-size: 14px;
       }
 

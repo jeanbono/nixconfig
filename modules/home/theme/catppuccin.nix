@@ -94,7 +94,7 @@ in
         package = pkgs.papirus-icon-theme;
       };
       font = {
-        name = "FiraCode Nerd Font";
+        name = "MonaspiceNe Nerd Font";
         size = 11;
       };
     };

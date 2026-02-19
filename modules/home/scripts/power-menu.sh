@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
 # Menu d'extinction avec wofi
-CHOICE=$(echo -e "Shutdown\nReboot\nLogout" | wofi --dmenu)
+CHOICE=$(echo -e "󰐥  Shutdown\n󰜉  Reboot\n󰍃  Logout" | wofi --dmenu)
 
 case "$CHOICE" in
-    Shutdown)
+    "󰐥  Shutdown")
         hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'
         ;;
-    Reboot)
+    "󰜉  Reboot")
         hyprshutdown -t 'Restarting...' --post-cmd 'reboot'
         ;;
-    Logout)
+    "󰍃  Logout")
         hyprshutdown -t 'Logging out...'
         ;;
 esac

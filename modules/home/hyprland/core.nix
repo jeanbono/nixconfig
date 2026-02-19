@@ -122,7 +122,7 @@ in
           "$mod, Escape, exec, uwsm app -- hyprlock"
           "$mod, Return, exec, uwsm app -- kitty"
           "$mod, Q, killactive"
-          "$mod, M, exec, ~/bin/power-menu.sh"
+          "$mod, M, exec, power-menu"
           "$mod, E, exec, uwsm app -- kitty -e yazi"
           "$mod, V, togglefloating"
           "$mod, D, exec, uwsm app -- wofi --show drun"

@@ -24,7 +24,7 @@ in
           separator_color = "$blue";
           sort = "yes";
           idle_threshold = 120;
-          font = "FiraCode Nerd Font 11";
+          font = "MonaspiceNe Nerd Font 11";
           line_height = 0;
           markup = "full";
           alignment = "left";

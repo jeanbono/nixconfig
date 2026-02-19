@@ -79,7 +79,7 @@ in
         @import "${themeCfg.waybarThemeFile}";
 
         * {
-          font-family: "FiraCode Nerd Font", "Noto Sans", sans-serif;
+          font-family: "MonaspiceNe Nerd Font", "Noto Sans", sans-serif;
           font-size: 13px;
           min-height: 0;
         }

@@ -32,14 +32,14 @@ in
           fail_text = "Incorrect";
           halign = "center";
           valign = "center";
-          font_family = "FiraCode Nerd Font";
+          font_family = "MonaspiceNe Nerd Font";
         }];
 
         label = [{
           text = "cmd[update:1000] date +\"%H:%M\"";
           color = "$text";
           font_size = 64;
-          font_family = "FiraCode Nerd Font";
+          font_family = "MonaspiceNe Nerd Font";
           position = "0, 120";
           halign = "center";
           valign = "center";
