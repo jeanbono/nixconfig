@@ -24,7 +24,7 @@ in
       enable = true;
       settings = {
         confirm_os_window_close = 0;
-        background_opacity = "0.98";
+        background_opacity = 0.4;
         enable_audio_bell = "no";
         cursor_shape = "block";
         cursor_shape_unfocused = "hollow";
