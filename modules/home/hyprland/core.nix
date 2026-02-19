@@ -6,8 +6,6 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    xdg.configFile."hypr/hyprland.conf".force = true;
-
     wayland.windowManager.hyprland = {
       enable = true;
       systemd.enable = false;

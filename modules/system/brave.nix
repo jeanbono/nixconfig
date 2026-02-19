@@ -3,6 +3,7 @@
 let
   cfg = config.modules.system.brave;
   ublockId = "cjpalhdlnbpafiamejdnhcphjbkeiagm";
+  catppuccinMacchiatoId = "cmpdlhmnmjhihmcfnigoememnffkimlk";
 in
 {
   options.modules.system.brave = {
@@ -34,6 +35,10 @@ in
       ExtensionSettings = {
         ${ublockId} = {
           toolbar_pin = "force_pinned";
+        };
+        ${catppuccinMacchiatoId} = {
+          installation_mode = "force_installed";
+          update_url = "https://clients2.google.com/service/update2/crx";
         };
       } // lib.genAttrs cfg.extraPinnedExtensions (_: {
         toolbar_pin = "force_pinned";

@@ -26,6 +26,8 @@ in
       withUWSM = true;
     };
 
+    programs.dconf.enable = true;
+
     # Variables d'environnement Nvidia pour Hyprland
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";

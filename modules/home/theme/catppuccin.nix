@@ -179,6 +179,8 @@ in
       GTK_THEME = cfg.gtkThemeName;
     };
 
+    dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+
     gtk = {
       enable = true;
       theme = {
