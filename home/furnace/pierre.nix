@@ -15,6 +15,11 @@
     tools.enable = true;
     dev.enable = true;
     hyprland.enable = true;
+    theme.catppuccin = {
+      enable = true;
+      flavor = "macchiato";
+      accent = "blue";
+    };
   };
 
   home.username = "pierre";

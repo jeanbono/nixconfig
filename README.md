@@ -4,7 +4,7 @@ Configuration NixOS modulaire basée sur les **Nix Flakes** et **Home Manager**.
 
 Chaque fonctionnalité est un module activable via une option `enable`, ce qui permet de **composer** chaque host à la carte.
 
-Les modules sont **découverts automatiquement** : il suffit de déposer un fichier `.nix` ou un dossier dans `modules/system/` ou `modules/home/` pour qu'il soit importé (via `lib.nix`).
+Les modules sont **découverts automatiquement** : il suffit de déposer un fichier `.nix` dans `modules/system/` ou `modules/home/` pour qu'il soit importé (via `lib.nix`). Les modules organisés en sous-dossiers exposent un `default.nix` et sont référencés par un fichier `.nix` de même nom dans le dossier parent.
 
 ## Structure du projet
 
@@ -12,7 +12,8 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 .
 ├── flake.nix                  # Point d'entrée — mkHost importe tous les modules
 ├── flake.lock
-├── lib.nix                    # importDir — auto-discovery des modules
+├── lib.nix                    # importDir — auto-discovery des modules (.nix réguliers)
+├── wallpapers/                # Fonds d'écran
 ├── hosts/
 │   └── furnace/               # Config spécifique au host "furnace"
 │       ├── default.nix        #   Active les modules + config machine
@@ -21,28 +22,44 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 │   └── furnace/
 │       └── pierre.nix         # Config Home Manager de l'utilisateur pierre
 └── modules/
-    ├── system/                # Modules NixOS (auto-discovery, structure plate)
+    ├── system/                # Modules NixOS (auto-discovery)
     │   ├── nix.nix            #   modules.system.nix
     │   ├── locale.nix         #   modules.system.locale
     │   ├── network.nix        #   modules.system.network
     │   ├── audio.nix          #   modules.system.audio
     │   ├── printing.nix       #   modules.system.printing
-    │   ├── plasma.nix         #   modules.system.plasma
+    │   ├── hyprland.nix       #   modules.system.hyprland
+    │   ├── plasma.nix         #   modules.system.plasma  (mutuellement exclusif avec hyprland)
     │   ├── nvidia.nix         #   modules.system.nvidia
     │   ├── gaming.nix         #   modules.system.gaming
     │   ├── onepassword.nix    #   modules.system.onepassword
     │   ├── shell.nix          #   modules.system.shell
     │   ├── dev.nix            #   modules.system.dev
     │   └── home-manager.nix   #   Intégration Home Manager (toujours actif)
-    └── home/                  # Modules Home Manager (auto-discovery, structure plate)
+    └── home/                  # Modules Home Manager (auto-discovery)
         ├── shell.nix          #   modules.home.shell
         ├── git.nix            #   modules.home.git
         ├── ssh.nix            #   modules.home.ssh
         ├── brave.nix          #   modules.home.brave
         ├── messaging.nix      #   modules.home.messaging
-        ├── desktop.nix        #   modules.home.desktop
+        ├── tools.nix          #   modules.home.tools
         ├── dev.nix            #   modules.home.dev
-        └── onepassword.nix    #   modules.home.onepassword
+        ├── hyprland.nix       #   → hyprland/  (point d'entrée)
+        ├── hyprland/          #   modules.home.hyprland — découpé en sous-modules
+        │   ├── default.nix    #     option enable + assertion plasma
+        │   ├── core.nix       #     compositor, moniteurs, keybinds, animations
+        │   ├── cursor.nix     #     curseur rose-pine-hyprcursor
+        │   ├── scripts.nix    #     wallpaper.png + power-menu.sh
+        │   ├── waybar.nix     #     barre de statut
+        │   ├── wofi.nix       #     lanceur d'applications
+        │   ├── hyprlock.nix   #     écran de verrouillage
+        │   ├── hypridle.nix   #     verrouillage automatique
+        │   ├── dunst.nix      #     notifications
+        │   ├── hyprpaper.nix  #     fond d'écran
+        │   └── packages.nix   #     paquets complémentaires
+        ├── theme.nix          #   → theme/  (point d'entrée)
+        └── theme/             #   Theming centralisé
+            └── catppuccin.nix #     modules.home.theme.catppuccin
 ```
 
 ## Modules disponibles
@@ -56,7 +73,8 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 | `modules.system.network.enable` | NetworkManager, SSH, curl, wget |
 | `modules.system.audio.enable` | PipeWire (ALSA, PulseAudio, JACK) |
 | `modules.system.printing.enable` | Impression (CUPS) |
-| `modules.system.plasma.enable` | KDE Plasma 6 + SDDM Wayland + polices |
+| `modules.system.hyprland.enable` | Hyprland (Wayland compositor) + portails XDG + polices + greetd/UWSM |
+| `modules.system.plasma.enable` | KDE Plasma 6 + SDDM Wayland + polices *(exclusif avec hyprland)* |
 | `modules.system.nvidia.enable` | Pilote NVIDIA beta, open kernel module, modesetting |
 | `modules.system.gaming.enable` | Steam, Proton, MangoHud, Gamemode, Wine |
 | `modules.system.onepassword.enable` | 1Password CLI + GUI |
@@ -72,9 +90,19 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 | `modules.home.ssh.enable` | SSH + agent 1Password |
 | `modules.home.brave.enable` | Brave browser + policies hardening |
 | `modules.home.messaging.enable` | Discord, Zulip, Element |
-| `modules.home.desktop.enable` | Paquets CLI (ripgrep, fd, jq…), variables Wayland |
+| `modules.home.tools.enable` | Paquets CLI (ripgrep, fd, jq…) |
 | `modules.home.dev.enable` | Outils de développement (IntelliJ IDEA) |
-| `modules.home.onepassword.enable` | Extension 1Password pour Brave (requiert modules.home.brave) |
+| `modules.home.hyprland.enable` | Hyprland complet : compositor, Waybar, Wofi, Hyprlock, Hypridle, Dunst, swww *(exclusif avec plasma)* |
+
+### Thème (`modules.home.theme.*`)
+
+| Option | Description |
+|---|---|
+| `modules.home.theme.catppuccin.enable` | Thème Catppuccin (GTK, Hyprland, Waybar) |
+| `modules.home.theme.catppuccin.flavor` | Variante : `latte` / `frappe` / `macchiato` / `mocha` (défaut : `macchiato`) |
+| `modules.home.theme.catppuccin.accent` | Couleur d'accent : `blue`, `mauve`, `green`… (défaut : `blue`) |
+
+Le module theme expose des options calculées (`hyprlandThemeFile`, `waybarThemeFile`, `gtkThemeName`) consommées automatiquement par les sous-modules Hyprland. Changer `flavor` ou `accent` propage le thème partout.
 
 ## Inputs du flake
 
@@ -83,10 +111,11 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 | **nixpkgs** | `nixos-unstable` |
 | **home-manager** | `nix-community/home-manager` (suit nixpkgs) |
 | **NUR** | `nix-community/NUR` (suit nixpkgs) |
+| **plasma-manager** | `nix-community/plasma-manager` (suit nixpkgs) |
 
 ## Host : `furnace`
 
-Machine de bureau Intel + NVIDIA sous KDE Plasma 6 / Wayland.
+Machine de bureau Intel + NVIDIA sous **Hyprland / Wayland**.
 
 ```nix
 # hosts/furnace/default.nix
@@ -96,9 +125,11 @@ modules.system = {
   network.enable = true;
   audio.enable = true;
   printing.enable = true;
-  plasma.enable = true;
+  hyprland.enable = true;
+  hyprland.user = "pierre";
   nvidia.enable = true;
   gaming.enable = true;
+  brave.enable = true;
   onepassword.enable = true;
   shell.enable = true;
   dev.enable = true;
@@ -113,9 +144,14 @@ modules.home = {
   ssh.enable = true;
   brave.enable = true;
   messaging.enable = true;
-  desktop.enable = true;
+  tools.enable = true;
   dev.enable = true;
-  onepassword.enable = true;
+  hyprland.enable = true;
+  theme.catppuccin = {
+    enable = true;
+    flavor = "macchiato";
+    accent = "blue";
+  };
 };
 ```
 
@@ -156,13 +192,12 @@ nix flake update
 
 ### Ajouter un nouveau module
 
-Il suffit de créer un fichier `.nix` dans `modules/system/` ou `modules/home/`.
-Le module sera automatiquement importé grâce à `lib.nix`. Il ne reste qu'à l'activer dans le host avec `modules.<system|home>.<nom>.enable = true;`.
+Créer un fichier `.nix` dans `modules/system/` ou `modules/home/` — il sera automatiquement importé par `lib.nix`. Pour un module avec plusieurs fichiers, créer un sous-dossier avec un `default.nix` et un fichier `.nix` de même nom dans le dossier parent qui l'importe.
 
 ### Exemple : serveur headless
 
 ```nix
-# Seulement le strict nécessaire, pas d'audio/plasma/gaming
+# Seulement le strict nécessaire, pas d'audio/hyprland/gaming
 modules.system = {
   nix.enable = true;
   locale.enable = true;
