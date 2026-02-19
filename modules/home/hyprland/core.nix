@@ -96,10 +96,6 @@ in
           "__GLX_VENDOR_LIBRARY_NAME,nvidia"
           "ELECTRON_OZONE_PLATFORM_HINT,auto"
           "NVD_BACKEND,direct"
-
-          # Curseurs Rose Pine Hyprcursor
-          "HYPRCURSOR_THEME,rose-pine-hyprcursor"
-          "HYPRCURSOR_SIZE,24"
         ];
 
         cursor = {

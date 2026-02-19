@@ -12,11 +12,21 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
+    # Hyprcursor (format moderne pour Hyprland)
     home.file.".local/share/icons/rose-pine-hyprcursor".source = rose-pine-hyprcursor;
 
-    gtk.cursorTheme = {
-      name = "rose-pine-hyprcursor";
-      package = rose-pine-hyprcursor;
+    home.sessionVariables = {
+      HYPRCURSOR_THEME = "rose-pine-hyprcursor";
+      HYPRCURSOR_SIZE = "24";
     };
+
+    # Xcursor classique (fallback pour GTK/X11)
+    gtk.cursorTheme = {
+      name = "BreezeX-RosePine-Linux";
+      package = pkgs.rose-pine-cursor;
+      size = 24;
+    };
+
+    home.packages = [ pkgs.rose-pine-cursor ];
   };
 }

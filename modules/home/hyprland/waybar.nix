@@ -15,61 +15,66 @@ in
           height = 34;
           spacing = 8;
 
-          modules-left = [ "hyprland/workspaces" "hyprland/window" ];
-          modules-center = [ "clock" ];
-          modules-right = [ "pulseaudio" "network" "cpu" "memory" "tray" ];
+          modules-left = [ "hyprland/window" ];
+          modules-center = [ "hyprland/workspaces" ];
+          modules-right = [ "tray" "pulseaudio" "network" "clock" ];
 
           "hyprland/workspaces" = {
-            format = "{icon}";
-            format-icons = {
-              active = "";
-              default = "";
-              empty = "";
-            };
+            format = "●";
             persistent-workspaces = {
-              "*" = 5;
+              "DP-1" = [ 1 2 3 4 5 ];
+              "DP-3" = [ 6 7 8 9 10 ];
             };
+            on-scroll-up = "hyprctl dispatch workspace e+1";
+            on-scroll-down = "hyprctl dispatch workspace e-1";
           };
 
           "hyprland/window" = {
-            max-length = 50;
+            format = "  {}";
+            max-length = 60;
+            separate-outputs = true;
           };
 
           clock = {
-            format = "{:%H:%M}";
-            format-alt = "{:%A %d %B %Y, %H:%M}";
+            format = "  {:%H:%M}";
+            format-alt = "  {:%A %d %B %Y}";
             tooltip-format = "<tt>{calendar}</tt>";
-          };
-
-          cpu = {
-            format = " {usage}%";
-            interval = 2;
-          };
-
-          memory = {
-            format = " {percentage}%";
-            interval = 2;
+            calendar = {
+              mode = "month";
+              on-scroll = 1;
+              format = {
+                today = "<span color='#cba6f7'><b><u>{}</u></b></span>";
+              };
+            };
           };
 
           pulseaudio = {
             format = "{icon} {volume}%";
-            format-muted = " muet";
+            format-muted = "󰝟 muet";
             format-icons = {
-              default = [ "" "" "" ];
+              default = [ "󰕿" "󰖀" "󰕾" ];
+              headphone = "󰋋";
+              headset = "󰋎";
             };
             on-click = "pavucontrol";
+            on-scroll-up = "pactl set-sink-volume @DEFAULT_SINK@ +2%";
+            on-scroll-down = "pactl set-sink-volume @DEFAULT_SINK@ -2%";
+            tooltip-format = "{desc} — {volume}%";
           };
 
           network = {
-            format-wifi = " {signalStrength}%";
-            format-ethernet = " {ipaddr}";
-            format-disconnected = "⚠ déconnecté";
-            tooltip-format = "{ifname}: {ipaddr}/{cidr}";
+            format-wifi = "󰤨 {essid}";
+            format-ethernet = "󰈀 {ifname}";
+            format-disconnected = "󰤭";
+            tooltip-format-wifi = "{essid} ({signalStrength}%) — {ipaddr}";
+            tooltip-format-ethernet = "{ifname}: {ipaddr}/{cidr}";
+            tooltip-format-disconnected = "Déconnecté";
+            on-click = "kitty -e nmtui";
           };
 
           tray = {
-            icon-size = 18;
-            spacing = 8;
+            icon-size = 16;
+            spacing = 6;
             show-passive-items = true;
           };
         };
@@ -82,50 +87,100 @@ in
           font-family: "MonaspiceNe Nerd Font", "Noto Sans", sans-serif;
           font-size: 13px;
           min-height: 0;
+          border: none;
+          border-radius: 0;
         }
 
         window#waybar {
-          background-color: alpha(@base, 0.85);
+          background-color: alpha(@base, 0.90);
           color: @text;
-          border-bottom: 2px solid alpha(@mauve, 0.3);
+          border-bottom: 1px solid alpha(@surface1, 0.5);
+        }
+
+        /* ── Fenêtre active ─────────────────────────────── */
+        #window {
+          color: @subtext1;
+          padding: 0 12px;
+          font-style: italic;
+        }
+
+
+        /* ── Workspaces ─────────────────────────────────── */
+        #workspaces {
+          margin: 4px 0;
+          padding: 0 4px;
         }
 
         #workspaces button {
-          padding: 0 6px;
-          color: @subtext0;
-          border: none;
-          border-radius: 4px;
-          margin: 3px 2px;
+          padding: 0 3px;
+          color: alpha(@overlay1, 0.5);
+          margin: 0;
+          transition: color 0.15s ease;
+          font-size: 10px;
+          background: transparent;
+          box-shadow: none;
         }
 
         #workspaces button.active {
-          color: @text;
-          background-color: alpha(@mauve, 0.25);
+          color: @mauve;
+          font-size: 14px;
+        }
+
+        #workspaces button.occupied {
+          color: @overlay2;
+        }
+
+        #workspaces button.urgent {
+          color: @red;
+          font-size: 14px;
         }
 
         #workspaces button:hover {
-          background-color: alpha(@mauve, 0.15);
+          color: @text;
+          background: transparent;
+          box-shadow: none;
         }
 
-        #clock, #cpu, #memory, #pulseaudio, #network, #tray {
-          padding: 0 10px;
+        /* ── Modules droite ─────────────────────────────── */
+        #pulseaudio, #network, #clock {
+          padding: 0 12px;
+          color: @text;
+        }
+
+        #pulseaudio {
+          color: @pink;
+        }
+
+        #pulseaudio.muted {
+          color: @overlay0;
+        }
+
+        #network {
+          color: @sky;
+        }
+
+        #network.disconnected {
+          color: @red;
         }
 
         #clock {
+          color: @lavender;
           font-weight: bold;
-          color: @blue;
         }
 
-        #cpu { color: @green; }
-        #memory { color: @yellow; }
+        #tray {
+          padding: 0 8px;
+        }
 
-        #pulseaudio { color: @pink; }
-        #pulseaudio.muted { color: @subtext0; }
+        #tray > .passive {
+          -gtk-icon-effect: dim;
+        }
 
-        #network { color: @sky; }
-        #network.disconnected { color: @red; }
-
-        #tray { padding: 0 6px; }
+        #tray > .needs-attention {
+          -gtk-icon-effect: highlight;
+          background-color: alpha(@red, 0.2);
+          border-radius: 4px;
+        }
       '';
     };
   };
