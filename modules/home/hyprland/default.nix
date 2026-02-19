@@ -10,7 +10,7 @@ in
     ./cursor.nix
     ./scripts.nix
     ./waybar.nix
-    ./wofi.nix
+    ./fuzzel.nix
     ./hyprlock.nix
     ./hypridle.nix
     ./dunst.nix
