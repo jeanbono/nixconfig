@@ -28,6 +28,8 @@ in
 
     programs.dconf.enable = true;
 
+    programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+
     # Variables d'environnement Nvidia pour Hyprland
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";

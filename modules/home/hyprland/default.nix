@@ -11,6 +11,7 @@ in
     ./scripts.nix
     ./waybar.nix
     ./fuzzel.nix
+    ./wlogout.nix
     ./hyprlock.nix
     ./hypridle.nix
     ./dunst.nix
