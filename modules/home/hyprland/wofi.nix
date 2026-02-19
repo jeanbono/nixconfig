@@ -2,15 +2,18 @@
 
 let
   cfg = config.modules.home.hyprland;
+  t = config.modules.home.theme.catppuccin;
+  p = t.palette;
+  rgba = t.rgba;
 in
 {
   config = lib.mkIf cfg.enable {
     xdg.configFile."wofi/style.css".text = ''
       window {
         margin: 0;
-        border: 2px solid rgba(137, 180, 250, 0.4);
+        border: 2px solid ${rgba p.blue 0.4};
         border-radius: 12px;
-        background-color: rgba(30, 30, 46, 0.92);
+        background-color: ${rgba p.base 0.92};
         font-family: "MonaspiceNe Nerd Font", "Noto Sans", sans-serif;
         font-size: 14px;
       }
@@ -20,12 +23,12 @@ in
         padding: 8px 12px;
         border: none;
         border-radius: 8px;
-        background-color: rgba(49, 50, 68, 0.9);
-        color: #cdd6f4;
+        background-color: ${p.surface0};
+        color: ${p.text};
       }
 
       #input:focus {
-        border: 2px solid rgba(137, 180, 250, 0.5);
+        border: 2px solid ${rgba p.blue 0.5};
       }
 
       #inner-box {
@@ -40,16 +43,16 @@ in
       #entry {
         padding: 6px 12px;
         border-radius: 8px;
-        color: #cdd6f4;
+        color: ${p.subtext1};
       }
 
       #entry:selected {
-        background-color: rgba(137, 180, 250, 0.2);
-        color: #cdd6f4;
+        background-color: ${rgba p.blue 0.2};
+        color: ${p.text};
       }
 
       #entry:hover {
-        background-color: rgba(137, 180, 250, 0.1);
+        background-color: ${rgba p.blue 0.1};
       }
 
       #entry image {
@@ -57,11 +60,11 @@ in
       }
 
       #text {
-        color: #cdd6f4;
+        color: ${p.subtext1};
       }
 
       #text:selected {
-        color: #cdd6f4;
+        color: ${p.text};
       }
     '';
 
