@@ -171,6 +171,17 @@ in
           "$mod, mouse_up, workspace, e-1"
         ];
 
+        # Touches multimédia (fallback clavier standard)
+        bindel = [
+          ", XF86AudioRaiseVolume, exec, wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 2%+"
+          ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
+        ];
+
+        bindl = [
+          ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+          ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+        ];
+
         # Déplacement / redimensionnement souris
         bindm = [
           "$mod, mouse:272, movewindow"
