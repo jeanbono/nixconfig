@@ -14,6 +14,7 @@
     messaging.enable = true;
     tools.enable = true;
     dev.enable = true;
+    nvim.enable = true;
     hyprland.enable = true;
     theme.catppuccin = {
       enable = true;
