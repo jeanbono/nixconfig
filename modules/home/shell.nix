@@ -16,7 +16,7 @@ in
       initContent = ''
         autoload -U colors && colors
         PROMPT=$'%F{221}%n%f %F{white}in%f %F{75}%1~%f\n \u203A '
-        export EDITOR=vim
+        export EDITOR=nvim
       '';
     };
 

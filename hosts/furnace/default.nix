@@ -45,7 +45,6 @@ in
   home-manager.users.${username} = import ../../home/furnace/${username}.nix;
 
   environment.systemPackages = with pkgs; [
-    vim
     git
     pciutils
     usbutils
