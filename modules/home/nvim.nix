@@ -46,6 +46,7 @@ in
 
         # ── Autocomplétion (blink.cmp) ────────────────────────────
         blink-cmp
+        windsurf-nvim
 
         # ── Snippets ──────────────────────────────────────────────
         luasnip
@@ -193,13 +194,23 @@ in
             nerd_font_variant = "mono",
           },
           sources = {
-            default = { "lsp", "path", "snippets", "buffer" },
+            default = { "lsp", "path", "snippets", "buffer", "codeium" },
+            providers = {
+              codeium = { name = "Codeium", module = "codeium.blink", async = true },
+            },
           },
           snippets = { preset = "luasnip" },
           completion = {
             documentation = { auto_show = true, auto_show_delay_ms = 200 },
           },
         })
+
+
+        -- ── Windsurf ──────────────────────────────────────────────────
+        require("codeium").setup({
+          enable_cmp_source = false,
+        })
+
 
         -- ── LSP (nvim 0.11 API) ───────────────────────────────────────
         local capabilities = require("blink.cmp").get_lsp_capabilities()
