@@ -176,16 +176,6 @@ in
           git = { enable = true },
         })
 
-        -- ── Treesitter ────────────────────────────────────────────────
-        vim.api.nvim_create_autocmd("FileType", {
-          callback = function(args)
-            local ok = pcall(vim.treesitter.start, args.buf)
-            if not ok then
-              vim.bo[args.buf].indentexpr = "nvim_treesitter#indentexpr()"
-            end
-          end,
-        })
-
         -- ── blink.cmp ─────────────────────────────────────────────────
         require("blink.cmp").setup({
           keymap = { preset = "super-tab" },
@@ -303,6 +293,36 @@ in
           { "<leader>bn", "<cmd>bnext<cr>",                desc = "Suivant" },
           { "<leader>bp", "<cmd>bprevious<cr>",            desc = "Précédent" },
           { "<leader>bd", "<cmd>bdelete<cr>",              desc = "Fermer" },
+        })
+
+        -- ── Autocommands ───────────────────────────────────────────────
+        local augroup = vim.api.nvim_create_augroup("UserAutocmds", { clear = true })
+
+        -- Highlight personnalisé pour le yank (lié au thème)
+        vim.api.nvim_set_hl(0, "YankHighlight", { link = "Visual" })
+
+        -- Treesitter : activation + fallback indent
+        vim.api.nvim_create_autocmd("FileType", {
+          group = augroup,
+          desc = "Enable Treesitter or fallback indent",
+          callback = function(args)
+            local ok = pcall(vim.treesitter.start, args.buf)
+            if not ok then
+              vim.bo[args.buf].indentexpr = "nvim_treesitter#indentexpr()"
+            end
+          end,
+        })
+
+        -- Highlight bref lors d’un yank
+        vim.api.nvim_create_autocmd("TextYankPost", {
+          group = augroup,
+          desc = "Highlight on yank",
+          callback = function()
+            vim.highlight.on_yank({
+              higroup = "YankHighlight",
+              timeout = 150,
+            })
+          end,
         })
 
         -- ── Keymaps divers ────────────────────────────────────────────
