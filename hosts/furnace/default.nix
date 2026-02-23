@@ -50,5 +50,34 @@ in
     usbutils
   ];
 
+  # nix-ld: permet aux binaires standards de fonctionner sur NixOS
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # Bibliothèques de base (essentielles)
+    stdenv.cc.cc
+    zlib
+    glib
+    pango
+    cairo
+    atk
+    gdk-pixbuf
+    gtk3
+    # Bibliothèques X11
+    libX11
+    libXext
+    libXi
+    libXrender
+    libXtst
+    libXxf86vm
+    # Polices
+    fontconfig
+    freetype
+    # Réseau et SSL (souvent nécessaire pour les outils de développement)
+    openssl
+    curl
+    nss
+    nspr
+  ];
+
   system.stateVersion = "25.05";
 }
