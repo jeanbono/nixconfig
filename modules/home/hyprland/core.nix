@@ -171,13 +171,13 @@ in
 
         # Touches multimédia (fallback clavier standard)
         bindel = [
-          ", XF86AudioRaiseVolume, exec, wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 2%+"
-          ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
+          ", XF86AudioRaiseVolume, exec, swayosd-client --output-volume +2"
+          ", XF86AudioLowerVolume, exec, swayosd-client --output-volume -2"
         ];
 
         bindl = [
-          ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-          ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+          ", XF86AudioMute, exec, swayosd-client --output-volume mute-toggle"
+          ", XF86AudioMicMute, exec, swayosd-client --input-volume mute-toggle"
         ];
 
         # Déplacement / redimensionnement souris
