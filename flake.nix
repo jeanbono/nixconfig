@@ -3,6 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    cachyos = {
+      url = "github:cachyos/cachyosOS";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,8 +32,13 @@
         modules = [
           { nixpkgs.config.allowUnfree = true; }
 
-          # NUR overlay
-          ({ ... }: { nixpkgs.overlays = [ inputs.nur.overlays.default ]; })
+          # CachyOS overlay
+          ({ ... }: { 
+            nixpkgs.overlays = [ 
+              inputs.cachyos.overlays.default 
+              inputs.nur.overlays.default 
+            ]; 
+          })
 
           # Tous les modules système (chacun activable via modules.system.<name>.enable)
           ./modules/system
