@@ -85,7 +85,7 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 
 | Option | Description |
 |---|---|
-| `modules.home.shell.enable` | Zsh (autosuggestion, prompt custom) + Kitty |
+| `modules.home.shell.enable` | Zsh (autosuggestion, prompt custom) + Alacritty |
 | `modules.home.git.enable` | Git + Jujutsu (identité configurée) |
 | `modules.home.ssh.enable` | SSH + agent 1Password |
 | `modules.home.brave.enable` | Brave browser + policies hardening |

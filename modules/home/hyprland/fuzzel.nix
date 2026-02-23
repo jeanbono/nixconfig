@@ -13,7 +13,7 @@ in
       placeholder=Rechercher...
       width=40
       lines=10
-      terminal=kitty
+      terminal=alacritty
       layer=overlay
       icons-enabled=yes
       icon-theme=Papirus-Dark

@@ -111,6 +111,25 @@ in
       description = "Chemin vers le fichier de thème Fuzzel";
     };
 
+    alacrittySource = lib.mkOption {
+      type = lib.types.package;
+      readOnly = true;
+      default = pkgs.fetchFromGitHub {
+        owner = "catppuccin";
+        repo = "alacritty";
+        rev = "f6cb5a5c2b404cdaceaff193b9c52317f62c62f7";
+        sha256 = "1r2z223hza63v5lmzlg3022mlar67j3a2gh41rsaiqwja2wyiihz";
+      };
+      description = "Source du thème Catppuccin pour Alacritty";
+    };
+
+    alacrittyThemeFile = lib.mkOption {
+      type = lib.types.str;
+      readOnly = true;
+      default = "${cfg.alacrittySource}/catppuccin-${cfg.flavor}.toml";
+      description = "Chemin vers le fichier de thème Alacritty";
+    };
+
     # Chemins calculés
     hyprlandThemeFile = lib.mkOption {
       type = lib.types.str;

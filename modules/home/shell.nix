@@ -2,9 +2,10 @@
 
 let
   cfg = config.modules.home.shell;
+  themeCfg = config.modules.home.theme.catppuccin;
 in
 {
-  options.modules.home.shell.enable = lib.mkEnableOption "Zsh + Kitty (shell complet)";
+  options.modules.home.shell.enable = lib.mkEnableOption "Zsh + Alacritty (shell complet)";
 
   config = lib.mkIf cfg.enable {
     programs.zsh = {
@@ -20,20 +21,28 @@ in
       '';
     };
 
-    programs.kitty = {
+    programs.alacritty = {
       enable = true;
       settings = {
-        confirm_os_window_close = 0;
-        background_opacity = 0.4;
-        enable_audio_bell = "no";
-        cursor_shape = "block";
-        cursor_shape_unfocused = "hollow";
-        cursor_blink_interval = 0;
-        strip_trailing_spaces = "smart";
-        window_padding_width = 10;
-        background = "#1e1e1e";
-        foreground = "#d4d4d4";
-        shell_integration = "no-cursor";
+        general = {
+          import = [ themeCfg.alacrittyThemeFile ];
+        };
+        window = {
+          opacity = 0.4;
+          padding = {
+            x = 10;
+            y = 10;
+          };
+        };
+        font = {
+          normal = {
+            family = "MonaspiceNe Nerd Font";
+          };
+        };
+        cursor = {
+          style = "Block";
+          blink_interval = 0;
+        };
       };
     };
   };

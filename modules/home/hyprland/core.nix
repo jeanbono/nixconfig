@@ -114,10 +114,10 @@ in
 
         bind = [
           "$mod, Escape, exec, uwsm app -- hyprlock"
-          "$mod, Return, exec, uwsm app -- kitty"
+          "$mod, Return, exec, uwsm app -- alacritty"
           "$mod, Q, killactive"
           "$mod, M, exec, pkill wlogout || wlogout"
-          "$mod, E, exec, uwsm app -- kitty -e yazi"
+          "$mod, E, exec, uwsm app -- alacritty -e yazi"
           "$mod, V, togglefloating"
           "$mod, D, exec, uwsm app -- fuzzel"
           "$mod, F, fullscreen"

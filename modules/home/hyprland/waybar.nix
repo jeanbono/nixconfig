@@ -69,7 +69,7 @@ in
             tooltip-format-wifi = "{essid} ({signalStrength}%) — {ipaddr}";
             tooltip-format-ethernet = "{ifname}: {ipaddr}/{cidr}";
             tooltip-format-disconnected = "Déconnecté";
-            on-click = "kitty -e nmtui";
+            on-click = "alacritty -e nmtui";
           };
 
           tray = {
