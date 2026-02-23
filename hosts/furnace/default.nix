@@ -33,7 +33,7 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.kernelModules = [ "atlantic" ];
-  boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
   users.users.${username} = {
     isNormalUser = true;

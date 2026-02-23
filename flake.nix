@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     cachyos = {
-      url = "github:cachyos/cachyosOS";
+      url = "github:xddxdd/nix-cachyos-kernel";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur = {
@@ -35,7 +35,7 @@
           # CachyOS overlay
           ({ ... }: { 
             nixpkgs.overlays = [ 
-              inputs.cachyos.overlays.default 
+              inputs.cachyos.overlays.pinned 
               inputs.nur.overlays.default 
             ]; 
           })
