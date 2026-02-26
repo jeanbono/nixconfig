@@ -9,9 +9,12 @@ in
   config = lib.mkIf cfg.enable {
     programs.steam = {
       enable = true;
-      # Active les libs 32-bit nécessaires à pas mal de jeux
-      # (Steam Runtime / Proton)
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+      localNetworkGameTransfers.openFirewall = true;
     };
+
+    programs.gamemode.enable = true;
 
     # Outils utiles (optionnels)
     environment.systemPackages = with pkgs; [
@@ -20,11 +23,12 @@ in
       protonplus
       vulkan-tools
       wineWow64Packages.stable
+      winetricks
+      # Support NTFS pour les jeux Windows
+      ntfs3g
     ];
 
-    programs.gamemode.enable = true;
-
-    # 32-bit OpenGL/Vulkan pour Proton/jeux
     hardware.graphics.enable32Bit = true;
+    hardware.steam-hardware.enable = true;
   };
 }

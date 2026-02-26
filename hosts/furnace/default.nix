@@ -79,5 +79,12 @@ in
     nspr
   ];
 
+  # Montage automatique de la partition Data Windows pour Steam
+  fileSystems."/mnt/data" = {
+    device = "/dev/disk/by-uuid/AE90AB7C90AB4A23";
+    fsType = "ntfs-3g";
+    options = [ "rw" "uid=1000" "gid=100" "umask=002" "nofail" ];
+  };
+
   system.stateVersion = "25.05";
 }
