@@ -18,6 +18,12 @@ in
           email = "pierre.fraisse@nebulous.fr";
           name = "Pierre Fraisse";
         };
+        revset-aliases = {
+          "closest_pushable(to)" = ''heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'';
+        };
+        aliases = {
+          tug = ["bookmark" "move" "--from" "heads(::@ & bookmarks())" "--to" "closest_pushable(@)"];
+        };
       };
     };
   };
