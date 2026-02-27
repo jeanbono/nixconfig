@@ -32,7 +32,7 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
     │   ├── plasma.nix         #   modules.system.plasma  (mutuellement exclusif avec hyprland)
     │   ├── nvidia.nix         #   modules.system.nvidia
     │   ├── gaming.nix         #   modules.system.gaming
-    │   ├── onepassword.nix    #   modules.system.onepassword
+    │   ├── protonpass.nix    #   modules.system.protonpass
     │   ├── shell.nix          #   modules.system.shell
     │   ├── dev.nix            #   modules.system.dev
     │   └── home-manager.nix   #   Intégration Home Manager (toujours actif)
@@ -44,6 +44,7 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
         ├── messaging.nix      #   modules.home.messaging
         ├── tools.nix          #   modules.home.tools
         ├── dev.nix            #   modules.home.dev
+        ├── nvim.nix           #   modules.home.nvim (IDE Neovim complet)
         ├── hyprland.nix       #   → hyprland/  (point d'entrée)
         ├── hyprland/          #   modules.home.hyprland — découpé en sous-modules
         │   ├── default.nix    #     option enable + assertion plasma
@@ -51,7 +52,9 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
         │   ├── cursor.nix     #     curseur rose-pine-hyprcursor
         │   ├── scripts.nix    #     wallpaper.png + power-menu.sh
         │   ├── waybar.nix     #     barre de statut
-        │   ├── wofi.nix       #     lanceur d'applications
+        │   ├── fuzzel.nix     #     lanceur d'applications (remplace wofi)
+        │   ├── wlogout.nix    #     menu de déconnexion
+        │   ├── yazi.nix       #     gestionnaire de fichiers
         │   ├── hyprlock.nix   #     écran de verrouillage
         │   ├── hypridle.nix   #     verrouillage automatique
         │   ├── dunst.nix      #     notifications
@@ -77,7 +80,7 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 | `modules.system.plasma.enable` | KDE Plasma 6 + SDDM Wayland + polices *(exclusif avec hyprland)* |
 | `modules.system.nvidia.enable` | Pilote NVIDIA beta, open kernel module, modesetting |
 | `modules.system.gaming.enable` | Steam, Proton, MangoHud, Gamemode, Wine |
-| `modules.system.onepassword.enable` | 1Password CLI + GUI |
+| `modules.system.protonpass.enable` | ProtonPass CLI + GUI + extension Brave |
 | `modules.system.shell.enable` | Zsh (niveau système) |
 | `modules.system.dev.enable` | Environnement de développement (Java) |
 
@@ -87,12 +90,13 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 |---|---|
 | `modules.home.shell.enable` | Zsh (autosuggestion, prompt custom) + Alacritty |
 | `modules.home.git.enable` | Git + Jujutsu (identité configurée) |
-| `modules.home.ssh.enable` | SSH + agent 1Password |
+| `modules.home.ssh.enable` | SSH + agent ProtonPass CLI |
 | `modules.home.brave.enable` | Brave browser + policies hardening |
 | `modules.home.messaging.enable` | Discord, Zulip, Element |
 | `modules.home.tools.enable` | Paquets CLI (ripgrep, fd, jq…) |
 | `modules.home.dev.enable` | Outils de développement (IntelliJ IDEA) |
-| `modules.home.hyprland.enable` | Hyprland complet : compositor, Waybar, Wofi, Hyprlock, Hypridle, Dunst, swww *(exclusif avec plasma)* |
+| `modules.home.nvim.enable` | IDE Neovim complet avec thèmes, LSP, autocomplétion |
+| `modules.home.hyprland.enable` | Hyprland complet : compositor, Waybar, Fuzzel, Wlogout, Yazi, Hyprlock, Hypridle, Dunst, swww *(exclusif avec plasma)* |
 
 ### Thème (`modules.home.theme.*`)
 
@@ -109,6 +113,7 @@ Le module theme expose des options calculées (`hyprlandThemeFile`, `waybarTheme
 | Input | Source |
 |---|---|
 | **nixpkgs** | `nixos-unstable` |
+| **cachyos** | `xddxdd/nix-cachyos-kernel` (kernels optimisés) |
 | **home-manager** | `nix-community/home-manager` (suit nixpkgs) |
 | **NUR** | `nix-community/NUR` (suit nixpkgs) |
 | **plasma-manager** | `nix-community/plasma-manager` (suit nixpkgs) |
@@ -130,7 +135,7 @@ modules.system = {
   nvidia.enable = true;
   gaming.enable = true;
   brave.enable = true;
-  onepassword.enable = true;
+  protonpass.enable = true;
   shell.enable = true;
   dev.enable = true;
 };
@@ -146,6 +151,7 @@ modules.home = {
   messaging.enable = true;
   tools.enable = true;
   dev.enable = true;
+  nvim.enable = true;
   hyprland.enable = true;
   theme.catppuccin = {
     enable = true;
@@ -155,7 +161,9 @@ modules.home = {
 };
 ```
 
-- **Boot** : systemd-boot, kernel latest, module `atlantic`
+- **Boot** : systemd-boot, kernel CachyOS latest, module `atlantic`
+- **Compatibilité** : nix-ld activé pour binaires standards
+- **Stockage** : Partition Windows `/mnt/data` montée automatiquement pour Steam
 
 ## Utilisation
 

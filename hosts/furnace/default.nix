@@ -20,7 +20,7 @@ in
     nvidia.enable = true;
     gaming.enable = true;
     brave.enable = true;
-    onepassword.enable = true;
+    protonpass.enable = true;
     shell.enable = true;
     dev.enable = true;
   };

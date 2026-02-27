@@ -29,6 +29,7 @@ in
       BraveVPNDisabled = true;
       TorDisabled = true;
       BraveAIChatEnabled = false;
+      PasswordManagerEnabled = false;
       ExtensionInstallForcelist = [
         "${ublockId};https://clients2.google.com/service/update2/crx"
       ] ++ cfg.extraExtensions;
