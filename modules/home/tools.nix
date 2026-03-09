@@ -14,6 +14,7 @@ in
       fd
       jq
       unzip
+      fastfetch
     ];
   };
 }

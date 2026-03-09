@@ -44,6 +44,10 @@ in
 
   home-manager.users.${username} = import ../../home/furnace/${username}.nix;
 
+  fonts.packages = with pkgs; [
+    nerd-fonts.monaspace
+  ];
+
   environment.systemPackages = with pkgs; [
     git
     pciutils
