@@ -35,32 +35,6 @@ in
       description = "Source du thème Catppuccin pour Hyprland";
     };
 
-    wlogoutSource = lib.mkOption {
-      type = lib.types.package;
-      readOnly = true;
-      default = pkgs.fetchFromGitHub {
-        owner = "catppuccin";
-        repo = "wlogout";
-        rev = "main";
-        sha256 = "sha256-0VCk+7t/cSEmcnfvKdxUDwwrtK0VLhZrVpw4enoBEbc=";
-      };
-      description = "Source du thème Catppuccin pour wlogout";
-    };
-
-    wlogoutThemeFile = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      default = "${cfg.wlogoutSource}/themes/${cfg.flavor}/${cfg.accent}.css";
-      description = "Chemin vers le fichier CSS wlogout";
-    };
-
-    wlogoutIconsDir = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      default = "${cfg.wlogoutSource}/icons/wlogout/${cfg.flavor}/${cfg.accent}";
-      description = "Chemin vers les icônes SVG wlogout";
-    };
-
     alacrittySource = lib.mkOption {
       type = lib.types.package;
       readOnly = true;

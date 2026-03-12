@@ -115,13 +115,13 @@ in
           "$mod, Escape, exec, uwsm app -- hyprlock"
           "$mod, Return, exec, uwsm app -- alacritty"
           "$mod, Q, killactive"
-          "$mod, M, exec, pkill wlogout || wlogout"
+          "$mod, M, exec, caelestia shell drawers toggle session"
           "$mod, E, exec, uwsm app -- alacritty -e yazi"
           "$mod, V, togglefloating"
           "$mod, D, exec, caelestia shell drawers toggle launcher"
           "$mod, F, fullscreen"
           "$mod, P, pseudo"
-          "$mod, S, togglesplit"
+          "$mod, S, layoutmsg, togglesplit"
 
           # Déplacement du focus
           "$mod, left, movefocus, l"

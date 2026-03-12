@@ -30,6 +30,9 @@
     settings = {
       bar.status.showBattery = false;
       bar.status.showWifi = false;
+      session.commands.logout = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Logging out...'"];
+      session.commands.shutdown = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'"];
+      session.commands.reboot = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Restarting...' --post-cmd 'reboot'"];
     };
   };
 

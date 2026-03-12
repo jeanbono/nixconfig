@@ -9,7 +9,6 @@ in
     ./core.nix
     ./cursor.nix
     ./scripts.nix
-    ./wlogout.nix
     ./hyprlock.nix
     ./hypridle.nix
     ./hyprpaper.nix
