@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   username = "pierre";
@@ -42,6 +42,7 @@ in
     shell = pkgs.zsh;
   };
 
+  home-manager.sharedModules = [ inputs.caelestia-shell.homeManagerModules.default ];
   home-manager.users.${username} = import ../../home/furnace/${username}.nix;
 
   fonts.packages = with pkgs; [

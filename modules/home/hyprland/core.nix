@@ -104,9 +104,8 @@ in
         # ── Autostart ─────────────────────────────────────────────
         exec-once = [
           "uwsm app -- hyprlock"
-          "uwsm app -- waybar"
+
           "uwsm app -- hypridle"
-          "uwsm app -- dunst"
         ];
 
         # ── Raccourcis clavier ────────────────────────────────────
@@ -119,7 +118,7 @@ in
           "$mod, M, exec, pkill wlogout || wlogout"
           "$mod, E, exec, uwsm app -- alacritty -e yazi"
           "$mod, V, togglefloating"
-          "$mod, D, exec, uwsm app -- fuzzel"
+          "$mod, D, exec, caelestia shell drawers toggle launcher"
           "$mod, F, fullscreen"
           "$mod, P, pseudo"
           "$mod, S, togglesplit"
@@ -171,13 +170,13 @@ in
 
         # Touches multimédia (fallback clavier standard)
         bindel = [
-          ", XF86AudioRaiseVolume, exec, swayosd-client --output-volume +2"
-          ", XF86AudioLowerVolume, exec, swayosd-client --output-volume -2"
+          ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+"
+          ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
         ];
 
         bindl = [
-          ", XF86AudioMute, exec, swayosd-client --output-volume mute-toggle"
-          ", XF86AudioMicMute, exec, swayosd-client --input-volume mute-toggle"
+          ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+          ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
         ];
 
         # Déplacement / redimensionnement souris

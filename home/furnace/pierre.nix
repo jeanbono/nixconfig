@@ -23,6 +23,16 @@
     };
   };
 
+  programs.caelestia = {
+    enable = true;
+    systemd.enable = true;
+    cli.enable = true;
+    settings = {
+      bar.status.showBattery = false;
+      bar.status.showWifi = false;
+    };
+  };
+
   home.username = "pierre";
   home.homeDirectory = "/home/pierre";
   home.stateVersion = "25.05";

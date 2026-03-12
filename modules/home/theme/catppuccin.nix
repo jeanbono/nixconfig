@@ -35,37 +35,6 @@ in
       description = "Source du thème Catppuccin pour Hyprland";
     };
 
-    waybarSource = lib.mkOption {
-      type = lib.types.package;
-      readOnly = true;
-      default = pkgs.fetchFromGitHub {
-        owner = "catppuccin";
-        repo = "waybar";
-        rev = "v1.1";
-        sha256 = "sha256-9lY+v1CTbpw2lREG/h65mLLw5KuT8OJdEPOb+NNC6Fo=";
-      };
-      description = "Source du thème Catppuccin pour Waybar";
-    };
-
-    dunstSource = lib.mkOption {
-      type = lib.types.package;
-      readOnly = true;
-      default = pkgs.fetchFromGitHub {
-        owner = "catppuccin";
-        repo = "dunst";
-        rev = "main";
-        sha256 = "sha256-rBp9wU6QHpmNAjeaKnI6u8rOUlv8MC70SLUzeKHN/eY=";
-      };
-      description = "Source du thème Catppuccin pour Dunst";
-    };
-
-    dunstThemeFile = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      default = "${cfg.dunstSource}/themes/${cfg.flavor}.conf";
-      description = "Chemin vers le fichier de thème Dunst";
-    };
-
     wlogoutSource = lib.mkOption {
       type = lib.types.package;
       readOnly = true;
@@ -90,25 +59,6 @@ in
       readOnly = true;
       default = "${cfg.wlogoutSource}/icons/wlogout/${cfg.flavor}/${cfg.accent}";
       description = "Chemin vers les icônes SVG wlogout";
-    };
-
-    fuzzelSource = lib.mkOption {
-      type = lib.types.package;
-      readOnly = true;
-      default = pkgs.fetchFromGitHub {
-        owner = "catppuccin";
-        repo = "fuzzel";
-        rev = "main";
-        sha256 = "sha256-XpItMGsYq4XvLT+7OJ9YRILfd/9RG1GMuO6J4hSGepg=";
-      };
-      description = "Source du thème Catppuccin pour Fuzzel";
-    };
-
-    fuzzelThemeFile = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      default = "${cfg.fuzzelSource}/themes/catppuccin-${cfg.flavor}/${cfg.accent}.ini";
-      description = "Chemin vers le fichier de thème Fuzzel";
     };
 
     alacrittySource = lib.mkOption {
@@ -136,13 +86,6 @@ in
       readOnly = true;
       default = "${cfg.hyprlandSource}/themes/${cfg.flavor}.conf";
       description = "Chemin vers le fichier de thème Hyprland";
-    };
-
-    waybarThemeFile = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      default = "${cfg.waybarSource}/themes/${cfg.flavor}.css";
-      description = "Chemin vers le fichier CSS Waybar";
     };
 
     # Nom du thème GTK complet

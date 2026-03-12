@@ -9,18 +9,15 @@ in
     ./core.nix
     ./cursor.nix
     ./scripts.nix
-    ./waybar.nix
-    ./fuzzel.nix
     ./wlogout.nix
     ./hyprlock.nix
     ./hypridle.nix
-    ./dunst.nix
     ./hyprpaper.nix
     ./yazi.nix
     ./packages.nix
   ];
 
-  options.modules.home.hyprland.enable = lib.mkEnableOption "Configuration Hyprland (compositor, waybar, keybinds)";
+  options.modules.home.hyprland.enable = lib.mkEnableOption "Configuration Hyprland (compositor, caelestia, keybinds)";
 
   config = lib.mkIf cfg.enable {
     assertions = [{
@@ -32,8 +29,5 @@ in
       NIXOS_OZONE_WL = "1";
     };
 
-    services.swayosd = {
-      enable = true;
-    };
   };
 }
