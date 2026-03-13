@@ -5,6 +5,6 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    home.file."wallpaper.png".source = ../../../wallpapers/wallpaper.png;
+    home.file."Pictures/Wallpapers/wallpaper.png".source = ../../../wallpapers/wallpaper.png;
   };
 }

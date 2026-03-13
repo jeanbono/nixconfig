@@ -102,17 +102,12 @@ in
         };
 
         # ── Autostart ─────────────────────────────────────────────
-        exec-once = [
-          "uwsm app -- hyprlock"
-
-          "uwsm app -- hypridle"
-        ];
+        exec-once = [];
 
         # ── Raccourcis clavier ────────────────────────────────────
         "$mod" = "SUPER";
 
         bind = [
-          "$mod, Escape, exec, uwsm app -- hyprlock"
           "$mod, Return, exec, uwsm app -- alacritty"
           "$mod, Q, killactive"
           "$mod, M, exec, caelestia shell drawers toggle session"

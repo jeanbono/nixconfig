@@ -6,7 +6,6 @@ in
 {
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-      hypridle      # Verrouillage automatique après inactivité
       wl-clipboard  # Copier/coller Wayland
       grim          # Capture d'écran
       slurp         # Sélection de zone

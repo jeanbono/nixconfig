@@ -41,7 +41,7 @@ in
       extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     };
 
-    # Auto-login via greetd, hyprlock sert d'écran de verrouillage au démarrage
+    # Auto-login via greetd
     services.greetd = {
       enable = true;
       settings = {
@@ -53,6 +53,12 @@ in
     };
 
     services.displayManager.defaultSession = "hyprland-uwsm";
+
+    services.logind.settings.Login = {
+      HandleSuspendKey = "ignore";
+      HandleSuspendKeyLongPress = "ignore";
+      HandleLidSwitch = "ignore";
+    };
 
     fonts.packages = with pkgs; [
       nerd-fonts.symbols-only

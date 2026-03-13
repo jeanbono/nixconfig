@@ -9,9 +9,6 @@ in
     ./core.nix
     ./cursor.nix
     ./scripts.nix
-    ./hyprlock.nix
-    ./hypridle.nix
-    ./hyprpaper.nix
     ./yazi.nix
     ./packages.nix
   ];

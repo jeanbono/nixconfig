@@ -30,6 +30,11 @@
     settings = {
       bar.status.showBattery = false;
       bar.status.showWifi = false;
+      general.idle.lockBeforeSleep = false;
+      general.idle.timeouts = [
+        { timeout = 300; idleAction = "lock"; }
+        { timeout = 600; idleAction = "dpms off"; returnAction = "dpms on"; }
+      ];
       appearance.rounding.scale = 0.6;
       session.commands.logout = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Logging out...'"];
       session.commands.shutdown = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'"];
