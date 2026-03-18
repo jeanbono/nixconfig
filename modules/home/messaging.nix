@@ -4,7 +4,7 @@ let
   cfg = config.modules.home.messaging;
 in
 {
-  options.modules.home.messaging.enable = lib.mkEnableOption "Discord, Zulip, Element";
+  options.modules.home.messaging.enable = lib.mkEnableOption "Discord, Element";
 
   config = lib.mkIf cfg.enable {
     programs.vesktop = {
@@ -23,7 +23,6 @@ in
     };
 
     home.packages = with pkgs; [
-      zulip
       element-desktop
     ];
   };
