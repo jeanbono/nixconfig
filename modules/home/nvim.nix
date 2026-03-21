@@ -134,12 +134,12 @@ in
             lsp_trouble = false,
           },
         })
-        vim.cmd.colorscheme("catppuccin")
+        vim.cmd.colorscheme("catppuccin-${themeCfg.flavor}")
 
         -- ── Lualine ───────────────────────────────────────────────────
         require("lualine").setup({
           options = {
-            theme = "catppuccin",
+            theme = "auto",
             component_separators = { left = "", right = "" },
             section_separators = { left = "", right = "" },
           },
