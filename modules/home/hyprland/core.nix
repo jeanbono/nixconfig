@@ -161,6 +161,9 @@ in
           # Scroll workspaces
           "$mod, mouse_down, workspace, e+1"
           "$mod, mouse_up, workspace, e-1"
+
+          # Screenshot zone sélectionnable → ~/Pictures/Screenshots/ + copie dans le presse-papier
+          "$mod SHIFT, S, exec, mkdir -p ~/Pictures/Screenshots && f=~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png && grim -g \"$(slurp -d)\" \"$f\" && wl-copy < \"$f\""
         ];
 
         # Touches multimédia (fallback clavier standard)
