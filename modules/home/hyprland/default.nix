@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, ... }:
 
 let
   cfg = config.modules.home.hyprland;
@@ -23,21 +23,6 @@ in
 
     home.sessionVariables = {
       NIXOS_OZONE_WL = "1";
-    };
-
-    systemd.user.services.lock-on-start = {
-      Unit = {
-        Description = "Lock session on startup and resume via caelestia";
-        After = [ "graphical-session.target" ];
-      };
-      Service = {
-        Type = "oneshot";
-        ExecStartPre = "${pkgs.coreutils}/bin/sleep 1";
-        ExecStart = "${config.programs.caelestia.cli.package}/bin/caelestia shell lock lock";
-      };
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
     };
 
   };

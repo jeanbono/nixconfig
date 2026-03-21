@@ -16,11 +16,11 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 ├── wallpapers/                # Fonds d'écran
 ├── hosts/
 │   └── furnace/               # Config spécifique au host "furnace"
-│       ├── default.nix        #   Active les modules + config machine
+│       ├── default.nix        #   Active les modules + config machine (boot, users, nix-ld…)
 │       └── hardware-configuration.nix
 ├── home/
 │   └── furnace/
-│       └── pierre.nix         # Config Home Manager + caelestia-shell
+│       └── pierre.nix         # Active les modules home pour l'utilisateur pierre
 └── modules/
     ├── system/                # Modules NixOS (auto-discovery)
     │   ├── nix.nix            #   modules.system.nix
@@ -32,22 +32,22 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
     │   ├── plasma.nix         #   modules.system.plasma  (mutuellement exclusif avec hyprland)
     │   ├── nvidia.nix         #   modules.system.nvidia
     │   ├── gaming.nix         #   modules.system.gaming
+    │   ├── brave.nix          #   modules.system.brave  (policies + installation HM via .users)
     │   ├── protonpass.nix     #   modules.system.protonpass
-    │   ├── shell.nix          #   modules.system.shell
-    │   └── home-manager.nix   #   Intégration Home Manager (toujours actif)
+    │   └── home-manager.nix   #   Intégration HM + sharedModules (plasma-manager, caelestia-shell)
     └── home/                  # Modules Home Manager (auto-discovery)
         ├── shell.nix          #   modules.home.shell
         ├── git.nix            #   modules.home.git
         ├── ssh.nix            #   modules.home.ssh
-        ├── brave.nix          #   modules.home.brave
         ├── messaging.nix      #   modules.home.messaging
         ├── tools.nix          #   modules.home.tools
         ├── dev.nix            #   modules.home.dev
-        ├── nvim.nix           #   modules.home.nvim (IDE Neovim complet)
+        ├── nvim.nix           #   modules.home.nvim
+        ├── caelestia.nix      #   modules.home.caelestia
         ├── plasma.nix         #   modules.home.plasma
         ├── hyprland.nix       #   → hyprland/  (point d'entrée)
         ├── hyprland/          #   modules.home.hyprland — découpé en sous-modules
-        │   ├── default.nix    #     option enable + lock-on-start systemd
+        │   ├── default.nix    #     option enable + assertion plasma
         │   ├── core.nix       #     compositor, moniteurs, keybinds, animations, screenshot
         │   ├── cursor.nix     #     curseur rose-pine-hyprcursor
         │   ├── scripts.nix    #     wallpaper.png
@@ -68,13 +68,13 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 | `modules.system.locale.enable` | Locale `fr_FR.UTF-8`, clavier français |
 | `modules.system.network.enable` | NetworkManager, SSH, curl, wget |
 | `modules.system.audio.enable` | PipeWire (ALSA, PulseAudio, JACK) |
-| `modules.system.printing.enable` | Impression (CUPS) |
+| `modules.system.printing.enable` | Impression (CUPS) — Brother DCP-1610W préconfigurée |
 | `modules.system.hyprland.enable` | Hyprland (Wayland compositor) + portails XDG + polices + greetd/UWSM |
 | `modules.system.plasma.enable` | KDE Plasma 6 + SDDM Wayland + polices *(exclusif avec hyprland)* |
 | `modules.system.nvidia.enable` | Pilote NVIDIA, open kernel module, modesetting |
 | `modules.system.gaming.enable` | Steam, Proton, MangoHud, Gamemode, Wine |
-| `modules.system.protonpass.enable` | ProtonPass CLI + GUI + extension Brave |
-| `modules.system.shell.enable` | Zsh (niveau système) |
+| `modules.system.brave.enable` | Policies Brave (uBlock, Catppuccin, ProtonPass) + installation HM via `brave.users` |
+| `modules.system.protonpass.enable` | ProtonPass CLI + GUI + extension Brave (si brave activé) |
 
 ### Home Manager (`modules.home.*`)
 
@@ -82,25 +82,35 @@ Les modules sont **découverts automatiquement** : il suffit de déposer un fich
 |---|---|
 | `modules.home.shell.enable` | Zsh (autosuggestion, syntaxe, Starship) + Alacritty (thème Catppuccin) |
 | `modules.home.git.enable` | Git + Jujutsu (identité configurée, aliases tug) |
-| `modules.home.ssh.enable` | SSH + agent ProtonPass CLI |
-| `modules.home.brave.enable` | Brave browser + policies hardening |
+| `modules.home.ssh.enable` | SSH + agent ProtonPass CLI (service systemd user) |
 | `modules.home.messaging.enable` | Vesktop (Discord + Vencord) + Element |
-| `modules.home.tools.enable` | Paquets CLI (ripgrep, fd, jq, fastfetch…) |
-| `modules.home.dev.enable` | Outils de développement (IntelliJ IDEA) |
-| `modules.home.nvim.enable` | IDE Neovim complet avec thèmes, LSP, autocomplétion |
-| `modules.home.hyprland.enable` | Hyprland : compositor, Yazi, screenshot, curseur rose-pine *(exclusif avec plasma)* |
-
-> **Shell de bureau** : la barre, le lanceur, l'écran de verrouillage, les notifications et le fond d'écran sont gérés par **caelestia-shell** (configuré directement dans `home/furnace/pierre.nix` via `programs.caelestia`), hors système de modules.
+| `modules.home.tools.enable` | Paquets CLI (ripgrep, fd, jq, fastfetch, unzip) |
+| `modules.home.dev.enable` | IntelliJ IDEA |
+| `modules.home.nvim.enable` | IDE Neovim : LSP, blink.cmp, Treesitter, Telescope, thème lié à `theme.catppuccin` |
+| `modules.home.caelestia.enable` | Caelestia shell (bar, launcher, lock, idle, wallpaper, notifications) + lock-on-start |
+| `modules.home.hyprland.enable` | Compositor Hyprland, Yazi, screenshot (`SUPER+SHIFT+S`), curseur rose-pine *(exclusif avec plasma)* |
 
 ### Thème (`modules.home.theme.*`)
 
 | Option | Description |
 |---|---|
-| `modules.home.theme.catppuccin.enable` | Thème Catppuccin (GTK, Hyprland, Alacritty, Yazi) |
+| `modules.home.theme.catppuccin.enable` | Thème Catppuccin (GTK, Hyprland, Alacritty, Yazi, Neovim) |
 | `modules.home.theme.catppuccin.flavor` | Variante : `latte` / `frappe` / `macchiato` / `mocha` (défaut : `macchiato`) |
 | `modules.home.theme.catppuccin.accent` | Couleur d'accent : `blue`, `mauve`, `green`… (défaut : `blue`) |
 
-Le module theme expose des options calculées (`hyprlandThemeFile`, `alacrittyThemeFile`, `gtkThemeName`) consommées automatiquement par les autres modules. Changer `flavor` ou `accent` propage le thème partout.
+Le module theme expose des options calculées (`hyprlandThemeFile`, `alacrittyThemeFile`, `gtkThemeName`) consommées automatiquement par les autres modules. Changer `flavor` ou `accent` propage le thème dans Hyprland, Alacritty, GTK, Yazi **et Neovim**.
+
+### Caelestia (`modules.home.caelestia.*`)
+
+| Option | Type | Défaut | Description |
+|---|---|---|---|
+| `enable` | bool | — | Active caelestia-shell |
+| `showBattery` | bool | `false` | Indicateur batterie dans la barre |
+| `showWifi` | bool | `false` | Indicateur Wi-Fi dans la barre |
+| `lockBeforeSleep` | bool | `false` | Verrouiller avant mise en veille |
+| `roundingScale` | float | `0.6` | Arrondi des coins (0.0–1.0) |
+| `desktopClock` | bool | `true` | Horloge sur le bureau |
+| `idleTimeouts` | list | lock@5min, dpms@10min | Timeouts d'inactivité |
 
 ## Raccourcis clavier notables
 
@@ -145,9 +155,11 @@ modules.system = {
   nvidia.enable = true;
   gaming.enable = true;
   brave.enable = true;
+  brave.users = [ "pierre" ];  # active programs.brave via HM
   protonpass.enable = true;
-  shell.enable = true;
 };
+
+programs.zsh.enable = true;
 ```
 
 ```nix
@@ -156,25 +168,17 @@ modules.home = {
   shell.enable = true;
   git.enable = true;
   ssh.enable = true;
-  brave.enable = true;
   messaging.enable = true;
   tools.enable = true;
   dev.enable = true;
   nvim.enable = true;
   hyprland.enable = true;
+  caelestia.enable = true;  # bar, launcher, lock, idle, wallpaper, notifications
   theme.catppuccin = {
     enable = true;
     flavor = "macchiato";
     accent = "blue";
   };
-};
-
-# caelestia-shell (bar, launcher, lock, idle, wallpaper, notifications)
-programs.caelestia = {
-  enable = true;
-  systemd.enable = true;
-  cli.enable = true;
-  settings = { ... };
 };
 ```
 

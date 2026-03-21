@@ -7,7 +7,13 @@ let
 in
 {
   options.modules.system.brave = {
-    enable = lib.mkEnableOption "Brave browser policies (system-level)";
+    enable = lib.mkEnableOption "Brave browser : policies système + installation HM";
+
+    users = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [];
+      description = "Utilisateurs pour lesquels activer programs.brave via Home Manager";
+    };
 
     extraExtensions = lib.mkOption {
       type = lib.types.listOf lib.types.str;
@@ -23,6 +29,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    home-manager.users = lib.genAttrs cfg.users (_: {
+      programs.brave.enable = true;
+    });
+
     environment.etc."brave/policies/managed/00-brave.json".text = builtins.toJSON {
       BraveRewardsDisabled = true;
       BraveWalletDisabled = true;

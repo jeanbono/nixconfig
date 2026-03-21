@@ -20,10 +20,11 @@ in
     nvidia.enable = true;
     gaming.enable = true;
     brave.enable = true;
+    brave.users = [ username ];
     protonpass.enable = true;
-    shell.enable = true;
-    dev.enable = true;
   };
+
+  programs.zsh.enable = true;
 
   networking.hostName = "furnace";
   time.timeZone = "Europe/Paris";
@@ -42,15 +43,9 @@ in
     shell = pkgs.zsh;
   };
 
-  home-manager.sharedModules = [ inputs.caelestia-shell.homeManagerModules.default ];
   home-manager.users.${username} = import ../../home/furnace/${username}.nix;
 
-  fonts.packages = with pkgs; [
-    nerd-fonts.monaspace
-  ];
-
   environment.systemPackages = with pkgs; [
-    git
     pciutils
     usbutils
   ];

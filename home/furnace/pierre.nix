@@ -10,36 +10,16 @@
     shell.enable = true;
     git.enable = true;
     ssh.enable = true;
-    brave.enable = true;
     messaging.enable = true;
     tools.enable = true;
     dev.enable = true;
     nvim.enable = true;
     hyprland.enable = true;
+    caelestia.enable = true;
     theme.catppuccin = {
       enable = true;
       flavor = "macchiato";
       accent = "blue";
-    };
-  };
-
-  programs.caelestia = {
-    enable = true;
-    systemd.enable = true;
-    cli.enable = true;
-    settings = {
-      bar.status.showBattery = false;
-      bar.status.showWifi = false;
-      general.idle.lockBeforeSleep = false;
-      general.idle.timeouts = [
-        { timeout = 300; idleAction = "lock"; }
-        { timeout = 600; idleAction = "dpms off"; returnAction = "dpms on"; }
-      ];
-      appearance.rounding.scale = 0.6;
-      background.desktopClock.enabled = true;
-      session.commands.logout = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Logging out...'"];
-      session.commands.shutdown = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'"];
-      session.commands.reboot = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Restarting...' --post-cmd 'reboot'"];
     };
   };
 

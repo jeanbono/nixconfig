@@ -2,6 +2,7 @@
 
 let
   cfg = config.modules.home.nvim;
+  themeCfg = config.modules.home.theme.catppuccin;
 in
 {
   options.modules.home.nvim.enable = lib.mkEnableOption "Neovim IDE complet";
@@ -69,7 +70,6 @@ in
       ];
 
       extraPackages = with pkgs; [
-        # LSP servers
         lua-language-server
         nil               # Nix LSP
         pyright           # Python LSP
@@ -77,10 +77,6 @@ in
         nodePackages.vscode-langservers-extracted  # HTML/CSS/JSON/ESLint
         rust-analyzer
         gopls
-
-        # Outils
-        ripgrep
-        fd
       ];
 
       initLua = ''
@@ -126,7 +122,7 @@ in
 
         -- ── Thème Catppuccin ──────────────────────────────────────────
         require("catppuccin").setup({
-          flavour = "macchiato",
+          flavour = "${themeCfg.flavor}",
           integrations = {
             nvim_tree = true,
             treesitter = true,
