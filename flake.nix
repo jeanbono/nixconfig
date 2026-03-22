@@ -3,6 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+
     cachyos = {
       url = "github:xddxdd/nix-cachyos-kernel";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,34 +32,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
-    let
-      lib = nixpkgs.lib;
+  outputs = inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ ./flake-module.nix ];
 
-      mkHost = hostName: system: lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs hostName; };
-        modules = [
-          { nixpkgs.config.allowUnfree = true; }
-
-          # CachyOS overlay
-          ({ ... }: { 
-            nixpkgs.overlays = [ 
-              inputs.cachyos.overlays.pinned 
-              inputs.nur.overlays.default 
-            ]; 
-          })
-
-          # Tous les modules système (chacun activable via modules.system.<name>.enable)
-          ./modules/system
-
-          ./hosts/${hostName}
-        ];
-      };
-    in
-    {
-      nixosConfigurations = {
-        furnace = mkHost "furnace" "x86_64-linux";
-      };
+      systems = [ "x86_64-linux" ];
     };
 }

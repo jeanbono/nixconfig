@@ -1,116 +1,93 @@
 # nixconfig
 
-Configuration NixOS modulaire basée sur les **Nix Flakes** et **Home Manager**.
+Configuration NixOS basée sur le **pattern dendritic** : [flake-parts](https://flake.parts/) + **Home Manager**.
 
-Chaque fonctionnalité est un module activable via une option `enable`, ce qui permet de **composer** chaque host à la carte.
+## Architecture dendritic
 
-Les modules sont **découverts automatiquement** : il suffit de déposer un fichier `.nix` dans `modules/system/` ou `modules/home/` pour qu'il soit importé (via `lib.nix`). Les modules organisés en sous-dossiers exposent un `default.nix` et sont référencés par un fichier `.nix` de même nom dans le dossier parent.
+Le [pattern dendritic](https://github.com/mightyiam/dendritic) unifie NixOS et Home Manager dans un seul arbre de modules :
+
+- **Chaque fichier `modules/*.nix` est un module NixOS** qui peut configurer simultanément le système (`config.*`) et les utilisateurs (`config.home-manager.users.*`) dans le même fichier — plus de séparation `system/` vs `home/`
+- `flake.nix` délègue entièrement à `flake-module.nix` via `flake-parts.lib.mkFlake`
+- `flake-module.nix` auto-importe tous les fichiers de `modules/` via `importTree` et les passe à `nixosSystem` — plus de `default.nix` d'agrégation
+- Les modules HM lisent la config NixOS (ex: `modules.theme.catppuccin`) via `nixosConfig` passé en `extraSpecialArgs`
+- `modules.users` est l'option centrale qui déclare les utilisateurs gérés ; chaque module HM y itère via `lib.genAttrs`
 
 ## Structure du projet
 
 ```
 .
-├── flake.nix                  # Point d'entrée — mkHost importe tous les modules
+├── flake.nix            # Point d'entrée — délègue à flake-module.nix via flake-parts
+├── flake-module.nix     # importTree ./modules + mkHost + flake.nixosConfigurations
 ├── flake.lock
-├── lib.nix                    # importDir — auto-discovery des modules (.nix réguliers)
-├── wallpapers/                # Fonds d'écran
+├── wallpapers/          # Fonds d'écran
 ├── hosts/
-│   └── furnace/               # Config spécifique au host "furnace"
-│       ├── default.nix        #   Active les modules + config machine (boot, users, nix-ld…)
-│       └── hardware-configuration.nix
-├── home/
 │   └── furnace/
-│       └── pierre.nix         # Active les modules home pour l'utilisateur pierre
-└── modules/
-    ├── system/                # Modules NixOS (auto-discovery)
-    │   ├── nix.nix            #   modules.system.nix
-    │   ├── locale.nix         #   modules.system.locale
-    │   ├── network.nix        #   modules.system.network
-    │   ├── audio.nix          #   modules.system.audio
-    │   ├── printing.nix       #   modules.system.printing
-    │   ├── hyprland.nix       #   modules.system.hyprland
-    │   ├── plasma.nix         #   modules.system.plasma  (mutuellement exclusif avec hyprland)
-    │   ├── nvidia.nix         #   modules.system.nvidia
-    │   ├── gaming.nix         #   modules.system.gaming
-    │   ├── brave.nix          #   modules.system.brave  (policies + installation HM via .users)
-    │   ├── protonpass.nix     #   modules.system.protonpass
-    │   └── home-manager.nix   #   Intégration HM + sharedModules (plasma-manager, caelestia-shell)
-    └── home/                  # Modules Home Manager (auto-discovery)
-        ├── shell.nix          #   modules.home.shell
-        ├── git.nix            #   modules.home.git
-        ├── ssh.nix            #   modules.home.ssh
-        ├── messaging.nix      #   modules.home.messaging
-        ├── tools.nix          #   modules.home.tools
-        ├── dev.nix            #   modules.home.dev
-        ├── nvim.nix           #   modules.home.nvim
-        ├── caelestia.nix      #   modules.home.caelestia
-        ├── plasma.nix         #   modules.home.plasma
-        ├── hyprland.nix       #   → hyprland/  (point d'entrée)
-        ├── hyprland/          #   modules.home.hyprland — découpé en sous-modules
-        │   ├── default.nix    #     option enable + assertion plasma
-        │   ├── core.nix       #     compositor, moniteurs, keybinds, animations, screenshot
-        │   ├── cursor.nix     #     curseur rose-pine-hyprcursor
-        │   ├── scripts.nix    #     wallpaper.png
-        │   ├── yazi.nix       #     gestionnaire de fichiers (thème Catppuccin)
-        │   └── packages.nix   #     paquets complémentaires (grim, slurp, wl-clipboard…)
-        ├── theme.nix          #   → theme/  (point d'entrée)
-        └── theme/             #   Theming centralisé
-            └── catppuccin.nix #     modules.home.theme.catppuccin
+│       ├── default.nix                 # Hardware + activation des modules features
+│       └── hardware-configuration.nix
+└── modules/             # Features unifiées NixOS+HM (un fichier = une feature)
+    ├── users.nix        # option modules.users (liste des utilisateurs gérés)
+    ├── nix.nix          # modules.nix
+    ├── locale.nix       # modules.locale
+    ├── network.nix      # modules.network
+    ├── audio.nix        # modules.audio
+    ├── printing.nix     # modules.printing
+    ├── nvidia.nix       # modules.nvidia
+    ├── gaming.nix       # modules.gaming
+    ├── hyprland.nix     # modules.hyprland       (NixOS + HM : compositor, greetd, keybinds, yazi, curseur)
+    ├── plasma.nix       # modules.plasma         (NixOS + HM : SDDM + plasma-manager)
+    ├── brave.nix        # modules.brave          (NixOS policies + HM programs.brave)
+    ├── protonpass.nix   # modules.protonpass     (NixOS+HM : CLI, GUI, agent SSH, policy Brave)
+    ├── zsh.nix          # modules.zsh            (HM : zsh + starship)
+    ├── alacritty.nix    # modules.alacritty      (HM : terminal GPU)
+    ├── git.nix          # modules.git            (HM : git)
+    ├── jujutsu.nix      # modules.jujutsu        (HM : jujutsu VCS)
+    ├── ssh.nix          # modules.ssh            (HM : config SSH cliente)
+    ├── messaging.nix    # modules.messaging      (HM : vesktop, element)
+    ├── tools.nix        # modules.tools          (HM : ripgrep, fd, jq…)
+    ├── intellij.nix     # modules.intellij       (NixOS java + HM : IntelliJ IDEA)
+    ├── nvim.nix         # modules.nvim           (HM : neovim IDE complet)
+    ├── caelestia.nix    # modules.caelestia      (HM : bar, launcher, lock, idle)
+    └── theme.nix        # modules.theme.catppuccin (HM : GTK, curseur, icônes)
 ```
 
 ## Modules disponibles
 
-### Système (`modules.system.*`)
+Tous les modules exposent leurs options sous `modules.*` sans distinction NixOS/HM.
 
-| Option | Description |
-|---|---|
-| `modules.system.nix.enable` | Flakes, auto-optimise-store, GC hebdomadaire |
-| `modules.system.locale.enable` | Locale `fr_FR.UTF-8`, clavier français |
-| `modules.system.network.enable` | NetworkManager, SSH, curl, wget |
-| `modules.system.audio.enable` | PipeWire (ALSA, PulseAudio, JACK) |
-| `modules.system.printing.enable` | Impression (CUPS) — Brother DCP-1610W préconfigurée |
-| `modules.system.hyprland.enable` | Hyprland (Wayland compositor) + portails XDG + polices + greetd/UWSM |
-| `modules.system.plasma.enable` | KDE Plasma 6 + SDDM Wayland + polices *(exclusif avec hyprland)* |
-| `modules.system.nvidia.enable` | Pilote NVIDIA, open kernel module, modesetting |
-| `modules.system.gaming.enable` | Steam, Proton, MangoHud, Gamemode, Wine |
-| `modules.system.brave.enable` | Policies Brave (uBlock, Catppuccin, ProtonPass) + installation HM via `brave.users` |
-| `modules.system.protonpass.enable` | ProtonPass CLI + GUI + extension Brave (si brave activé) |
-
-### Home Manager (`modules.home.*`)
-
-| Option | Description |
-|---|---|
-| `modules.home.shell.enable` | Zsh (autosuggestion, syntaxe, Starship) + Alacritty (thème Catppuccin) |
-| `modules.home.git.enable` | Git + Jujutsu (identité configurée, aliases tug) |
-| `modules.home.ssh.enable` | SSH + agent ProtonPass CLI (service systemd user) |
-| `modules.home.messaging.enable` | Vesktop (Discord + Vencord) + Element |
-| `modules.home.tools.enable` | Paquets CLI (ripgrep, fd, jq, fastfetch, unzip) |
-| `modules.home.dev.enable` | IntelliJ IDEA |
-| `modules.home.nvim.enable` | IDE Neovim : LSP, blink.cmp, Treesitter, Telescope, thème lié à `theme.catppuccin` |
-| `modules.home.caelestia.enable` | Caelestia shell (bar, launcher, lock, idle, wallpaper, notifications) + lock-on-start |
-| `modules.home.hyprland.enable` | Compositor Hyprland, Yazi, screenshot (`SUPER+SHIFT+S`), curseur rose-pine *(exclusif avec plasma)* |
-
-### Thème (`modules.home.theme.*`)
-
-| Option | Description |
-|---|---|
-| `modules.home.theme.catppuccin.enable` | Thème Catppuccin (GTK, Hyprland, Alacritty, Yazi, Neovim) |
-| `modules.home.theme.catppuccin.flavor` | Variante : `latte` / `frappe` / `macchiato` / `mocha` (défaut : `macchiato`) |
-| `modules.home.theme.catppuccin.accent` | Couleur d'accent : `blue`, `mauve`, `green`… (défaut : `blue`) |
-
-Le module theme expose des options calculées (`hyprlandThemeFile`, `alacrittyThemeFile`, `gtkThemeName`) consommées automatiquement par les autres modules. Changer `flavor` ou `accent` propage le thème dans Hyprland, Alacritty, GTK, Yazi **et Neovim**.
-
-### Caelestia (`modules.home.caelestia.*`)
-
-| Option | Type | Défaut | Description |
-|---|---|---|---|
-| `enable` | bool | — | Active caelestia-shell |
-| `showBattery` | bool | `false` | Indicateur batterie dans la barre |
-| `showWifi` | bool | `false` | Indicateur Wi-Fi dans la barre |
-| `lockBeforeSleep` | bool | `false` | Verrouiller avant mise en veille |
-| `roundingScale` | float | `0.6` | Arrondi des coins (0.0–1.0) |
-| `desktopClock` | bool | `true` | Horloge sur le bureau |
-| `idleTimeouts` | list | lock@5min, dpms@10min | Timeouts d'inactivité |
+| Option | Couche | Description |
+|---|---|---|
+| `modules.users` | NixOS | Liste des utilisateurs gérés par les modules HM |
+| `modules.nix.enable` | NixOS | Flakes, auto-optimise-store, GC hebdomadaire |
+| `modules.locale.enable` | NixOS | Locale `fr_FR.UTF-8`, clavier français |
+| `modules.network.enable` | NixOS | NetworkManager, SSH, curl, wget |
+| `modules.audio.enable` | NixOS | PipeWire (ALSA, PulseAudio, JACK) |
+| `modules.printing.enable` | NixOS | Impression (CUPS) — Brother DCP-1610W préconfigurée |
+| `modules.nvidia.enable` | NixOS | Pilote NVIDIA, modesetting |
+| `modules.gaming.enable` | NixOS | Steam, Proton, MangoHud, Gamemode, Wine |
+| `modules.hyprland.enable` | NixOS+HM | Compositor + greetd/UWSM + keybinds, moniteurs, yazi, curseur, wallpaper |
+| `modules.hyprland.user` | NixOS | Utilisateur pour l'auto-login greetd |
+| `modules.plasma.enable` | NixOS+HM | KDE Plasma 6 + SDDM + plasma-manager *(exclusif avec hyprland)* |
+| `modules.brave.enable` | NixOS+HM | Policies Brave (uBlock, Catppuccin) + `programs.brave` |
+| `modules.protonpass.enable` | NixOS+HM | CLI + GUI + agent SSH systemd + policy Brave |
+| `modules.zsh.enable` | HM | Zsh (autosuggestion, syntaxe) + Starship |
+| `modules.alacritty.enable` | HM | Terminal GPU Alacritty (thème Catppuccin) |
+| `modules.git.enable` | HM | Git |
+| `modules.jujutsu.enable` | HM | Jujutsu VCS (identité, alias tug) |
+| `modules.ssh.enable` | HM | Config SSH cliente (agent ProtonPass) |
+| `modules.messaging.enable` | HM | Vesktop (Discord + Vencord) + Element |
+| `modules.tools.enable` | HM | Paquets CLI (ripgrep, fd, jq, fastfetch, unzip) |
+| `modules.intellij.enable` | NixOS+HM | Java (NixOS) + IntelliJ IDEA (HM) |
+| `modules.nvim.enable` | HM | Neovim IDE : LSP, blink.cmp, Treesitter, Telescope |
+| `modules.caelestia.enable` | HM | Caelestia shell (bar, launcher, lock, idle, wallpaper) |
+| `modules.caelestia.showBattery` | HM | Indicateur batterie dans la barre |
+| `modules.caelestia.showWifi` | HM | Indicateur Wi-Fi dans la barre |
+| `modules.caelestia.lockBeforeSleep` | HM | Verrouiller avant mise en veille |
+| `modules.caelestia.roundingScale` | HM | Arrondi des coins (défaut : `0.6`) |
+| `modules.caelestia.desktopClock` | HM | Horloge sur le bureau (défaut : `true`) |
+| `modules.caelestia.idleTimeouts` | HM | Timeouts d'inactivité (défaut : lock@5min, dpms@10min) |
+| `modules.theme.catppuccin.enable` | HM | Thème Catppuccin (GTK, Hyprland, Alacritty, Yazi, Neovim) |
+| `modules.theme.catppuccin.flavor` | HM | `latte` / `frappe` / `macchiato` / `mocha` (défaut : `macchiato`) |
+| `modules.theme.catppuccin.accent` | HM | `blue`, `mauve`, `green`… (défaut : `blue`) |
 
 ## Raccourcis clavier notables
 
@@ -132,6 +109,7 @@ Le module theme expose des options calculées (`hyprlandThemeFile`, `alacrittyTh
 | Input | Source |
 |---|---|
 | **nixpkgs** | `nixos-unstable` |
+| **flake-parts** | `hercules-ci/flake-parts` (système de modules flake) |
 | **cachyos** | `xddxdd/nix-cachyos-kernel` (kernels optimisés) |
 | **home-manager** | `nix-community/home-manager` (suit nixpkgs) |
 | **NUR** | `nix-community/NUR` (suit nixpkgs) |
@@ -143,28 +121,25 @@ Le module theme expose des options calculées (`hyprlandThemeFile`, `alacrittyTh
 Machine de bureau Intel + NVIDIA sous **Hyprland / Wayland**.
 
 ```nix
-# hosts/furnace/default.nix
-modules.system = {
+# hosts/furnace/default.nix — tout en un seul endroit
+modules.users = [ "pierre" ];
+
+modules = {
   nix.enable = true;
   locale.enable = true;
   network.enable = true;
   audio.enable = true;
   printing.enable = true;
-  hyprland.enable = true;
-  hyprland.user = "pierre";
   nvidia.enable = true;
   gaming.enable = true;
+
+  hyprland.enable = true;
+  hyprland.user = "pierre";
+  hyprland-home.enable = true;
+
   brave.enable = true;
-  brave.users = [ "pierre" ];  # active programs.brave via HM
   protonpass.enable = true;
-};
 
-programs.zsh.enable = true;
-```
-
-```nix
-# home/furnace/pierre.nix
-modules.home = {
   shell.enable = true;
   git.enable = true;
   ssh.enable = true;
@@ -172,8 +147,8 @@ modules.home = {
   tools.enable = true;
   dev.enable = true;
   nvim.enable = true;
-  hyprland.enable = true;
-  caelestia.enable = true;  # bar, launcher, lock, idle, wallpaper, notifications
+  caelestia.enable = true;
+
   theme.catppuccin = {
     enable = true;
     flavor = "macchiato";
@@ -203,31 +178,32 @@ nix flake update
 ### Ajouter un nouveau host
 
 1. Créer `hosts/<nom>/default.nix` et `hosts/<nom>/hardware-configuration.nix`
-2. Créer `home/<nom>/<user>.nix` si besoin
-3. Ajouter l'entrée dans `flake.nix` :
+2. Ajouter l'entrée dans `flake-module.nix` :
    ```nix
-   nixosConfigurations.<nom> = mkHost "<nom>" "x86_64-linux";
+   flake.nixosConfigurations.<nom> = mkHost { hostName = "<nom>"; };
    ```
-4. Activer les modules souhaités dans le host :
+3. Activer les modules souhaités dans `hosts/<nom>/default.nix` :
    ```nix
-   modules.system = {
+   modules.users = [ "alice" ];
+   modules = {
      nix.enable = true;
      locale.enable = true;
      network.enable = true;
+     shell.enable = true;
      # ... seulement ce dont la machine a besoin
    };
    ```
-5. Rebuild : `sudo nixos-rebuild switch --flake .#<nom>`
+4. Rebuild : `sudo nixos-rebuild switch --flake .#<nom>`
 
-### Ajouter un nouveau module
+### Ajouter un nouveau module feature
 
-Créer un fichier `.nix` dans `modules/system/` ou `modules/home/` — il sera automatiquement importé par `lib.nix`. Pour un module avec plusieurs fichiers, créer un sous-dossier avec un `default.nix` et un fichier `.nix` de même nom dans le dossier parent qui l'importe.
+Créer un fichier `.nix` dans `modules/` — il est automatiquement importé par `importTree` dans `flake-module.nix`. Le fichier est un module NixOS standard qui peut configurer à la fois le système et `home-manager.users` dans le même fichier.
 
 ### Exemple : serveur headless
 
 ```nix
-# Seulement le strict nécessaire, pas d'audio/hyprland/gaming
-modules.system = {
+modules.users = [];
+modules = {
   nix.enable = true;
   locale.enable = true;
   network.enable = true;

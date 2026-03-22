@@ -1,3 +1,0 @@
-{
-  imports = import ../../../lib.nix ./.;
-}

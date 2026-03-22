@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   username = "pierre";
@@ -8,23 +8,42 @@ in
     ./hardware-configuration.nix
   ];
 
-  # --- Modules système composables ---
-  modules.system = {
+  # --- Utilisateurs gérés par les modules features ---
+  modules.users = [ username ];
+
+  # --- Modules features (NixOS + HM unifiés) ---
+  modules = {
     nix.enable = true;
     locale.enable = true;
     network.enable = true;
     audio.enable = true;
     printing.enable = true;
-    hyprland.enable = true;
-    hyprland.user = username;
     nvidia.enable = true;
     gaming.enable = true;
-    brave.enable = true;
-    brave.users = [ username ];
-    protonpass.enable = true;
-  };
 
-  programs.zsh.enable = true;
+    hyprland.enable = true;
+    hyprland.user = username;
+
+    brave.enable = true;
+    protonpass.enable = true;
+
+    zsh.enable = true;
+    alacritty.enable = true;
+    git.enable = true;
+    jujutsu.enable = true;
+    ssh.enable = true;
+    messaging.enable = true;
+    tools.enable = true;
+    intellij.enable = true;
+    nvim.enable = true;
+    caelestia.enable = true;
+
+    theme.catppuccin = {
+      enable = true;
+      flavor = "macchiato";
+      accent = "blue";
+    };
+  };
 
   networking.hostName = "furnace";
   time.timeZone = "Europe/Paris";
@@ -43,17 +62,20 @@ in
     shell = pkgs.zsh;
   };
 
-  home-manager.users.${username} = import ../../home/furnace/${username}.nix;
+  home-manager.users.${username} = {
+    home.username = username;
+    home.homeDirectory = "/home/${username}";
+    home.stateVersion = "25.05";
+    programs.home-manager.enable = true;
+  };
 
   environment.systemPackages = with pkgs; [
     pciutils
     usbutils
   ];
 
-  # nix-ld: permet aux binaires standards de fonctionner sur NixOS
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
-    # Bibliothèques de base (essentielles)
     stdenv.cc.cc
     zlib
     glib
@@ -62,24 +84,20 @@ in
     atk
     gdk-pixbuf
     gtk3
-    # Bibliothèques X11
     libX11
     libXext
     libXi
     libXrender
     libXtst
     libXxf86vm
-    # Polices
     fontconfig
     freetype
-    # Réseau et SSL (souvent nécessaire pour les outils de développement)
     openssl
     curl
     nss
     nspr
   ];
 
-  # Montage automatique de la partition Data Windows pour Steam
   fileSystems."/mnt/data" = {
     device = "/dev/disk/by-uuid/AE90AB7C90AB4A23";
     fsType = "ntfs-3g";
