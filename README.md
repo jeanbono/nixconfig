@@ -61,7 +61,7 @@ Tous les modules exposent leurs options sous `modules.*` sans distinction NixOS/
 | `modules.locale.enable` | NixOS | Locale `fr_FR.UTF-8`, clavier français |
 | `modules.network.enable` | NixOS | NetworkManager, SSH, curl, wget |
 | `modules.audio.enable` | NixOS | PipeWire (ALSA, PulseAudio, JACK) |
-| `modules.printing.enable` | NixOS | Impression (CUPS) — Brother DCP-1610W préconfigurée |
+| `modules.printing.enable` | NixOS+HM | Impression (CUPS) + scan (SANE/brscan4) — Brother DCP-1610W + simple-scan |
 | `modules.nvidia.enable` | NixOS | Pilote NVIDIA, modesetting |
 | `modules.gaming.enable` | NixOS | Steam, Proton, MangoHud, Gamemode, Wine |
 | `modules.hyprland.enable` | NixOS+HM | Compositor + greetd/UWSM + keybinds, moniteurs, yazi, curseur, wallpaper |
@@ -135,17 +135,18 @@ modules = {
 
   hyprland.enable = true;
   hyprland.user = "pierre";
-  hyprland-home.enable = true;
 
   brave.enable = true;
   protonpass.enable = true;
 
-  shell.enable = true;
+  zsh.enable = true;
+  alacritty.enable = true;
   git.enable = true;
+  jujutsu.enable = true;
   ssh.enable = true;
   messaging.enable = true;
   tools.enable = true;
-  dev.enable = true;
+  intellij.enable = true;
   nvim.enable = true;
   caelestia.enable = true;
 
