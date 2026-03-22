@@ -6,7 +6,7 @@ let
   printerHost = "brwf0a654d3138e.lan";
 in
 {
-  options.modules.printing.enable = lib.mkEnableOption "Impression (CUPS)";
+  options.modules.printing.enable = lib.mkEnableOption "Impression + scan (CUPS + SANE) — Brother DCP-1610W";
 
   config = lib.mkIf cfg.enable {
     services.printing = {
@@ -27,5 +27,24 @@ in
         }
       ];
     };
+
+    hardware.sane = {
+      enable = true;
+      brscan4 = {
+        enable = true;
+        netDevices = {
+          brother = {
+            model = "DCP-1610W";
+            nodename = printerHost;
+          };
+        };
+      };
+    };
+
+    home-manager.users = lib.genAttrs config.modules.users (_: {
+      home.packages = with pkgs; [
+        simple-scan
+      ];
+    });
   };
 }
