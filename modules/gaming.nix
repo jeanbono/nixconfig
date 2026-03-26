@@ -17,6 +17,7 @@ in
     programs.gamemode.enable = true;
 
     environment.systemPackages = with pkgs; [
+      faugus-launcher
       mangohud
       gamemode
       protonplus

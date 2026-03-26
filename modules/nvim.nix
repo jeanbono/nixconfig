@@ -48,8 +48,6 @@ in
             lua-language-server
             nil
             pyright
-            nodePackages.typescript-language-server
-            nodePackages.vscode-langservers-extracted
             rust-analyzer
             gopls
           ];
