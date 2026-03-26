@@ -18,11 +18,13 @@ in
       systemd.user.services.protonpass-ssh-agent = {
         Unit = {
           Description = "ProtonPass CLI SSH Agent";
-          After = "graphical-session.target";
+          After = [ "graphical-session.target" ];
         };
         Service = {
+          ExecStartPre = "${pkgs.networkmanager}/bin/nm-online -q --timeout=30";
           ExecStart = "${pkgs.proton-pass-cli}/bin/pass-cli ssh-agent start --create-new-identities Pierre";
           Restart = "on-failure";
+          RestartSec = "5s";
           Environment = [
             "SSH_AUTH_SOCK=%h/.ssh/proton-pass-agent.sock"
             "PROTON_PASS_KEY_PROVIDER=fs"
