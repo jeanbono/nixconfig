@@ -78,6 +78,7 @@ in
 
       gtk = {
         enable = true;
+        gtk4.theme = null;
         theme = {
           name = cfg.gtkThemeName;
           package = pkgs.catppuccin-gtk;

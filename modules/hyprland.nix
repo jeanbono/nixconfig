@@ -9,6 +9,14 @@ let
     rev = "main";
     sha256 = "sha256-ouuA8LVBXzrbYwPW2vNjh7fC9H2UBud/1tUiIM5vPvM=";
   };
+
+  # Couleurs Catppuccin embarquées (remplace le source = .conf qui n'est plus possible en Lua)
+  catppuccinColors = {
+    latte     = { mauve = "0xffdc8a78"; blue = "0xff1e66f5"; surface0 = "0xffccd0da"; };
+    frappe    = { mauve = "0xffca9ee6"; blue = "0xff8caaee"; surface0 = "0xff414559"; };
+    macchiato = { mauve = "0xffc6a0f6"; blue = "0xff8aadf4"; surface0 = "0xff363a4f"; };
+    mocha     = { mauve = "0xffcba6f7"; blue = "0xff89b4fa"; surface0 = "0xff313244"; };
+  };
 in
 {
   options.modules.hyprland = {
@@ -78,6 +86,7 @@ in
       { nixosConfig, pkgs, lib, ... }:
       let
         themeCfg = nixosConfig.modules.theme.catppuccin;
+        colors = catppuccinColors.${themeCfg.flavor};
       in
       {
         home.sessionVariables = {
@@ -87,7 +96,7 @@ in
         };
 
         home.file.".local/share/icons/rose-pine-hyprcursor".source = rose-pine-hyprcursor;
-        home.file."Pictures/Wallpapers/wallpaper.png".source = ../wallpapers/wallpaper.png;
+        home.file."Images/Wallpapers/wallpaper.png".source = ../wallpapers/wallpaper.png;
 
         home.packages = with pkgs; [
           wl-clipboard
@@ -129,98 +138,131 @@ in
         wayland.windowManager.hyprland = {
           enable = true;
           systemd.enable = false;
-          settings = {
-            monitor = [
-              "DP-3, 2560x1440@165, 0x0, 1, bitdepth, 10, cm, hdr, sdrbrightness, 1.3"
-              "DP-1, 2560x1440@300, 2560x0, 1, bitdepth, 10, cm, hdr, sdrbrightness, 1.3"
-            ];
-            workspace = [
-              "1, monitor:DP-1, default:true" "2, monitor:DP-1" "3, monitor:DP-1"
-              "4, monitor:DP-1" "5, monitor:DP-1"
-              "6, monitor:DP-3" "7, monitor:DP-3" "8, monitor:DP-3"
-              "9, monitor:DP-3" "10, monitor:DP-3"
-            ];
-            input = { kb_layout = "fr"; follow_mouse = 1; sensitivity = 0; };
-            source = themeCfg.hyprlandThemeFile;
-            general = {
-              gaps_in = 4; gaps_out = 8; border_size = 2;
-              "col.active_border" = "$mauve $blue 45deg";
-              "col.inactive_border" = "$surface0";
-              layout = "dwindle";
-            };
-            decoration = {
-              rounding = 8;
-              blur = { enabled = true; size = 6; passes = 2; };
-              shadow = { enabled = true; range = 12; render_power = 3; color = "rgba(0,0,0,0.4)"; };
-            };
-            animations = {
-              enabled = true;
-              bezier = [ "ease, 0.25, 0.1, 0.25, 1" ];
-              animation = [
-                "windows, 1, 4, ease"
-                "windowsOut, 1, 4, ease, popin 80%"
-                "fade, 1, 4, ease"
-                "workspaces, 1, 3, ease"
-              ];
-            };
-            dwindle = { pseudotile = true; preserve_split = true; };
-            misc = { force_default_wallpaper = 0; disable_hyprland_logo = true; };
-            env = [
-              "LIBVA_DRIVER_NAME,nvidia"
-              "__GLX_VENDOR_LIBRARY_NAME,nvidia"
-              "ELECTRON_OZONE_PLATFORM_HINT,auto"
-              "NVD_BACKEND,direct"
-            ];
-            cursor = { no_hardware_cursors = true; default_monitor = "DP-1"; };
-            "$mod" = "SUPER";
-            bind = [
-              "$mod, Return, exec, uwsm app -- alacritty"
-              "$mod, Q, killactive"
-              "$mod, M, exec, caelestia shell drawers toggle session"
-              "$mod, E, exec, uwsm app -- alacritty -e yazi"
-              "$mod, V, togglefloating"
-              "$mod, D, exec, caelestia shell drawers toggle launcher"
-              "$mod, F, fullscreen"
-              "$mod, P, pseudo"
-              "$mod, S, layoutmsg, togglesplit"
-              "$mod, left, movefocus, l"   "$mod, right, movefocus, r"
-              "$mod, up, movefocus, u"     "$mod, down, movefocus, d"
-              "$mod SHIFT, H, movewindow, l" "$mod SHIFT, L, movewindow, r"
-              "$mod SHIFT, K, movewindow, u" "$mod SHIFT, J, movewindow, d"
-              "$mod SHIFT, left, movewindow, mon:-1"
-              "$mod SHIFT, right, movewindow, mon:+1"
-              "$mod, ampersand, workspace, 1"  "$mod, eacute, workspace, 2"
-              "$mod, quotedbl, workspace, 3"   "$mod, apostrophe, workspace, 4"
-              "$mod, parenleft, workspace, 5"  "$mod, minus, workspace, 6"
-              "$mod, egrave, workspace, 7"     "$mod, underscore, workspace, 8"
-              "$mod, ccedilla, workspace, 9"   "$mod, agrave, workspace, 10"
-              "$mod SHIFT, ampersand, movetoworkspace, 1"
-              "$mod SHIFT, eacute, movetoworkspace, 2"
-              "$mod SHIFT, quotedbl, movetoworkspace, 3"
-              "$mod SHIFT, apostrophe, movetoworkspace, 4"
-              "$mod SHIFT, parenleft, movetoworkspace, 5"
-              "$mod SHIFT, minus, movetoworkspace, 6"
-              "$mod SHIFT, egrave, movetoworkspace, 7"
-              "$mod SHIFT, underscore, movetoworkspace, 8"
-              "$mod SHIFT, ccedilla, movetoworkspace, 9"
-              "$mod SHIFT, agrave, movetoworkspace, 10"
-              "$mod, mouse_down, workspace, e+1"
-              "$mod, mouse_up, workspace, e-1"
-              ''$mod SHIFT, S, exec, mkdir -p ~/Pictures/Screenshots && f=~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png && grim -g "$(slurp -d)" "$f" && wl-copy < "$f"''
-            ];
-            bindel = [
-              ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+"
-              ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
-            ];
-            bindl = [
-              ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-              ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-            ];
-            bindm = [
-              "$mod, mouse:272, movewindow"
-              "$mod, mouse:273, resizewindow"
-            ];
-          };
+          configType = "lua";
+          extraConfig = ''
+            -- Monitors
+            hl.monitor({ output = "DP-3", mode = "2560x1440@165", position = "0x0",    scale = 1, bitdepth = 10, cm = "hdr", sdrbrightness = 1.3 })
+            hl.monitor({ output = "DP-1", mode = "2560x1440@300", position = "2560x0", scale = 1, bitdepth = 10, cm = "hdr", sdrbrightness = 1.3 })
+
+            -- Workspace → monitor assignment
+            hl.workspace_rule({ workspace = "1",  monitor = "DP-1", default = true })
+            hl.workspace_rule({ workspace = "2",  monitor = "DP-1" })
+            hl.workspace_rule({ workspace = "3",  monitor = "DP-1" })
+            hl.workspace_rule({ workspace = "4",  monitor = "DP-1" })
+            hl.workspace_rule({ workspace = "5",  monitor = "DP-1" })
+            hl.workspace_rule({ workspace = "6",  monitor = "DP-3" })
+            hl.workspace_rule({ workspace = "7",  monitor = "DP-3" })
+            hl.workspace_rule({ workspace = "8",  monitor = "DP-3" })
+            hl.workspace_rule({ workspace = "9",  monitor = "DP-3" })
+            hl.workspace_rule({ workspace = "10", monitor = "DP-3" })
+
+            -- Env
+            hl.env("LIBVA_DRIVER_NAME",            "nvidia")
+            hl.env("__GLX_VENDOR_LIBRARY_NAME",    "nvidia")
+            hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
+            hl.env("NVD_BACKEND",                  "direct")
+
+            -- Config
+            hl.config({
+              input = {
+                kb_layout    = "fr",
+                follow_mouse = 1,
+                sensitivity  = 0,
+              },
+              general = {
+                gaps_in     = 4,
+                gaps_out    = 8,
+                border_size = 2,
+                col = {
+                  active_border   = { colors = { "${colors.mauve}", "${colors.blue}" }, angle = 45 },
+                  inactive_border = "${colors.surface0}",
+                },
+                layout = "dwindle",
+              },
+              decoration = {
+                rounding = 8,
+                blur   = { enabled = true, size = 6, passes = 2, brightness = 1.2, contrast = 1.0, vibrancy = 0.0 },
+                shadow = { enabled = true, range = 12, render_power = 3, color = "0x66000000" },
+              },
+              animations = { enabled = true },
+              dwindle = { preserve_split = true },
+              misc    = { force_default_wallpaper = 0, disable_hyprland_logo = true },
+              cursor  = { no_hardware_cursors = true, default_monitor = "DP-1" },
+              render  = { use_fp16 = false, ctm_animation = false, new_render_scheduling = true },
+            })
+
+            hl.curve("ease", { type = "bezier", points = { {0.25, 0.1}, {0.25, 1} } })
+            hl.animation({ leaf = "windows",    enabled = true, speed = 4, bezier = "ease" })
+            hl.animation({ leaf = "windowsOut", enabled = true, speed = 4, bezier = "ease", style = "popin 80%" })
+            hl.animation({ leaf = "fade",       enabled = true, speed = 4, bezier = "ease" })
+            hl.animation({ leaf = "workspaces", enabled = true, speed = 3, bezier = "ease" })
+
+            -- Keybinds
+            local mod = "SUPER"
+
+            hl.bind(mod .. " + Return", hl.dsp.exec_cmd("uwsm app -- alacritty"))
+            hl.bind(mod .. " + Q",      hl.dsp.window.close())
+            hl.bind(mod .. " + M",      hl.dsp.exec_cmd("caelestia shell drawers toggle session"))
+            hl.bind(mod .. " + E",      hl.dsp.exec_cmd("uwsm app -- alacritty -e yazi"))
+            hl.bind(mod .. " + V",      hl.dsp.window.float({ action = "toggle" }))
+            hl.bind(mod .. " + D",      hl.dsp.exec_cmd("caelestia shell drawers toggle launcher"))
+            hl.bind(mod .. " + F",      hl.dsp.window.fullscreen())
+            hl.bind(mod .. " + S",      hl.dsp.layout("togglesplit"))
+
+            hl.bind(mod .. " + left",  hl.dsp.focus({ direction = "left" }))
+            hl.bind(mod .. " + right", hl.dsp.focus({ direction = "right" }))
+            hl.bind(mod .. " + up",    hl.dsp.focus({ direction = "up" }))
+            hl.bind(mod .. " + down",  hl.dsp.focus({ direction = "down" }))
+
+            hl.bind(mod .. " + SHIFT + H", hl.dsp.window.move({ direction = "left" }))
+            hl.bind(mod .. " + SHIFT + L", hl.dsp.window.move({ direction = "right" }))
+            hl.bind(mod .. " + SHIFT + K", hl.dsp.window.move({ direction = "up" }))
+            hl.bind(mod .. " + SHIFT + J", hl.dsp.window.move({ direction = "down" }))
+
+            hl.bind(mod .. " + SHIFT + left",  hl.dsp.window.move({ monitor = "l" }))
+            hl.bind(mod .. " + SHIFT + right", hl.dsp.window.move({ monitor = "r" }))
+
+            -- Workspaces (AZERTY)
+            hl.bind(mod .. " + ampersand",  hl.dsp.focus({ workspace = 1 }))
+            hl.bind(mod .. " + eacute",     hl.dsp.focus({ workspace = 2 }))
+            hl.bind(mod .. " + quotedbl",   hl.dsp.focus({ workspace = 3 }))
+            hl.bind(mod .. " + apostrophe", hl.dsp.focus({ workspace = 4 }))
+            hl.bind(mod .. " + parenleft",  hl.dsp.focus({ workspace = 5 }))
+            hl.bind(mod .. " + minus",      hl.dsp.focus({ workspace = 6 }))
+            hl.bind(mod .. " + egrave",     hl.dsp.focus({ workspace = 7 }))
+            hl.bind(mod .. " + underscore", hl.dsp.focus({ workspace = 8 }))
+            hl.bind(mod .. " + ccedilla",   hl.dsp.focus({ workspace = 9 }))
+            hl.bind(mod .. " + agrave",     hl.dsp.focus({ workspace = 10 }))
+
+            hl.bind(mod .. " + SHIFT + ampersand",  hl.dsp.window.move({ workspace = 1 }))
+            hl.bind(mod .. " + SHIFT + eacute",     hl.dsp.window.move({ workspace = 2 }))
+            hl.bind(mod .. " + SHIFT + quotedbl",   hl.dsp.window.move({ workspace = 3 }))
+            hl.bind(mod .. " + SHIFT + apostrophe", hl.dsp.window.move({ workspace = 4 }))
+            hl.bind(mod .. " + SHIFT + parenleft",  hl.dsp.window.move({ workspace = 5 }))
+            hl.bind(mod .. " + SHIFT + minus",      hl.dsp.window.move({ workspace = 6 }))
+            hl.bind(mod .. " + SHIFT + egrave",     hl.dsp.window.move({ workspace = 7 }))
+            hl.bind(mod .. " + SHIFT + underscore", hl.dsp.window.move({ workspace = 8 }))
+            hl.bind(mod .. " + SHIFT + ccedilla",   hl.dsp.window.move({ workspace = 9 }))
+            hl.bind(mod .. " + SHIFT + agrave",     hl.dsp.window.move({ workspace = 10 }))
+
+            hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+            hl.bind(mod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
+
+            -- Screenshot
+            hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd(
+              'mkdir -p ~/Pictures/Screenshots && f=~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png && grim -g "$(slurp -d)" "$f" && wl-copy < "$f"'
+            ))
+
+            -- Audio
+            hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+"), { locked = true, repeating = true })
+            hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"), { locked = true, repeating = true })
+            hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),    { locked = true })
+            hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), { locked = true })
+
+            -- Mouse
+            hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+            hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+          '';
         };
       }
     );
