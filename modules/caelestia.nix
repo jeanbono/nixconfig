@@ -71,9 +71,9 @@ in
               cfg.idleTimeouts;
             appearance.rounding.scale = cfg.roundingScale;
             background.desktopClock.enabled = cfg.desktopClock;
-            session.commands.logout   = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Logging out...'"];
-            session.commands.shutdown = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'"];
-            session.commands.reboot   = ["hyprctl" "dispatch" "exec" "hyprshutdown -t 'Restarting...' --post-cmd 'reboot'"];
+            session.commands.logout   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Logging out..."];
+            session.commands.shutdown = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Shutting down..." "-p" "systemctl poweroff"];
+            session.commands.reboot   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Restarting..."   "-p" "systemctl reboot"];
           };
         };
 
