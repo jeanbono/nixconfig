@@ -28,11 +28,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [{
-      assertion = !config.modules.plasma.enable;
-      message = "modules.hyprland et modules.plasma sont mutuellement exclusifs";
-    }];
-
     # ── NixOS : compositor, portails, polices, greetd ──────────────────────
     programs.hyprland = {
       enable = true;
@@ -187,8 +182,8 @@ in
               animations = { enabled = true },
               dwindle = { preserve_split = true },
               misc    = { force_default_wallpaper = 0, disable_hyprland_logo = true },
-              cursor  = { no_hardware_cursors = true, default_monitor = "DP-1" },
-              render  = { use_fp16 = false, ctm_animation = false, new_render_scheduling = true },
+              cursor  = { no_hardware_cursors = 2, default_monitor = "DP-1" },
+              render  = { use_fp16 = false, ctm_animation = false },
             })
 
             hl.curve("ease", { type = "bezier", points = { {0.25, 0.1}, {0.25, 1} } })

@@ -34,6 +34,7 @@ in
     ssh.enable = true;
     messaging.enable = true;
     tools.enable = true;
+    lmstudio.enable = true;
     claude-code.enable = true;
     intellij.enable = true;
     nvim.enable = true;

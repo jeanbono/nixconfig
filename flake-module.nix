@@ -47,8 +47,8 @@ let
               useUserPackages = true;
               extraSpecialArgs = { nixosConfig = config; };
               sharedModules = [
-                inputs.plasma-manager.homeModules.plasma-manager
                 inputs.caelestia-shell.homeManagerModules.default
+                inputs.nixvim.homeModules.nixvim
               ];
             };
           })
