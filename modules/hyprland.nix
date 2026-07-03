@@ -136,8 +136,8 @@ in
           configType = "lua";
           extraConfig = ''
             -- Monitors
-            hl.monitor({ output = "DP-3", mode = "2560x1440@165", position = "0x0",    scale = 1, bitdepth = 10, cm = "hdr", sdrbrightness = 1.3 })
-            hl.monitor({ output = "DP-1", mode = "2560x1440@300", position = "2560x0", scale = 1, bitdepth = 10, cm = "hdr", sdrbrightness = 1.3 })
+            hl.monitor({ output = "DP-3", mode = "2560x1440@165", position = "0x0",    scale = 1, bitdepth = 10, cm = "hdr", sdrbrightness = 2.3 })
+            hl.monitor({ output = "DP-1", mode = "2560x1440@300", position = "2560x0", scale = 1, bitdepth = 10, cm = "hdr", sdrbrightness = 2.3 })
 
             -- Workspace → monitor assignment
             hl.workspace_rule({ workspace = "1",  monitor = "DP-1", default = true })
@@ -183,7 +183,7 @@ in
               dwindle = { preserve_split = true },
               misc    = { force_default_wallpaper = 0, disable_hyprland_logo = true },
               cursor  = { no_hardware_cursors = 2, default_monitor = "DP-1" },
-              render  = { use_fp16 = false, ctm_animation = false },
+              render  = { use_fp16 = 2, ctm_animation = false },
             })
 
             hl.curve("ease", { type = "bezier", points = { {0.25, 0.1}, {0.25, 1} } })

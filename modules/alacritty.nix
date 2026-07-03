@@ -18,7 +18,7 @@ in
           settings = {
             general.import = [ themeCfg.alacrittyThemeFile ];
             window = {
-              opacity = 0.85;
+              opacity = 0.96;
               padding = { x = 10; y = 10; };
             };
             font.normal.family = "MonaspiceNe Nerd Font";

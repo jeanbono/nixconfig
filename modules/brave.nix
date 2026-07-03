@@ -14,6 +14,7 @@ in
     });
 
     environment.etc."brave/policies/managed/00-brave.json".text = builtins.toJSON {
+      BackgroundModeEnabled = false;
       BraveRewardsDisabled = true;
       BraveWalletDisabled = true;
       BraveVPNDisabled = true;

@@ -7,18 +7,6 @@ in
   options.modules.caelestia = {
     enable = lib.mkEnableOption "Caelestia shell (bar, launcher, lock, notifications, wallpaper)";
 
-    showBattery = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Afficher l'indicateur de batterie dans la barre";
-    };
-
-    showWifi = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Afficher l'indicateur Wi-Fi dans la barre";
-    };
-
     lockBeforeSleep = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -62,8 +50,6 @@ in
           systemd.enable = true;
           cli.enable = true;
           settings = {
-            bar.status.showBattery = cfg.showBattery;
-            bar.status.showWifi = cfg.showWifi;
             general.idle.lockBeforeSleep = cfg.lockBeforeSleep;
             general.idle.timeouts = map
               (t: { timeout = t.timeout; idleAction = t.idleAction; }
@@ -72,8 +58,8 @@ in
             appearance.rounding.scale = cfg.roundingScale;
             background.desktopClock.enabled = cfg.desktopClock;
             session.commands.logout   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Logging out..."];
-            session.commands.shutdown = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Shutting down..." "-p" "systemctl poweroff"];
-            session.commands.reboot   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Restarting..."   "-p" "systemctl reboot"];
+            session.commands.shutdown = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Shutting down..." "-p" "poweroff"];
+            session.commands.reboot   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Restarting..."   "-p" "reboot"];
           };
         };
 

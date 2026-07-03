@@ -32,11 +32,21 @@ let
         # (ils exposent options.modules.* et configurent config.*)
         allModules
         ++ [
-          { nixpkgs.config.allowUnfree = true; }
+          {
+            nixpkgs.config.allowUnfree = true;
+          }
           {
             nixpkgs.overlays = [
               inputs.cachyos.overlays.pinned
               inputs.nur.overlays.default
+              # Workaround nixpkgs#545286 : cmake 4.3+ refuse CUDAToolkit_ROOT si bin/nvcc
+              # est absent — le hook nixpkgs le remplit mal. Unset force cmake à trouver
+              # nvcc via PATH (déjà présent en nativeBuildInputs). PR#545542 non mergé.
+              (_: prev: {
+                ollama-cuda = prev.ollama-cuda.overrideAttrs (old: {
+                  preBuild = "unset CUDAToolkit_ROOT\n" + (old.preBuild or "");
+                });
+              })
             ];
           }
           # Module home-manager (injection de l'intégration HM)

@@ -35,6 +35,7 @@ in
     messaging.enable = true;
     tools.enable = true;
     lmstudio.enable = true;
+    ollama.enable = true;
     claude-code.enable = true;
     intellij.enable = true;
     nvim.enable = true;
@@ -45,6 +46,12 @@ in
       flavor = "macchiato";
       accent = "blue";
     };
+  };
+
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 25;
   };
 
   networking.hostName = "furnace";

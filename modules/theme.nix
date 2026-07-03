@@ -1,10 +1,6 @@
 { pkgs, lib, config, ... }:
 
 let
-  cap = s:
-    lib.strings.toUpper (builtins.substring 0 1 s)
-    + builtins.substring 1 (builtins.stringLength s - 1) s;
-
   hyprlandSource = pkgs.fetchFromGitHub {
     owner = "catppuccin";
     repo = "hyprland";
@@ -54,11 +50,6 @@ in
       description = "Chemin vers le thème Alacritty Catppuccin";
     };
 
-    gtkThemeName = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      description = "Nom du thème GTK Catppuccin";
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -66,23 +57,11 @@ in
       "${hyprlandSource}/themes/${cfg.flavor}.conf";
     modules.theme.catppuccin.alacrittyThemeFile =
       "${alacrittySource}/catppuccin-${cfg.flavor}.toml";
-    modules.theme.catppuccin.gtkThemeName =
-      "Catppuccin-${cap cfg.flavor}-Standard-${cap cfg.accent}-Dark";
-
     home-manager.users = lib.genAttrs config.modules.users (_: {
-      home.sessionVariables = {
-        GTK_THEME = cfg.gtkThemeName;
-      };
-
       dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
 
       gtk = {
         enable = true;
-        gtk4.theme = null;
-        theme = {
-          name = cfg.gtkThemeName;
-          package = pkgs.catppuccin-gtk;
-        };
         iconTheme = {
           name = "Papirus-Dark";
           package = pkgs.papirus-icon-theme;
@@ -94,7 +73,6 @@ in
       };
 
       home.packages = with pkgs; [
-        catppuccin-gtk
         papirus-icon-theme
       ];
     });
