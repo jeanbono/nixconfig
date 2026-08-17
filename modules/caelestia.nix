@@ -16,7 +16,13 @@ in
     roundingScale = lib.mkOption {
       type = lib.types.float;
       default = 0.6;
-      description = "Facteur d'arrondi des coins (0.0 = carré, 1.0 = maximum)";
+      description = "Facteur d'arrondi des éléments UI (0.1 = carré, 5.0 = maximum)";
+    };
+
+    borderRounding = lib.mkOption {
+      type = lib.types.int;
+      default = 12;
+      description = "Rayon des coins du cadre caelestia en px (défaut caelestia : 25 ; Hyprland decoration:rounding = 8 donne un résultat visuellement similaire avec ~25 sur un écran 1440p)";
     };
 
     desktopClock = lib.mkOption {
@@ -56,6 +62,7 @@ in
                 // lib.optionalAttrs (t.returnAction != null) { returnAction = t.returnAction; })
               cfg.idleTimeouts;
             appearance.rounding.scale = cfg.roundingScale;
+            border.rounding = cfg.borderRounding;
             background.desktopClock.enabled = cfg.desktopClock;
             session.commands.logout   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Logging out..."];
             session.commands.shutdown = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Shutting down..." "-p" "poweroff"];
