@@ -2,22 +2,23 @@
 
 let
   cfg = config.modules.jujutsu;
+  userName  = "Pierre Fraisse";
+  userEmail = "pierre.fraisse@nebulous.fr";
   signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKg9gmxgKvtgr3+UTVn5n/32QqW+8c+ueRxyN3hqKVWs";
-  signerEmail = "pierre.fraisse@nebulous.fr";
 in
 {
   options.modules.jujutsu.enable = lib.mkEnableOption "Jujutsu (VCS)";
 
   config = lib.mkIf cfg.enable {
     home-manager.users = lib.genAttrs config.modules.users (_: { config, ... }: {
-      home.file.".ssh/allowed-signers".text = "${signerEmail} ${signingKey}\n";
+      home.file.".ssh/allowed-signers".text = "${userEmail} ${signingKey}\n";
 
       programs.jujutsu = {
         enable = true;
         settings = {
           user = {
-            email = "pierre.fraisse@nebulous.fr";
-            name = "Pierre Fraisse";
+            email = userEmail;
+            name = userName;
           };
           signing = {
             backend = "ssh";
