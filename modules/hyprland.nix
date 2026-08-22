@@ -214,8 +214,22 @@ in
             hl.bind(mod .. " + SHIFT + K", hl.dsp.window.move({ direction = "up" }))
             hl.bind(mod .. " + SHIFT + J", hl.dsp.window.move({ direction = "down" }))
 
-            hl.bind(mod .. " + SHIFT + left",  hl.dsp.window.move({ monitor = "l" }))
-            hl.bind(mod .. " + SHIFT + right", hl.dsp.window.move({ monitor = "r" }))
+            local function move_to_monitor(dir)
+              return function()
+                local active = hl.get_active_monitor()
+                if not active then return end
+                for _, mon in ipairs(hl.get_monitors()) do
+                  if mon.id ~= active.id then
+                    local ok = (dir == "l" and mon.x + mon.width <= active.x)
+                            or (dir == "r" and mon.x >= active.x + active.width)
+                    if ok then hl.dispatch(hl.dsp.window.move({ monitor = dir })) return end
+                  end
+                end
+              end
+            end
+
+            hl.bind(mod .. " + SHIFT + left",  move_to_monitor("l"))
+            hl.bind(mod .. " + SHIFT + right", move_to_monitor("r"))
 
             -- Workspaces (AZERTY)
             hl.bind(mod .. " + ampersand",  hl.dsp.focus({ workspace = 1 }))

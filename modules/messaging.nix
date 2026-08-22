@@ -4,7 +4,7 @@ let
   cfg = config.modules.messaging;
 in
 {
-  options.modules.messaging.enable = lib.mkEnableOption "Discord, Element";
+  options.modules.messaging.enable = lib.mkEnableOption "Discord, Element, Cinny";
 
   config = lib.mkIf cfg.enable {
     home-manager.users = lib.genAttrs config.modules.users (_: {
@@ -21,7 +21,7 @@ in
         };
       };
 
-      home.packages = with pkgs; [ element-desktop ];
+      home.packages = with pkgs; [ element-desktop cinny-desktop ];
     });
   };
 }
