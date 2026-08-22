@@ -27,6 +27,8 @@
       den.aspects.hyprland
       den.aspects.caelestia
       den.aspects.zsh
+
+      den.aspects.plex
     ];
 
     provides.to-hosts.nixos = { ... }: {

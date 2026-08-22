@@ -67,6 +67,7 @@ Chaque fichier `modules/*.nix` déclare un ou plusieurs **aspects** (`den.aspect
 | `brave` | NixOS+HM | Policies Brave (uBlock, Catppuccin) + `programs.brave` |
 | `protonpass` | NixOS+HM | CLI + GUI + agent SSH systemd + policy Brave |
 | `messaging` | HM | Vesktop (Discord), Element, Cinny |
+| `plex` | HM | Plex Desktop |
 | `claude-code` | HM | Claude Code CLI |
 | `tools` | HM | Paquets CLI (ripgrep, fd, jq, fastfetch, unzip) |
 
