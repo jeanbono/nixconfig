@@ -16,55 +16,50 @@ sudo nixos-rebuild dry-activate --flake .#furnace
 
 # Check flake outputs
 nix flake show
+
+# Regenerate flake.nix after editing flake-file.inputs in modules/dendritic.nix
+nix run .#write-flake
 ```
 
 ## Architecture
 
-This config uses the **dendritic pattern**: flake-parts + Home Manager unified in a single module tree, so NixOS system config and Home Manager user config live in the same file.
+This config uses the [**den**](https://github.com/denful/den) flake framework (pinned to tag `v0.18.0`), built on flake-parts + `import-tree` + `flake-file`. NixOS system config and Home Manager user config live in the same tree, split into **aspects** rather than boolean-toggled modules.
 
 ### Entry points
 
-- `flake.nix` — delegates entirely to `flake-module.nix` via `flake-parts.lib.mkFlake`
-- `flake-module.nix` — auto-imports all `modules/*.nix` via `importTree`, defines `mkHost`, registers `flake.nixosConfigurations`
-- `hosts/furnace/default.nix` — activates modules for the `furnace` machine; no module code lives here, only `modules.<x>.enable = true` declarations
+- `flake.nix` — **auto-generated** by `flake-file` from `flake-file.inputs` declared in `modules/dendritic.nix`. Never edit it by hand; run `nix run .#write-flake` after changing inputs.
+- `modules/dendritic.nix` — imports `flake-file` and `den`'s dendritic flake-parts modules, declares all flake inputs.
+- `modules/defaults.nix` — flake-wide defaults: `system.stateVersion`, `home.stateVersion`, `nixpkgs.config.allowUnfree`, `home-manager.{useGlobalPkgs,useUserPackages,sharedModules}`, `systems`.
+- `modules/hosts.nix` — declares which hosts and users exist: `den.hosts.x86_64-linux.furnace.users.pierre = {};`
+- `modules/furnace.nix` — the **host aspect** for `furnace`: hardware import, boot/kernel, networking, and an `includes` list of every NixOS-facing aspect active on this machine.
+- `modules/pierre.nix` — the **user aspect** for `pierre`: `den.batteries.*` (user account creation, shell) and an `includes` list of every Home-Manager-facing aspect active for this user.
+- `hosts/furnace/hardware-configuration.nix` — plain NixOS module (nixos-generate-config output), imported by `furnace.nix`. Deliberately kept **outside** `modules/`: `import-tree` scans every `.nix` file under `modules/` as a flake-parts module, and a raw NixOS module fed there would fail to evaluate (`environment.systemPackages` etc. aren't valid flake-parts options).
 
-### Module pattern
+### Aspect pattern
 
-Every file in `modules/` is a standard NixOS module that exposes options under `modules.*` and can configure both the NixOS system (`config.*`) and Home Manager users (`config.home-manager.users.*`) in the same file. There is no `system/` vs `home/` split.
-
-The pattern for a typical module:
+Every feature file in `modules/` declares a `den.aspects.<name>` with `nixos` and/or `homeManager` fields:
 
 ```nix
-{ pkgs, lib, config, ... }:
-let cfg = config.modules.<name>; in
 {
-  options.modules.<name>.enable = lib.mkEnableOption "…";
-
-  config = lib.mkIf cfg.enable {
-    # NixOS system config
-    environment.systemPackages = [ … ];
-
-    # Home Manager config for all managed users
-    home-manager.users = lib.genAttrs config.modules.users (_: {
-      programs.<name>.enable = true;
-    });
+  den.aspects.foo = {
+    nixos = { pkgs, ... }: { environment.systemPackages = [ pkgs.foo ]; };
+    homeManager = { pkgs, ... }: { home.packages = [ pkgs.foo-cli ]; };
   };
 }
 ```
 
-`config.modules.users` (defined in `modules/users.nix`) is the list of users managed by HM modules. All HM modules iterate over it with `lib.genAttrs`.
+- `nixos` only takes effect when the aspect is included on a **host** (directly or via that host's `includes`).
+- `homeManager` only takes effect when the aspect is included on a **user** (directly or via that user's `includes`).
+- There is **no `enable` option** and no `lib.genAttrs config.modules.users`. "Activating" a feature means adding `den.aspects.<name>` to `furnace.nix`'s `includes` (for `nixos`) and/or `pierre.nix`'s `includes` (for `homeManager`). A feature touching both layers is listed in both places.
+- `{ den, ... }:` is only needed in a file's top-level signature when it references `den.batteries.*`/`den.aspects.*`/`den.lib.*`; otherwise `{ ... }:` or `{ pkgs, lib, ... }:` suffices.
 
-### Cross-layer communication
+### Cross-layer sharing: `flake.lib`
 
-HM modules access NixOS config via `nixosConfig` (passed as `extraSpecialArgs`). For example, `modules/alacritty.nix` reads `nixosConfig.modules.theme.catppuccin` to pick the right theme file. This is injected in `flake-module.nix`:
+Values that need to be read from multiple aspect files (e.g. the Catppuccin flavor) are exposed via `flake.lib.<name>` in a proper flake-parts module (see `modules/theme.nix`), and consumed elsewhere via `inputs.self.lib.<name>` (needs `{ inputs, ... }:` in that file's signature). This replaced the old `nixosConfig`/`extraSpecialArgs` HM-cross-layer trick — a plain file exporting a bare function/attrset would break `import-tree` the same way `hardware-configuration.nix` would.
 
-```nix
-home-manager.extraSpecialArgs = { nixosConfig = config; };
-```
+### Adding a new aspect
 
-### Adding a new module
-
-Create `modules/<name>.nix` — `importTree` picks it up automatically. No registration needed.
+Create `modules/<name>.nix` with `den.aspects.<name> = { nixos = ...; homeManager = ...; };` — `import-tree` picks it up automatically. Then add `den.aspects.<name>` to `furnace.nix`'s `includes` (if it has a `nixos` field) and/or `pierre.nix`'s `includes` (if it has a `homeManager` field).
 
 ## Changeset descriptions (Jujutsu)
 
@@ -85,7 +80,6 @@ Format: `:gitmoji: description du changeset`
 
 ### Adding a new host
 
-1. Create `hosts/<name>/default.nix` and `hosts/<name>/hardware-configuration.nix`
-2. Add to `flake-module.nix`: `flake.nixosConfigurations.<name> = mkHost { hostName = "<name>"; };`
-3. Activate modules in `hosts/<name>/default.nix`
-4. Rebuild: `sudo nixos-rebuild switch --flake .#<name>`
+1. Add `den.hosts.<system>.<hostname>.users.<username> = {};` to `modules/hosts.nix`.
+2. Create `modules/<hostname>.nix` as the host aspect (mirror `modules/furnace.nix`), and `modules/<username>.nix` as the user aspect (mirror `modules/pierre.nix`) if it's a new user.
+3. Rebuild: `sudo nixos-rebuild switch --flake .#<hostname>`
