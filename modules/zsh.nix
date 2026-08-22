@@ -1,15 +1,10 @@
-{ pkgs, lib, config, ... }:
-
-let
-  cfg = config.modules.zsh;
-in
 {
-  options.modules.zsh.enable = lib.mkEnableOption "Zsh + Starship";
+  den.aspects.zsh = {
+    nixos = { ... }: {
+      programs.zsh.enable = true;
+    };
 
-  config = lib.mkIf cfg.enable {
-    programs.zsh.enable = true;
-
-    home-manager.users = lib.genAttrs config.modules.users (_: {
+    homeManager = { ... }: {
       programs.zsh = {
         enable = true;
         enableCompletion = true;
@@ -114,6 +109,6 @@ in
           };
         };
       };
-    });
+    };
   };
 }

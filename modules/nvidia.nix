@@ -1,12 +1,5 @@
-{ config, lib, ... }:
-
-let
-  cfg = config.modules.nvidia;
-in
 {
-  options.modules.nvidia.enable = lib.mkEnableOption "Pilote NVIDIA (beta, open, modesetting)";
-
-  config = lib.mkIf cfg.enable {
+  den.aspects.nvidia.nixos = { config, ... }: {
     hardware.graphics = {
       enable = true;
       enable32Bit = true;

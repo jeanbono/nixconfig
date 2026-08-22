@@ -1,12 +1,5 @@
-{ pkgs, lib, config, ... }:
-
-let
-  cfg = config.modules.nix;
-in
 {
-  options.modules.nix.enable = lib.mkEnableOption "Nix flakes, auto-GC and store optimisation";
-
-  config = lib.mkIf cfg.enable {
+  den.aspects.nix.nixos = { ... }: {
     nix.settings = {
       experimental-features = [ "nix-command" "flakes" ];
       auto-optimise-store = true;

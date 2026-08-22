@@ -1,20 +1,25 @@
-{ pkgs, lib, config, ... }:
-
 let
-  cfg = config.modules.protonpass;
   protonPassId = "ghmbeldphafepmbegfdlkpapadhbakde";
   updateUrl = "https://clients2.google.com/service/update2/crx";
 in
 {
-  options.modules.protonpass.enable = lib.mkEnableOption "ProtonPass CLI + GUI";
+  den.aspects.protonpass = {
+    nixos = { pkgs, ... }: {
+      environment.systemPackages = with pkgs; [
+        proton-pass
+        proton-pass-cli
+      ];
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      proton-pass
-      proton-pass-cli
-    ];
+      environment.etc."brave/policies/managed/10-protonpass.json".text = builtins.toJSON {
+        ExtensionSettings.${protonPassId} = {
+          installation_mode = "force_installed";
+          update_url = updateUrl;
+          toolbar_pin = "force_pinned";
+        };
+      };
+    };
 
-    home-manager.users = lib.genAttrs config.modules.users (_: {
+    homeManager = { pkgs, ... }: {
       home.sessionVariables.SSH_AUTH_SOCK = "$HOME/.ssh/proton-pass-agent.sock";
 
       systemd.user.services.protonpass-ssh-agent = {
@@ -34,18 +39,6 @@ in
         };
         Install.WantedBy = [ "graphical-session.target" ];
       };
-    });
-
-    # Contribue sa propre policy Brave si Brave est activé, sans écrire dans brave.nix
-    environment.etc."brave/policies/managed/10-protonpass.json" =
-      lib.mkIf config.modules.brave.enable {
-        text = builtins.toJSON {
-          ExtensionSettings.${protonPassId} = {
-            installation_mode = "force_installed";
-            update_url = updateUrl;
-            toolbar_pin = "force_pinned";
-          };
-        };
-      };
+    };
   };
 }

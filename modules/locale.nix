@@ -1,12 +1,5 @@
-{ lib, config, ... }:
-
-let
-  cfg = config.modules.locale;
-in
 {
-  options.modules.locale.enable = lib.mkEnableOption "Locale FR et clavier français";
-
-  config = lib.mkIf cfg.enable {
+  den.aspects.locale.nixos = { ... }: {
     i18n.defaultLocale = "fr_FR.UTF-8";
     i18n.extraLocaleSettings = {
       LC_ADDRESS = "fr_FR.UTF-8";

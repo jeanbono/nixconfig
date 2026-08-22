@@ -1,12 +1,5 @@
-{ pkgs, lib, config, ... }:
-
-let
-  cfg = config.modules.gaming;
-in
 {
-  options.modules.gaming.enable = lib.mkEnableOption "Steam, Proton, MangoHud, Gamemode, Wine";
-
-  config = lib.mkIf cfg.enable {
+  den.aspects.gaming.nixos = { pkgs, ... }: {
     programs.steam = {
       enable = true;
       remotePlay.openFirewall = true;

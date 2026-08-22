@@ -1,27 +1,18 @@
-{ pkgs, lib, config, ... }:
-
-let
-  cfg = config.modules.messaging;
-in
 {
-  options.modules.messaging.enable = lib.mkEnableOption "Discord, Element, Cinny";
-
-  config = lib.mkIf cfg.enable {
-    home-manager.users = lib.genAttrs config.modules.users (_: {
-      programs.vesktop = {
-        enable = true;
-        vencord.settings = {
-          autoUpdate = true;
-          autoUpdateNotification = true;
-          notifyAboutUpdates = true;
-          plugins = {
-            ClearURLs.enabled = true;
-            FixYoutubeEmbeds.enabled = true;
-          };
+  den.aspects.messaging.homeManager = { pkgs, ... }: {
+    programs.vesktop = {
+      enable = true;
+      vencord.settings = {
+        autoUpdate = true;
+        autoUpdateNotification = true;
+        notifyAboutUpdates = true;
+        plugins = {
+          ClearURLs.enabled = true;
+          FixYoutubeEmbeds.enabled = true;
         };
       };
+    };
 
-      home.packages = with pkgs; [ element-desktop cinny-desktop ];
-    });
+    home.packages = with pkgs; [ element-desktop cinny-desktop ];
   };
 }

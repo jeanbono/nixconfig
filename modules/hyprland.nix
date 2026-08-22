@@ -1,9 +1,8 @@
-{ pkgs, lib, config, ... }:
-
+{ inputs, ... }:
 let
-  cfg = config.modules.hyprland;
+  username = "pierre";
 
-  rose-pine-hyprcursor = pkgs.fetchFromGitHub {
+  rose-pine-hyprcursor = { pkgs }: pkgs.fetchFromGitHub {
     owner = "ndom91";
     repo = "rose-pine-hyprcursor";
     rev = "main";
@@ -19,69 +18,59 @@ let
   };
 in
 {
-  options.modules.hyprland = {
-    enable = lib.mkEnableOption "Hyprland : compositor (NixOS) + session utilisateur (HM)";
-    user = lib.mkOption {
-      type = lib.types.str;
-      description = "Utilisateur pour l'auto-login greetd";
-    };
-  };
+  den.aspects.hyprland = {
+    nixos = { pkgs, ... }: {
+      programs.hyprland = {
+        enable = true;
+        xwayland.enable = true;
+        withUWSM = true;
+      };
 
-  config = lib.mkIf cfg.enable {
-    # ── NixOS : compositor, portails, polices, greetd ──────────────────────
-    programs.hyprland = {
-      enable = true;
-      xwayland.enable = true;
-      withUWSM = true;
-    };
+      programs.dconf.enable = true;
+      programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
-    programs.dconf.enable = true;
-    programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+      environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-    environment.sessionVariables.NIXOS_OZONE_WL = "1";
+      xdg.portal = {
+        enable = true;
+        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      };
 
-    xdg.portal = {
-      enable = true;
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    };
+      services.greetd = {
+        enable = true;
+        settings.default_session = {
+          command = "uwsm start hyprland-uwsm.desktop";
+          user = username;
+        };
+      };
 
-    services.greetd = {
-      enable = true;
-      settings.default_session = {
-        command = "uwsm start hyprland-uwsm.desktop";
-        user = cfg.user;
+      services.displayManager.defaultSession = "hyprland-uwsm";
+
+      services.logind.settings.Login = {
+        HandleSuspendKey = "ignore";
+        HandleSuspendKeyLongPress = "ignore";
+        HandleLidSwitch = "ignore";
+      };
+
+      fonts.packages = with pkgs; [
+        nerd-fonts.symbols-only
+        nerd-fonts.monaspace
+        noto-fonts
+        noto-fonts-cjk-sans
+        noto-fonts-color-emoji
+      ];
+
+      fonts.fontconfig = {
+        enable = true;
+        antialias = true;
+        hinting = { enable = true; style = "slight"; };
+        subpixel = { rgba = "none"; lcdfilter = "default"; };
       };
     };
 
-    services.displayManager.defaultSession = "hyprland-uwsm";
-
-    services.logind.settings.Login = {
-      HandleSuspendKey = "ignore";
-      HandleSuspendKeyLongPress = "ignore";
-      HandleLidSwitch = "ignore";
-    };
-
-    fonts.packages = with pkgs; [
-      nerd-fonts.symbols-only
-      nerd-fonts.monaspace
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-color-emoji
-    ];
-
-    fonts.fontconfig = {
-      enable = true;
-      antialias = true;
-      hinting = { enable = true; style = "slight"; };
-      subpixel = { rgba = "none"; lcdfilter = "default"; };
-    };
-
-    # ── HM : session wayland, keybinds, moniteurs, yazi, curseur ──────────
-    home-manager.users = lib.genAttrs config.modules.users (user:
-      { nixosConfig, pkgs, lib, ... }:
+    homeManager = { pkgs, ... }:
       let
-        themeCfg = nixosConfig.modules.theme.catppuccin;
-        colors = catppuccinColors.${themeCfg.flavor};
+        colors = catppuccinColors.${inputs.self.lib.theme.flavor};
       in
       {
         home.sessionVariables = {
@@ -90,7 +79,7 @@ in
           HYPRCURSOR_SIZE = "24";
         };
 
-        home.file.".local/share/icons/rose-pine-hyprcursor".source = rose-pine-hyprcursor;
+        home.file.".local/share/icons/rose-pine-hyprcursor".source = rose-pine-hyprcursor { inherit pkgs; };
         home.file."Images/Wallpapers/wallpaper.png".source = ../wallpapers/wallpaper.png;
 
         home.packages = with pkgs; [
@@ -121,8 +110,8 @@ in
               sort_dir_first = true;
             };
           };
-          theme.flavor.use = themeCfg.flavor;
-          flavors.${themeCfg.flavor} = pkgs.fetchFromGitHub {
+          theme.flavor.use = inputs.self.lib.theme.flavor;
+          flavors.${inputs.self.lib.theme.flavor} = pkgs.fetchFromGitHub {
             owner = "catppuccin";
             repo = "yazi";
             rev = "main";
@@ -273,7 +262,6 @@ in
             hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
           '';
         };
-      }
-    );
+      };
   };
 }
