@@ -1,13 +1,17 @@
-{ lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.jujutsu;
+  signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKg9gmxgKvtgr3+UTVn5n/32QqW+8c+ueRxyN3hqKVWs";
+  signerEmail = "pierre.fraisse@nebulous.fr";
 in
 {
   options.modules.jujutsu.enable = lib.mkEnableOption "Jujutsu (VCS)";
 
   config = lib.mkIf cfg.enable {
-    home-manager.users = lib.genAttrs config.modules.users (_: {
+    home-manager.users = lib.genAttrs config.modules.users (_: { config, ... }: {
+      home.file.".ssh/allowed-signers".text = "${signerEmail} ${signingKey}\n";
+
       programs.jujutsu = {
         enable = true;
         settings = {
@@ -15,12 +19,26 @@ in
             email = "pierre.fraisse@nebulous.fr";
             name = "Pierre Fraisse";
           };
+          signing = {
+            backend = "ssh";
+            behavior = "own";
+            key = signingKey;
+            backends.ssh.program = "${pkgs.openssh}/bin/ssh-keygen";
+            backends.ssh.allowed-signers = "${config.home.homeDirectory}/.ssh/allowed-signers";
+          };
           revset-aliases = {
             "closest_pushable(to)" = ''heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'';
           };
           aliases = {
             tug = [ "bookmark" "move" "--from" "heads(::@ & bookmarks())" "--to" "closest_pushable(@)" ];
           };
+          ui.show-cryptographic-signatures = true;
+          template-aliases."format_short_cryptographic_signature(sig)" = ''
+            if(sig,
+              label("signature status " ++ sig.status(), sig.status()),
+              label("signature status invalid", "(no sig)"),
+            )
+          '';
         };
       };
     });
