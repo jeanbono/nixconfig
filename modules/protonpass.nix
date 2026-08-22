@@ -15,6 +15,8 @@ in
     ];
 
     home-manager.users = lib.genAttrs config.modules.users (_: {
+      home.sessionVariables.SSH_AUTH_SOCK = "$HOME/.ssh/proton-pass-agent.sock";
+
       systemd.user.services.protonpass-ssh-agent = {
         Unit = {
           Description = "ProtonPass CLI SSH Agent";
