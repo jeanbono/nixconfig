@@ -2,6 +2,8 @@
 {
   den.aspects.furnace = {
     includes = [
+      den.batteries.hostname
+
       den.aspects.audio
       den.aspects.gaming
       den.aspects.locale
@@ -27,7 +29,6 @@
 
       nixpkgs.overlays = [ inputs.cachyos.overlays.pinned ];
 
-      networking.hostName = "furnace";
       time.timeZone = "Europe/Paris";
 
       zramSwap = {

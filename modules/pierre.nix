@@ -31,11 +31,9 @@
       den.aspects.plex
     ];
 
-    provides.to-hosts.nixos = { ... }: {
-      users.users.pierre = {
-        description = "pierre";
-        extraGroups = [ "video" "audio" "input" ];
-      };
+    user = { ... }: {
+      description = "pierre";
+      extraGroups = [ "video" "audio" "input" ];
     };
   };
 }
