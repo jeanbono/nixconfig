@@ -33,7 +33,7 @@ This config uses the [**den**](https://github.com/denful/den) flake framework (p
 - `modules/hosts.nix` — declares which hosts and users exist: `den.hosts.x86_64-linux.furnace.users.pierre = {};`
 - `modules/furnace.nix` — the **host aspect** for `furnace`: hardware import, boot/kernel, networking, and an `includes` list of every NixOS-facing aspect active on this machine.
 - `modules/pierre.nix` — the **user aspect** for `pierre`: `den.batteries.*` (user account creation, shell) and an `includes` list of every Home-Manager-facing aspect active for this user.
-- `hosts/furnace/hardware-configuration.nix` — plain NixOS module (nixos-generate-config output), imported by `furnace.nix`. Deliberately kept **outside** `modules/`: `import-tree` scans every `.nix` file under `modules/` as a flake-parts module, and a raw NixOS module fed there would fail to evaluate (`environment.systemPackages` etc. aren't valid flake-parts options).
+- `modules/_nixos/hardware-configuration.nix` — plain NixOS module (nixos-generate-config output), imported by `furnace.nix`. Lives under the den-recommended `_nixos/` convention: `import-tree` ignores any path containing a `/_` segment, so this raw NixOS module (`environment.systemPackages` etc. aren't valid flake-parts options) never gets scanned as an aspect — it's only pulled in explicitly via `furnace.nix`'s `nixos.imports`.
 
 ### Aspect pattern
 
@@ -55,7 +55,7 @@ Every feature file in `modules/` declares a `den.aspects.<name>` with `nixos` an
 
 ### Cross-layer sharing: `flake.lib`
 
-Values that need to be read from multiple aspect files (e.g. the Catppuccin flavor) are exposed via `flake.lib.<name>` in a proper flake-parts module (see `modules/theme.nix`), and consumed elsewhere via `inputs.self.lib.<name>` (needs `{ inputs, ... }:` in that file's signature). This replaced the old `nixosConfig`/`extraSpecialArgs` HM-cross-layer trick — a plain file exporting a bare function/attrset would break `import-tree` the same way `hardware-configuration.nix` would.
+Values that need to be read from multiple aspect files (e.g. the Catppuccin flavor) are exposed via `flake.lib.<name>` in a proper flake-parts module (see `modules/theme.nix`), and consumed elsewhere via `inputs.self.lib.<name>` (needs `{ inputs, ... }:` in that file's signature). This replaced the old `nixosConfig`/`extraSpecialArgs` HM-cross-layer trick — a plain file exporting a bare function/attrset would break `import-tree` the same way an unprefixed `hardware-configuration.nix` would.
 
 ### Adding a new aspect
 

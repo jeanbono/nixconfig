@@ -23,7 +23,7 @@
     ];
 
     nixos = { pkgs, ... }: {
-      imports = [ ../hosts/furnace/hardware-configuration.nix ];
+      imports = [ ./_nixos/hardware-configuration.nix ];
 
       nixpkgs.overlays = [ inputs.cachyos.overlays.pinned ];
 

@@ -19,7 +19,7 @@ Chaque fichier `modules/*.nix` déclare un ou plusieurs **aspects** (`den.aspect
 - `modules/hosts.nix` déclare quels hosts/users existent : `den.hosts.x86_64-linux.furnace.users.pierre = {};`
 - `modules/furnace.nix` (aspect **host**) et `modules/pierre.nix` (aspect **user**) contiennent chacun une liste `includes` — c'est elle qui "active" les aspects, pas une option `enable`.
 - Un aspect touchant les deux couches est listé dans les deux `includes`.
-- `hosts/furnace/hardware-configuration.nix` reste hors de `modules/` (module NixOS classique, pas flake-parts).
+- `modules/_nixos/hardware-configuration.nix` (module NixOS classique, pas flake-parts) : le préfixe `_` fait qu'`import-tree` l'ignore (convention den), il est importé explicitement dans `furnace.nix`.
 
 ## Structure du projet
 
@@ -28,9 +28,6 @@ Chaque fichier `modules/*.nix` déclare un ou plusieurs **aspects** (`den.aspect
 ├── flake.nix                # Généré par flake-file — ne pas éditer
 ├── flake.lock
 ├── wallpapers/
-├── hosts/
-│   └── furnace/
-│       └── hardware-configuration.nix
 └── modules/
     ├── dendritic.nix         # Wiring den + flake-file, déclaration des inputs
     ├── defaults.nix          # stateVersion, allowUnfree, systems, HM useGlobalPkgs
@@ -38,6 +35,8 @@ Chaque fichier `modules/*.nix` déclare un ou plusieurs **aspects** (`den.aspect
     ├── furnace.nix            # Aspect host : hardware, boot, includes NixOS
     ├── pierre.nix             # Aspect user : batteries, includes HM
     ├── theme.nix              # flake.lib.theme (flavor, thème alacritty) + GTK dark
+    ├── _nixos/
+    │   └── hardware-configuration.nix  # Module NixOS brut, ignoré par import-tree (préfixe `_`)
     └── <feature>.nix          # Un aspect par feature (voir tableau ci-dessous)
 ```
 
