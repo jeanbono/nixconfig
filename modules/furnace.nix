@@ -37,9 +37,17 @@
         memoryPercent = 25;
       };
 
-      boot.loader.systemd-boot.enable = true;
-      boot.loader.systemd-boot.configurationLimit = 1;
+      boot.loader.systemd-boot.enable = false;
       boot.loader.efi.canTouchEfiVariables = true;
+      boot.loader.limine = {
+        enable = true;
+        maxGenerations = 2;
+        extraEntries = ''
+          /Windows
+            protocol: efi
+            path: boot():///EFI/Microsoft/Boot/bootmgfw.efi
+        '';
+      };
       boot.kernelModules = [ "atlantic" ];
       boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
