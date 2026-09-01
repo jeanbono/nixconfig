@@ -16,6 +16,7 @@
       den.aspects.lmstudio
       den.aspects.intellij
       den.aspects.printing
+      den.aspects.razer
 
       den.aspects.brave
       den.aspects.protonpass

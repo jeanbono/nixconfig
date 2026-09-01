@@ -49,6 +49,7 @@ Chaque fichier `modules/*.nix` déclare un ou plusieurs **aspects** (`den.aspect
 | `network` | NixOS | NetworkManager, SSH, curl, wget |
 | `nix` | NixOS | Flakes, auto-optimise-store, GC hebdomadaire |
 | `nvidia` | NixOS | Pilote NVIDIA, modesetting |
+| `razer` | NixOS+HM | OpenRazer (daemon + udev) + Polychromatic (GUI) |
 | `gaming` | NixOS | Steam, Proton, MangoHud, Gamemode, Wine |
 | `printing` | NixOS+HM | CUPS + SANE (Brother DCP-1610W) + simple-scan |
 | `ollama` | NixOS | Service Ollama CUDA, préchargement modèle |

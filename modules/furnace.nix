@@ -10,6 +10,7 @@
       den.aspects.network
       den.aspects.nix
       den.aspects.nvidia
+      den.aspects.razer
 
       den.aspects.lmstudio
       den.aspects.intellij
