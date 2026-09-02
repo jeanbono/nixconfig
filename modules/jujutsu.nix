@@ -7,6 +7,10 @@ in
   den.aspects.jujutsu.homeManager = { pkgs, config, ... }: {
     home.file.".ssh/allowed-signers".text = "${userEmail} ${signingKey}\n";
 
+    # less (pager par défaut de `jj log`) affiche "<U+XXXX>" pour les glyphes
+    # Nerd Font (zone Private Use Area) qu'il ne reconnaît pas comme imprimables.
+    home.sessionVariables.LESSUTFCHARDEF = "e000-f8ff:p";
+
     programs.jujutsu = {
       enable = true;
       settings = {
@@ -30,7 +34,12 @@ in
         ui.show-cryptographic-signatures = true;
         template-aliases."format_short_cryptographic_signature(sig)" = ''
           if(sig,
-            label("signature status " ++ sig.status(), sig.status()),
+            label("signature status " ++ sig.status(),
+              if(sig.status() == "good", "",
+              if(sig.status() == "bad", "",
+              if(sig.status() == "unknown", "",
+              "")))
+            ),
             label("signature status invalid", "(no sig)"),
           )
         '';
