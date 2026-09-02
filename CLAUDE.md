@@ -63,7 +63,7 @@ Create `modules/<name>.nix` with `den.aspects.<name> = { nixos = ...; homeManage
 
 ## Changeset descriptions (Jujutsu)
 
-Format: `:gitmoji: description du changeset`
+Format: `:gitmoji: description du changeset`. La description doit être rédigée **en anglais**, même si le reste de cette documentation est en français.
 
 | Gitmoji | Quand l'utiliser |
 |---|---|
