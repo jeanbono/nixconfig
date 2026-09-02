@@ -5,7 +5,7 @@ let
   rose-pine-hyprcursor = { pkgs }: pkgs.fetchFromGitHub {
     owner = "ndom91";
     repo = "rose-pine-hyprcursor";
-    rev = "main";
+    rev = "4b02963d0baf0bee18725cf7c5762b3b3c1392f1";
     sha256 = "sha256-ouuA8LVBXzrbYwPW2vNjh7fC9H2UBud/1tUiIM5vPvM=";
   };
 
@@ -114,7 +114,7 @@ in
           flavors.${inputs.self.lib.theme.flavor} = pkgs.fetchFromGitHub {
             owner = "catppuccin";
             repo = "yazi";
-            rev = "main";
+            rev = "fc69d6472d29b823c4980d23186c9c120a0ad32c";
             sha256 = "sha256-Og33IGS9pTim6LEH33CO102wpGnPomiperFbqfgrJjw=";
           };
         };
