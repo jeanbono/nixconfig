@@ -10,6 +10,9 @@ let
 in
 {
   den.aspects.caelestia.homeManager = { pkgs, config, ... }: {
+    # Read by the dashboard as the profile picture (caelestia-shell convention).
+    home.file.".face".source = ../assets/face.png;
+
     programs.caelestia = {
       enable = true;
       systemd.enable = true;
