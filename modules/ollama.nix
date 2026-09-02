@@ -1,6 +1,3 @@
-let
-  openFirewall = true;
-in
 {
   den.aspects.ollama.nixos = { pkgs, ... }: {
     # Workaround nixpkgs#545286 : cmake 4.3+ refuse CUDAToolkit_ROOT si bin/nvcc
@@ -26,6 +23,6 @@ in
       # Attend /dev/nvidia0 jusqu'à 30s avant de démarrer ; ignore l'échec si absent
       "-${pkgs.bash}/bin/bash -c 'i=0; while [ $i -lt 30 ] && [ ! -e /dev/nvidia0 ]; do sleep 1; i=$((i+1)); done'";
 
-    networking.firewall.allowedTCPPorts = if openFirewall then [ 11434 ] else [ ];
+    networking.firewall.allowedTCPPorts = [ 11434 ];
   };
 }
