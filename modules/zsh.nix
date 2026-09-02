@@ -35,6 +35,7 @@
           fossil_branch.symbol = " ";
           gcloud.symbol = " ";
           git_commit.tag_symbol = "  ";
+          git_commit.disabled = true;
           git_branch.disabled = true;
           git_state.disabled = true;
           git_status.disabled = true;
