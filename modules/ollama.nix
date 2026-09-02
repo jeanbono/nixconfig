@@ -1,8 +1,9 @@
 {
   den.aspects.ollama.nixos = { pkgs, ... }: {
-    # Workaround nixpkgs#545286 : cmake 4.3+ refuse CUDAToolkit_ROOT si bin/nvcc
-    # est absent — le hook nixpkgs le remplit mal. Unset force cmake à trouver
-    # nvcc via PATH (déjà présent en nativeBuildInputs). PR#545542 non mergé.
+    # Workaround for nixpkgs#545286: cmake 4.3+ rejects CUDAToolkit_ROOT when
+    # bin/nvcc is missing — the nixpkgs hook fills it in incorrectly. Unsetting
+    # it forces cmake to find nvcc via PATH (already in nativeBuildInputs).
+    # PR#545542 not merged.
     nixpkgs.overlays = [
       (_: prev: {
         ollama-cuda = prev.ollama-cuda.overrideAttrs (old: {
@@ -20,7 +21,7 @@
     };
 
     systemd.services.ollama.serviceConfig.ExecStartPre =
-      # Attend /dev/nvidia0 jusqu'à 30s avant de démarrer ; ignore l'échec si absent
+      # Waits up to 30s for /dev/nvidia0 before starting; ignores failure if absent
       "-${pkgs.bash}/bin/bash -c 'i=0; while [ $i -lt 30 ] && [ ! -e /dev/nvidia0 ]; do sleep 1; i=$((i+1)); done'";
 
     networking.firewall.allowedTCPPorts = [ 11434 ];

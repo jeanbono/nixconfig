@@ -63,20 +63,20 @@ Create `modules/<name>.nix` with `den.aspects.<name> = { nixos = ...; homeManage
 
 ## Changeset descriptions (Jujutsu)
 
-Format: `:gitmoji: description du changeset`. La description doit être rédigée **en anglais**, même si le reste de cette documentation est en français.
+Format: `:gitmoji: description of the changeset`. The description must be written **in English**.
 
-| Gitmoji | Quand l'utiliser |
+| Gitmoji | When to use it |
 |---|---|
-| `:sparkles:` | Nouveau module ou nouvelle feature |
-| `:wrench:` | Modification de config existante |
-| `:bug:` | Correction d'un bug |
-| `:recycle:` | Refacto sans changement fonctionnel |
-| `:arrow_up:` | Mise à jour des flake inputs (`nix flake update`) |
-| `:fire:` | Suppression de code ou de module |
+| `:sparkles:` | New module or new feature |
+| `:wrench:` | Change to existing config |
+| `:bug:` | Bug fix |
+| `:recycle:` | Refactor with no functional change |
+| `:arrow_up:` | Flake input update (`nix flake update`) |
+| `:fire:` | Removal of code or a module |
 | `:memo:` | Documentation (README, CLAUDE.md…) |
-| `:lipstick:` | Changement de thème ou d'apparence |
-| `:package:` | Ajout/suppression de paquets dans un module existant |
-| `:construction:` | Travail en cours (WIP) |
+| `:lipstick:` | Theme or appearance change |
+| `:package:` | Adding/removing packages in an existing module |
+| `:construction:` | Work in progress (WIP) |
 
 ### Adding a new host
 

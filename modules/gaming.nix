@@ -20,7 +20,7 @@
       ntfs3g
     ];
 
-    # hardware.graphics.enable32Bit déjà activé par den.aspects.nvidia.
+    # hardware.graphics.enable32Bit already enabled by den.aspects.nvidia.
     hardware.steam-hardware.enable = true;
   };
 }

@@ -16,7 +16,7 @@ in
           {
             name = printerName;
             description = "Brother DCP-1610W";
-            location = "Bureau";
+            location = "Office";
             deviceUri = "socket://${printerHost}";
             model = "drv:///brlaser.drv/br1610.ppd";
             ppdOptions = { PageSize = "A4"; };

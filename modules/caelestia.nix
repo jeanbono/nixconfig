@@ -32,17 +32,17 @@ in
     systemd.user.services.lock-on-start = {
       Unit = {
         Description = "Lock session on startup and resume via caelestia";
-        # Sans cet ordre, ce service et `caelestia.service` (le shell) démarrent
-        # tous les deux sur `graphical-session.target` sans contrainte entre eux.
+        # Without this ordering, this service and `caelestia.service` (the shell)
+        # both start on `graphical-session.target` with no constraint between them.
         After = [ "graphical-session.target" "caelestia.service" ];
       };
       Service = {
         Type = "oneshot";
-        # Pattern recommandé par les mainteneurs caelestia-dots (discussion
-        # shell#176) : `shell -d` bloque jusqu'à ce que le shell soit vraiment
-        # prêt (même s'il tourne déjà via caelestia.service, il détecte
-        # l'instance existante et rend la main), donc `lock` qui suit ne peut
-        # plus arriver trop tôt — plus besoin de sleep ni de retry.
+        # Pattern recommended by the caelestia-dots maintainers (shell#176
+        # discussion): `shell -d` blocks until the shell is actually ready
+        # (even if it's already running via caelestia.service, it detects the
+        # existing instance and returns), so the following `lock` can no
+        # longer run too early — no more sleep or retry needed.
         ExecStart = [
           "${config.programs.caelestia.cli.package}/bin/caelestia shell -d"
           "${config.programs.caelestia.cli.package}/bin/caelestia shell lock lock"

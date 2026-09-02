@@ -7,8 +7,8 @@ in
   den.aspects.jujutsu.homeManager = { pkgs, config, ... }: {
     home.file.".ssh/allowed-signers".text = "${userEmail} ${signingKey}\n";
 
-    # less (pager par défaut de `jj log`) affiche "<U+XXXX>" pour les glyphes
-    # Nerd Font (zone Private Use Area) qu'il ne reconnaît pas comme imprimables.
+    # less (the default pager for `jj log`) displays "<U+XXXX>" for Nerd Font
+    # glyphs (Private Use Area) it doesn't recognize as printable.
     home.sessionVariables.LESSUTFCHARDEF = "e000-f8ff:p";
 
     programs.jujutsu = {

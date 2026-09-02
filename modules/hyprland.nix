@@ -9,7 +9,7 @@ let
     sha256 = "sha256-ouuA8LVBXzrbYwPW2vNjh7fC9H2UBud/1tUiIM5vPvM=";
   };
 
-  # Couleurs Catppuccin embarquées (remplace le source = .conf qui n'est plus possible en Lua)
+  # Catppuccin colors inlined (replaces the source = .conf file, no longer possible in Lua)
   catppuccinColors = {
     latte     = { mauve = "0xffdc8a78"; blue = "0xff1e66f5"; surface0 = "0xffccd0da"; };
     frappe    = { mauve = "0xffca9ee6"; blue = "0xff8caaee"; surface0 = "0xff414559"; };

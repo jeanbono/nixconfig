@@ -135,29 +135,29 @@
         which-key = {
           enable = true;
           settings.spec = [
-            { __unkeyed-1 = "<leader>f"; group = "Fichiers"; }
-            { __unkeyed-1 = "<leader>ff"; __unkeyed-2 = "<cmd>Telescope find_files<cr>"; desc = "Trouver fichier"; }
+            { __unkeyed-1 = "<leader>f"; group = "Files"; }
+            { __unkeyed-1 = "<leader>ff"; __unkeyed-2 = "<cmd>Telescope find_files<cr>"; desc = "Find file"; }
             { __unkeyed-1 = "<leader>fg"; __unkeyed-2 = "<cmd>Telescope live_grep<cr>"; desc = "Grep"; }
             { __unkeyed-1 = "<leader>fb"; __unkeyed-2 = "<cmd>Telescope buffers<cr>"; desc = "Buffers"; }
-            { __unkeyed-1 = "<leader>fh"; __unkeyed-2 = "<cmd>Telescope help_tags<cr>"; desc = "Aide"; }
-            { __unkeyed-1 = "<leader>e"; __unkeyed-2 = "<cmd>NvimTreeToggle<cr>"; desc = "Explorateur"; }
+            { __unkeyed-1 = "<leader>fh"; __unkeyed-2 = "<cmd>Telescope help_tags<cr>"; desc = "Help"; }
+            { __unkeyed-1 = "<leader>e"; __unkeyed-2 = "<cmd>NvimTreeToggle<cr>"; desc = "Explorer"; }
             { __unkeyed-1 = "<leader>g"; group = "Git"; }
             { __unkeyed-1 = "<leader>gs"; __unkeyed-2 = "<cmd>Gitsigns stage_hunk<cr>"; desc = "Stage hunk"; }
             { __unkeyed-1 = "<leader>gr"; __unkeyed-2 = "<cmd>Gitsigns reset_hunk<cr>"; desc = "Reset hunk"; }
             { __unkeyed-1 = "<leader>gp"; __unkeyed-2 = "<cmd>Gitsigns preview_hunk<cr>"; desc = "Preview hunk"; }
             { __unkeyed-1 = "<leader>gb"; __unkeyed-2 = "<cmd>Gitsigns blame_line<cr>"; desc = "Blame"; }
             { __unkeyed-1 = "<leader>l"; group = "LSP"; }
-            { __unkeyed-1 = "<leader>ld"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.definition()<cr>"; desc = "Définition"; }
-            { __unkeyed-1 = "<leader>lr"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.references()<cr>"; desc = "Références"; }
-            { __unkeyed-1 = "<leader>ln"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.rename()<cr>"; desc = "Renommer"; }
+            { __unkeyed-1 = "<leader>ld"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.definition()<cr>"; desc = "Definition"; }
+            { __unkeyed-1 = "<leader>lr"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.references()<cr>"; desc = "References"; }
+            { __unkeyed-1 = "<leader>ln"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.rename()<cr>"; desc = "Rename"; }
             { __unkeyed-1 = "<leader>la"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.code_action()<cr>"; desc = "Actions"; }
-            { __unkeyed-1 = "<leader>lf"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.format()<cr>"; desc = "Formater"; }
+            { __unkeyed-1 = "<leader>lf"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.format()<cr>"; desc = "Format"; }
             { __unkeyed-1 = "<leader>lh"; __unkeyed-2 = "<cmd>lua vim.lsp.buf.hover()<cr>"; desc = "Hover"; }
             { __unkeyed-1 = "<leader>le"; __unkeyed-2 = "<cmd>lua vim.diagnostic.open_float()<cr>"; desc = "Diagnostics"; }
             { __unkeyed-1 = "<leader>b"; group = "Buffers"; }
-            { __unkeyed-1 = "<leader>bn"; __unkeyed-2 = "<cmd>bnext<cr>"; desc = "Suivant"; }
-            { __unkeyed-1 = "<leader>bp"; __unkeyed-2 = "<cmd>bprevious<cr>"; desc = "Précédent"; }
-            { __unkeyed-1 = "<leader>bd"; __unkeyed-2 = "<cmd>bdelete<cr>"; desc = "Fermer"; }
+            { __unkeyed-1 = "<leader>bn"; __unkeyed-2 = "<cmd>bnext<cr>"; desc = "Next"; }
+            { __unkeyed-1 = "<leader>bp"; __unkeyed-2 = "<cmd>bprevious<cr>"; desc = "Previous"; }
+            { __unkeyed-1 = "<leader>bd"; __unkeyed-2 = "<cmd>bdelete<cr>"; desc = "Close"; }
           ];
         };
 
@@ -176,7 +176,7 @@
 
         lsp = {
           enable = true;
-          # Passe les capabilities blink-cmp à tous les serveurs
+          # Passes blink-cmp capabilities to all servers
           capabilities = "require('blink.cmp').get_lsp_capabilities(capabilities)";
           servers = {
             lua_ls = {
