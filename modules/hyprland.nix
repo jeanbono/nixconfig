@@ -123,64 +123,73 @@ in
           enable = true;
           systemd.enable = false;
           configType = "lua";
-          extraConfig = ''
-            -- Monitors
-            hl.monitor({ output = "DP-3", mode = "2560x1440@165", position = "0x0",    scale = 1, bitdepth = 10, cm = "hdr", sdrbrightness = 2.3 })
-            hl.monitor({ output = "DP-1", mode = "2560x1440@300", position = "2560x0", scale = 1, bitdepth = 10, cm = "hdr", sdrbrightness = 2.3 })
+          # Deterministic render order for `settings` below (module default is
+          # alphabetical + a fixed prefix list that doesn't match our keys).
+          importantPrefixes = [ "monitor" "workspace_rule" "env" "config" "curve" "animation" ];
+          settings = {
+            monitor = [
+              { output = "DP-3"; mode = "2560x1440@165"; position = "0x0"; scale = 1; bitdepth = 10; cm = "hdr"; sdrbrightness = 2.3; }
+              { output = "DP-1"; mode = "2560x1440@300"; position = "2560x0"; scale = 1; bitdepth = 10; cm = "hdr"; sdrbrightness = 2.3; }
+            ];
 
-            -- Workspace → monitor assignment
-            hl.workspace_rule({ workspace = "1",  monitor = "DP-1", default = true })
-            hl.workspace_rule({ workspace = "2",  monitor = "DP-1" })
-            hl.workspace_rule({ workspace = "3",  monitor = "DP-1" })
-            hl.workspace_rule({ workspace = "4",  monitor = "DP-1" })
-            hl.workspace_rule({ workspace = "5",  monitor = "DP-1" })
-            hl.workspace_rule({ workspace = "6",  monitor = "DP-3" })
-            hl.workspace_rule({ workspace = "7",  monitor = "DP-3" })
-            hl.workspace_rule({ workspace = "8",  monitor = "DP-3" })
-            hl.workspace_rule({ workspace = "9",  monitor = "DP-3" })
-            hl.workspace_rule({ workspace = "10", monitor = "DP-3" })
+            workspace_rule = [
+              { workspace = "1"; monitor = "DP-1"; default = true; }
+              { workspace = "2"; monitor = "DP-1"; }
+              { workspace = "3"; monitor = "DP-1"; }
+              { workspace = "4"; monitor = "DP-1"; }
+              { workspace = "5"; monitor = "DP-1"; }
+              { workspace = "6"; monitor = "DP-3"; }
+              { workspace = "7"; monitor = "DP-3"; }
+              { workspace = "8"; monitor = "DP-3"; }
+              { workspace = "9"; monitor = "DP-3"; }
+              { workspace = "10"; monitor = "DP-3"; }
+            ];
 
-            -- Env
-            hl.env("LIBVA_DRIVER_NAME",            "nvidia")
-            hl.env("__GLX_VENDOR_LIBRARY_NAME",    "nvidia")
-            hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
-            hl.env("NVD_BACKEND",                  "direct")
+            env = [
+              { _args = [ "LIBVA_DRIVER_NAME" "nvidia" ]; }
+              { _args = [ "__GLX_VENDOR_LIBRARY_NAME" "nvidia" ]; }
+              { _args = [ "ELECTRON_OZONE_PLATFORM_HINT" "auto" ]; }
+              { _args = [ "NVD_BACKEND" "direct" ]; }
+            ];
 
-            -- Config
-            hl.config({
+            config = {
               input = {
-                kb_layout    = "fr",
-                follow_mouse = 1,
-                sensitivity  = 0,
-              },
+                kb_layout = "fr";
+                follow_mouse = 1;
+                sensitivity = 0;
+              };
               general = {
-                gaps_in     = 4,
-                gaps_out    = 8,
-                border_size = 2,
+                gaps_in = 4;
+                gaps_out = 8;
+                border_size = 2;
                 col = {
-                  active_border   = { colors = { "${colors.mauve}", "${colors.blue}" }, angle = 45 },
-                  inactive_border = "${colors.surface0}",
-                },
-                layout = "dwindle",
-              },
+                  active_border = { colors = [ colors.mauve colors.blue ]; angle = 45; };
+                  inactive_border = colors.surface0;
+                };
+                layout = "dwindle";
+              };
               decoration = {
-                rounding = 8,
-                blur   = { enabled = true, size = 6, passes = 2, brightness = 1.2, contrast = 1.0, vibrancy = 0.0 },
-                shadow = { enabled = true, range = 12, render_power = 3, color = "0x66000000" },
-              },
-              animations = { enabled = true },
-              dwindle = { preserve_split = true },
-              misc    = { force_default_wallpaper = 0, disable_hyprland_logo = true },
-              cursor  = { no_hardware_cursors = 2, default_monitor = "DP-1" },
-              render  = { use_fp16 = 2, ctm_animation = false },
-            })
+                rounding = 8;
+                blur = { enabled = true; size = 6; passes = 2; brightness = 1.2; contrast = 1.0; vibrancy = 0.0; };
+                shadow = { enabled = true; range = 12; render_power = 3; color = "0x66000000"; };
+              };
+              animations = { enabled = true; };
+              dwindle = { preserve_split = true; };
+              misc = { force_default_wallpaper = 0; disable_hyprland_logo = true; };
+              cursor = { no_hardware_cursors = 2; default_monitor = "DP-1"; };
+              render = { use_fp16 = 2; ctm_animation = false; };
+            };
 
-            hl.curve("ease", { type = "bezier", points = { {0.25, 0.1}, {0.25, 1} } })
-            hl.animation({ leaf = "windows",    enabled = true, speed = 4, bezier = "ease" })
-            hl.animation({ leaf = "windowsOut", enabled = true, speed = 4, bezier = "ease", style = "popin 80%" })
-            hl.animation({ leaf = "fade",       enabled = true, speed = 4, bezier = "ease" })
-            hl.animation({ leaf = "workspaces", enabled = true, speed = 3, bezier = "ease" })
+            curve = { _args = [ "ease" { type = "bezier"; points = [ [ 0.25 0.1 ] [ 0.25 1 ] ]; } ]; };
 
+            animation = [
+              { leaf = "windows"; enabled = true; speed = 4; bezier = "ease"; }
+              { leaf = "windowsOut"; enabled = true; speed = 4; bezier = "ease"; style = "popin 80%"; }
+              { leaf = "fade"; enabled = true; speed = 4; bezier = "ease"; }
+              { leaf = "workspaces"; enabled = true; speed = 3; bezier = "ease"; }
+            ];
+          };
+          extraConfig = ''
             -- Keybinds
             local mod = "SUPER"
 
