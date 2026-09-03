@@ -10,6 +10,13 @@ in
         proton-pass-cli
       ];
 
+      # `programs.chromium.extraOpts` (used by den.aspects.brave) can't be set
+      # from here too: NixOS merges it as one opaque attrs value per key, so a
+      # second module setting `extraOpts.ExtensionSettings` here would silently
+      # replace brave.nix's instead of merging with it (verified via `nix eval`
+      # — no error, just data loss). A separate managed-policies file is the
+      # actually-safe way for two independent aspects to both contribute:
+      # Brave merges every *.json under policies/managed/ itself.
       environment.etc."brave/policies/managed/10-protonpass.json".text = builtins.toJSON {
         ExtensionSettings.${protonPassId} = {
           installation_mode = "force_installed";
