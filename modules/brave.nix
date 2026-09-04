@@ -1,5 +1,12 @@
 let
-  ublockId = "cjpalhdlnbpafiamejdnhcphjbkeiagm";
+  # Google delisted classic uBlock Origin (cjpalhdlnbpafiamejdnhcphjbkeiagm)
+  # from the Web Store with the Manifest V2 sunset. Brave keeps its own MV2
+  # build alive under a different id — enable it once, manually, via
+  # brave://settings/extensions/v2 ("Manifest V2 extensions" toggle); it
+  # isn't force-installable through policy (not a Web Store listing, so
+  # ExtensionInstallForcelist/installation_mode can't fetch it). Once enabled,
+  # ExtensionSettings/3rdparty below still apply to it normally.
+  ublockId = "jcokkipkhhgiakinbnnplhkdbjbgcgpe";
   catppuccinMacchiatoId = "cmpdlhmnmjhihmcfnigoememnffkimlk";
   # Owned here, not in protonpass.nix: Chromium's own docs say setting the
   # same managed policy (ExtensionSettings) from two separate *.json files is
@@ -21,9 +28,9 @@ in
           TorDisabled = true;
           BraveAIChatEnabled = false;
           PasswordManagerEnabled = false;
-          ExtensionInstallForcelist = [
-            "${ublockId};https://clients2.google.com/service/update2/crx"
-          ];
+          # Native address/email/phone autofill suggestions overlap with
+          # ProtonPass's own dropdown.
+          AutofillAddressEnabled = false;
           ExtensionSettings = {
             ${ublockId} = {
               toolbar_pin = "force_pinned";
