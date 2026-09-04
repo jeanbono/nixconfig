@@ -5,6 +5,11 @@
       auto-optimise-store = true;
       max-jobs = 4;
       cores = 0;
+
+      # Binary cache for den.aspects.furnace's CachyOS kernel (xddxdd/nix-cachyos-kernel)
+      # — otherwise every new kernel version gets built from source locally.
+      substituters = [ "https://attic.xuyh0120.win/lantian" ];
+      trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
     };
 
     nix.gc = {
