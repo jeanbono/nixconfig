@@ -1,20 +1,19 @@
 let
   flavor = "macchiato";
+
+  # Ghostty bundles Catppuccin themes under their display names rather than
+  # the lowercase flavor slugs used elsewhere (e.g. "Catppuccin Macchiato").
+  ghosttyThemeNames = {
+    latte = "Catppuccin Latte";
+    frappe = "Catppuccin Frappe";
+    macchiato = "Catppuccin Macchiato";
+    mocha = "Catppuccin Mocha";
+  };
 in
 {
   flake.lib.theme = {
     inherit flavor;
-
-    alacrittyThemeFile = { pkgs }:
-      let
-        alacrittySource = pkgs.fetchFromGitHub {
-          owner = "catppuccin";
-          repo = "alacritty";
-          rev = "f6cb5a5c2b404cdaceaff193b9c52317f62c62f7";
-          sha256 = "1r2z223hza63v5lmzlg3022mlar67j3a2gh41rsaiqwja2wyiihz";
-        };
-      in
-      "${alacrittySource}/catppuccin-${flavor}.toml";
+    ghosttyTheme = ghosttyThemeNames.${flavor};
   };
 
   den.aspects.theme.homeManager = { pkgs, ... }: {

@@ -22,7 +22,7 @@
       den.aspects.protonpass
 
       den.aspects.theme
-      den.aspects.alacritty
+      den.aspects.ghostty
       den.aspects.nvim
 
       den.aspects.hyprland
