@@ -12,7 +12,8 @@
         cursor-style = "block";
         cursor-style-blink = false;
         gtk-single-instance = true;
-        quit-after-last-window-closed = false;
+        quit-after-last-window-closed = true;
+        quit-after-last-window-closed-delay = "5m";
       };
     };
   };
