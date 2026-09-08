@@ -18,6 +18,7 @@
       wineWow64Packages.stable
       winetricks
       ntfs3g
+      r2modman
     ];
 
     # hardware.graphics.enable32Bit already enabled by den.aspects.nvidia.
