@@ -9,7 +9,7 @@ let
   ];
 in
 {
-  den.aspects.caelestia.homeManager = { pkgs, config, ... }: {
+  den.aspects.caelestia.homeManager = { ... }: {
     # Read by the dashboard as the profile picture (caelestia-shell convention).
     home.file.".face".source = ../assets/face.png;
 
@@ -26,33 +26,14 @@ in
         appearance.rounding.scale = roundingScale;
         border.rounding = borderRounding;
         background.desktopClock.enabled = desktopClock;
-        session.commands.logout   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Logging out..."];
-        session.commands.shutdown = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Shutting down..." "-p" "poweroff"];
-        session.commands.reboot   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Restarting..."   "-p" "reboot"];
-      };
-    };
-
-    systemd.user.services.lock-on-start = {
-      Unit = {
-        Description = "Lock session on startup and resume via caelestia";
-        # Without this ordering, this service and `caelestia.service` (the shell)
-        # both start on `graphical-session.target` with no constraint between them.
-        After = [ "graphical-session.target" "caelestia.service" ];
-      };
-      Service = {
-        Type = "oneshot";
-        # Pattern recommended by the caelestia-dots maintainers (shell#176
-        # discussion): `shell -d` blocks until the shell is actually ready
-        # (even if it's already running via caelestia.service, it detects the
-        # existing instance and returns), so the following `lock` can no
-        # longer run too early — no more sleep or retry needed.
-        ExecStart = [
-          "${config.programs.caelestia.cli.package}/bin/caelestia shell -d"
-          "${config.programs.caelestia.cli.package}/bin/caelestia shell lock lock"
-        ];
-      };
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
+        # --vt 1 forces a VT switch after Hyprland exits: on NVIDIA,
+        # greetd/tuigreet's own VT (services.greetd.settings.terminal.vt,
+        # fixed to 1) otherwise doesn't repaint and logout leaves a black
+        # screen instead of returning to the greeter (hyprshutdown --help
+        # documents this as "fixes NVIDIA+SDDM black screen").
+        session.commands.logout   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Logging out..." "--vt" "1"];
+        session.commands.shutdown = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Shutting down..." "-p" "poweroff" "--vt" "1"];
+        session.commands.reboot   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Restarting..."   "-p" "reboot" "--vt" "1"];
       };
     };
   };

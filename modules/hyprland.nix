@@ -34,21 +34,12 @@ in
         extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };
 
-      services.greetd = {
-        enable = true;
-        settings.default_session = {
-          command = "uwsm start hyprland-uwsm.desktop";
-          user = (host.hyprland or { }).greetdUser or "greeter";
-        };
-      };
-
+      # greetd/tuigreet own the actual login flow — see greeter.nix.
       services.displayManager.defaultSession = "hyprland-uwsm";
 
-      services.logind.settings.Login = {
-        HandleSuspendKey = "ignore";
-        HandleSuspendKeyLongPress = "ignore";
-        HandleLidSwitch = "ignore";
-      };
+      # Suspend-key/lid-switch behavior is a host preference (e.g. a laptop
+      # wants HandleLidSwitch to actually suspend) — see hosts.nix.
+      services.logind.settings.Login = host.hyprland.logindOverrides;
 
       fonts.packages = with pkgs; [
         nerd-fonts.symbols-only
@@ -71,13 +62,9 @@ in
         colors = catppuccinColors.${inputs.self.lib.theme.flavor};
         # Every field is optional — a host that doesn't set `hyprland` gets
         # Hyprland's own auto-detected monitors and no GPU-specific tuning.
-        rawHypr = host.hyprland or { };
-        hypr = {
-          monitors = rawHypr.monitors or [ ];
-          workspaceRules = rawHypr.workspaceRules or [ ];
-          nvidia = rawHypr.nvidia or false;
-          defaultMonitor = rawHypr.defaultMonitor or null;
-        };
+        # Typed by schema.nix (den.schema.host.imports) — every field
+        # already has a default, no `or` fallbacks needed here.
+        hypr = host.hyprland;
       in
       {
         home.sessionVariables = {
@@ -185,6 +172,10 @@ in
               { leaf = "workspaces"; enabled = true; speed = 3; bezier = "ease"; }
             ];
           };
+          # Keybinds below assume ghostty/caelestia/wpctl(PipeWire) are also
+          # active — an accepted coupling, not accidental: pierre.nix always
+          # bundles the whole desktop stack together, and splitting this
+          # into per-command options would be config for its own sake.
           extraConfig = ''
             -- Keybinds
             local mod = "SUPER"
