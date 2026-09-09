@@ -1,11 +1,6 @@
-let
-  userName = "Pierre Fraisse";
-  userEmail = "pierre.fraisse@nebulous.fr";
-  signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKg9gmxgKvtgr3+UTVn5n/32QqW+8c+ueRxyN3hqKVWs";
-in
 {
-  den.aspects.jujutsu.homeManager = { pkgs, config, ... }: {
-    home.file.".ssh/allowed-signers".text = "${userEmail} ${signingKey}\n";
+  den.aspects.jujutsu.homeManager = { pkgs, config, user, ... }: {
+    home.file.".ssh/allowed-signers".text = "${user.email} ${user.signingKey}\n";
 
     # less (the default pager for `jj log`) displays "<U+XXXX>" for Nerd Font
     # glyphs (Private Use Area) it doesn't recognize as printable.
@@ -15,13 +10,13 @@ in
       enable = true;
       settings = {
         user = {
-          email = userEmail;
-          name = userName;
+          email = user.email;
+          name = user.fullName;
         };
         signing = {
           backend = "ssh";
           behavior = "own";
-          key = signingKey;
+          key = user.signingKey;
           backends.ssh.program = "${pkgs.openssh}/bin/ssh-keygen";
           backends.ssh.allowed-signers = "${config.home.homeDirectory}/.ssh/allowed-signers";
         };
@@ -36,10 +31,10 @@ in
         template-aliases."format_short_cryptographic_signature(sig)" = ''
           if(sig,
             label("signature status " ++ sig.status(),
-              if(sig.status() == "good", "",
-              if(sig.status() == "bad", "",
-              if(sig.status() == "unknown", "",
-              "")))
+              if(sig.status() == "good", "",
+              if(sig.status() == "bad", "",
+              if(sig.status() == "unknown", "",
+              "")))
             ),
             label("signature status invalid", "(no sig)"),
           )

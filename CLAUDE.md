@@ -30,7 +30,7 @@ This config uses the [**den**](https://github.com/denful/den) flake framework (p
 - `flake.nix` — **auto-generated** by `flake-file` from `flake-file.inputs` declared in `modules/dendritic.nix`. Never edit it by hand; run `nix run .#write-flake` after changing inputs.
 - `modules/dendritic.nix` — imports `flake-file` and `den`'s dendritic flake-parts modules, declares all flake inputs.
 - `modules/defaults.nix` — flake-wide defaults: `system.stateVersion`, `home.stateVersion`, `nixpkgs.config.allowUnfree`, `home-manager.{useGlobalPkgs,useUserPackages,sharedModules}`, `systems`.
-- `modules/hosts.nix` — declares which hosts and users exist: `den.hosts.x86_64-linux.furnace.users.pierre = {};`
+- `modules/hosts.nix` — declares which hosts and users exist: `den.hosts.x86_64-linux.furnace.users.pierre = {};`. The host/user entries take arbitrary extra fields (freeform) beyond the ones den's schema declares — see "Per-entity data" below.
 - `modules/furnace.nix` — the **host aspect** for `furnace`: hardware import, boot/kernel, networking, and an `includes` list of every NixOS-facing aspect active on this machine.
 - `modules/pierre.nix` — the **user aspect** for `pierre`: `den.batteries.*` (user account creation, shell) and an `includes` list of every Home-Manager-facing aspect active for this user.
 - `modules/_nixos/hardware-configuration.nix` — plain NixOS module (nixos-generate-config output), imported by `furnace.nix`. Lives under the den-recommended `_nixos/` convention: `import-tree` ignores any path containing a `/_` segment, so this raw NixOS module (`environment.systemPackages` etc. aren't valid flake-parts options) never gets scanned as an aspect — it's only pulled in explicitly via `furnace.nix`'s `nixos.imports`.
@@ -53,9 +53,26 @@ Every feature file in `modules/` declares a `den.aspects.<name>` with `nixos` an
 - There is **no `enable` option** and no `lib.genAttrs config.modules.users`. "Activating" a feature means adding `den.aspects.<name>` to `furnace.nix`'s `includes` (for `nixos`) and/or `pierre.nix`'s `includes` (for `homeManager`). A feature touching both layers is listed in both places.
 - `{ den, ... }:` is only needed in a file's top-level signature when it references `den.batteries.*`/`den.aspects.*`/`den.lib.*`; otherwise `{ ... }:` or `{ pkgs, lib, ... }:` suffices.
 
+### Per-entity data: `{ user, host, ... }`
+
+Data that belongs to a specific host or user (screens/GPU quirks, name/email/signing key…) is declared as extra freeform fields directly on that entity in `modules/hosts.nix`, not invented as a separate cross-cutting mechanism:
+
+```nix
+den.hosts.x86_64-linux.furnace = {
+  hyprland.monitors = [ { output = "DP-1"; ...; } ];
+  users.pierre.email = "pierre@example.com";
+};
+```
+
+den injects the resolved entity as a `{ user, host, ... }` module arg into every aspect's `nixos`/`homeManager` function it resolves for (`nixos` gets `host` only — a host has many users, so there's no single "current user"; `homeManager` gets both). Read it directly (`host.hyprland.monitors`, `user.email`) — no registry file, no `flake.lib` needed for this. Guard optional fields with `or` (`(host.hyprland or {}).monitors or []`) so an aspect stays usable on a host/user that doesn't set them.
+
 ### Cross-layer sharing: `flake.lib`
 
-Values that need to be read from multiple aspect files (e.g. the Catppuccin flavor) are exposed via `flake.lib.<name>` in a proper flake-parts module (see `modules/theme.nix`), and consumed elsewhere via `inputs.self.lib.<name>` (needs `{ inputs, ... }:` in that file's signature). This replaced the old `nixosConfig`/`extraSpecialArgs` HM-cross-layer trick — a plain file exporting a bare function/attrset would break `import-tree` the same way an unprefixed `hardware-configuration.nix` would.
+Values that aren't tied to one host/user entity, but still need to be read from multiple aspect files regardless of layer (e.g. the Catppuccin flavor) are exposed via `flake.lib.<name>` in a proper flake-parts module (see `modules/theme.nix`), and consumed elsewhere via `inputs.self.lib.<name>` (needs `{ inputs, ... }:` in that file's signature). This replaced the old `nixosConfig`/`extraSpecialArgs` HM-cross-layer trick — a plain file exporting a bare function/attrset would break `import-tree` the same way an unprefixed `hardware-configuration.nix` would.
+
+`flake.lib` itself has no type declared by flake-parts, so it defaults to a raw, non-mergeable value: a second module setting a different `flake.lib.<name>` key fails with "option `flake.lib' is defined multiple times... expected to be unique." Only `theme.nix` uses it today — if a second `flake.lib.<name>` contributor shows up, declare `options.flake.lib = lib.mkOption { type = lib.types.lazyAttrsOf lib.types.raw; };` somewhere first (a `modules/flake-lib.nix` was added and removed for this in a past session, when a second contributor came and went).
+
+A plain aspect-to-aspect implementation detail that isn't per-entity data or genuinely cross-layer (e.g. a hardcoded path one aspect creates and another consumes) doesn't need either mechanism — a short cross-referencing comment in both files (see `ssh.nix`/`protonpass.nix`, `brave.nix`/`protonpass.nix`) is enough; don't reach for `flake.lib` just to avoid a one-line duplication.
 
 ### Adding a new aspect
 

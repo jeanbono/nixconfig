@@ -31,7 +31,7 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 └── modules/
     ├── dendritic.nix         # Wiring den + flake-file, input declarations
     ├── defaults.nix          # stateVersion, allowUnfree, systems, HM useGlobalPkgs
-    ├── hosts.nix              # den.hosts.<system>.<host>.users.<user>
+    ├── hosts.nix              # den.hosts.<system>.<host>.users.<user> + freeform per-entity data
     ├── furnace.nix            # Host aspect: hardware, boot, NixOS includes
     ├── pierre.nix             # User aspect: batteries, HM includes
     ├── theme.nix              # flake.lib.theme (flavor, ghostty theme) + GTK dark
@@ -60,8 +60,8 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 | `ghostty` | HM | Ghostty GPU terminal (D-Bus single-instance) |
 | `nvim` | HM | Neovim IDE: LSP, blink.cmp, Treesitter, Telescope |
 | `zsh` | NixOS+HM | Zsh (autosuggestion, syntax) + Starship |
-| `git` | HM | Git + SSH signing |
-| `jujutsu` | HM | Jujutsu VCS (identity, SSH signing, tug alias) |
+| `git` | HM | Git, SSH-signed commits/tags (name/email/key from `hosts.nix`'s `users.pierre`) |
+| `jujutsu` | HM | Jujutsu VCS (SSH signing, tug alias) |
 | `ssh` | HM | SSH client config (ProtonPass agent) |
 | `brave` | NixOS+HM | Brave policies (uBlock, Catppuccin) + `programs.brave` |
 | `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent + Brave policy |

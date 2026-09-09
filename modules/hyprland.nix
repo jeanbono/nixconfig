@@ -1,7 +1,5 @@
 { inputs, ... }:
 let
-  username = "pierre";
-
   rose-pine-hyprcursor = { pkgs }: pkgs.fetchFromGitHub {
     owner = "ndom91";
     repo = "rose-pine-hyprcursor";
@@ -19,7 +17,7 @@ let
 in
 {
   den.aspects.hyprland = {
-    nixos = { pkgs, ... }: {
+    nixos = { pkgs, host, ... }: {
       programs.hyprland = {
         enable = true;
         xwayland.enable = true;
@@ -40,7 +38,7 @@ in
         enable = true;
         settings.default_session = {
           command = "uwsm start hyprland-uwsm.desktop";
-          user = username;
+          user = (host.hyprland or { }).greetdUser or "greeter";
         };
       };
 
@@ -68,9 +66,18 @@ in
       };
     };
 
-    homeManager = { pkgs, ... }:
+    homeManager = { pkgs, lib, host, ... }:
       let
         colors = catppuccinColors.${inputs.self.lib.theme.flavor};
+        # Every field is optional — a host that doesn't set `hyprland` gets
+        # Hyprland's own auto-detected monitors and no GPU-specific tuning.
+        rawHypr = host.hyprland or { };
+        hypr = {
+          monitors = rawHypr.monitors or [ ];
+          workspaceRules = rawHypr.workspaceRules or [ ];
+          nvidia = rawHypr.nvidia or false;
+          defaultMonitor = rawHypr.defaultMonitor or null;
+        };
       in
       {
         home.sessionVariables = {
@@ -127,28 +134,14 @@ in
           # alphabetical + a fixed prefix list that doesn't match our keys).
           importantPrefixes = [ "monitor" "workspace_rule" "env" "config" "curve" "animation" ];
           settings = {
-            monitor = [
-              { output = "DP-3"; mode = "2560x1440@165"; position = "0x0"; scale = 1; bitdepth = 10; cm = "hdr"; sdrbrightness = 2.3; }
-              { output = "DP-1"; mode = "2560x1440@300"; position = "2560x0"; scale = 1; bitdepth = 10; cm = "hdr"; sdrbrightness = 2.3; }
-            ];
-
-            workspace_rule = [
-              { workspace = "1"; monitor = "DP-1"; default = true; }
-              { workspace = "2"; monitor = "DP-1"; }
-              { workspace = "3"; monitor = "DP-1"; }
-              { workspace = "4"; monitor = "DP-1"; }
-              { workspace = "5"; monitor = "DP-1"; }
-              { workspace = "6"; monitor = "DP-3"; }
-              { workspace = "7"; monitor = "DP-3"; }
-              { workspace = "8"; monitor = "DP-3"; }
-              { workspace = "9"; monitor = "DP-3"; }
-              { workspace = "10"; monitor = "DP-3"; }
-            ];
+            monitor = hypr.monitors;
+            workspace_rule = hypr.workspaceRules;
 
             env = [
+              { _args = [ "ELECTRON_OZONE_PLATFORM_HINT" "auto" ]; }
+            ] ++ lib.optionals hypr.nvidia [
               { _args = [ "LIBVA_DRIVER_NAME" "nvidia" ]; }
               { _args = [ "__GLX_VENDOR_LIBRARY_NAME" "nvidia" ]; }
-              { _args = [ "ELECTRON_OZONE_PLATFORM_HINT" "auto" ]; }
               { _args = [ "NVD_BACKEND" "direct" ]; }
             ];
 
@@ -176,7 +169,10 @@ in
               animations = { enabled = true; };
               dwindle = { preserve_split = true; };
               misc = { force_default_wallpaper = 0; disable_hyprland_logo = true; };
-              cursor = { no_hardware_cursors = 2; default_monitor = "DP-1"; };
+              cursor =
+                lib.optionalAttrs (hypr.defaultMonitor != null) { default_monitor = hypr.defaultMonitor; }
+                // lib.optionalAttrs hypr.nvidia { no_hardware_cursors = 2; };
+            } // lib.optionalAttrs hypr.nvidia {
               render = { use_fp16 = 2; ctm_animation = false; };
             };
 

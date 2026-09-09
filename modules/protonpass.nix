@@ -12,6 +12,8 @@
     };
 
     homeManager = { pkgs, ... }: {
+      # Socket path also hardcoded in den.aspects.ssh's identityAgent —
+      # keep both in sync if this changes.
       home.sessionVariables.SSH_AUTH_SOCK = "$HOME/.ssh/proton-pass-agent.sock";
 
       systemd.user.services.protonpass-ssh-agent = {

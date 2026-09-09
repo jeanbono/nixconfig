@@ -1,11 +1,19 @@
 {
-  den.aspects.git.homeManager = { config, ... }: {
+  den.aspects.git.homeManager = { user, config, ... }: {
     programs.git = {
       enable = true;
-      settings.gpg = {
+      settings = {
+        user = {
+          name = user.fullName;
+          email = user.email;
+        };
+        # File created by den.aspects.jujutsu, not here.
+        gpg.ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed-signers";
+      };
+      signing = {
+        key = user.signingKey;
         format = "ssh";
-        # File created by den.aspects.jujutsu (home.file), not here.
-        ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed-signers";
+        signByDefault = true;
       };
     };
   };
