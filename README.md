@@ -34,7 +34,7 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
     ├── hosts.nix              # den.hosts.<system>.<host>.users.<user>
     ├── furnace.nix            # Host aspect: hardware, boot, NixOS includes
     ├── pierre.nix             # User aspect: batteries, HM includes
-    ├── theme.nix              # flake.lib.theme (flavor, alacritty theme) + GTK dark
+    ├── theme.nix              # flake.lib.theme (flavor, ghostty theme) + GTK dark
     ├── _nixos/
     │   └── hardware-configuration.nix  # Plain NixOS module, ignored by import-tree (`_` prefix)
     └── <feature>.nix          # One aspect per feature (see table below)
@@ -50,15 +50,14 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 | `nix` | NixOS | Flakes, auto-optimise-store, weekly GC |
 | `nvidia` | NixOS | NVIDIA driver, modesetting |
 | `razer` | NixOS+HM | OpenRazer (daemon + udev) + Polychromatic (GUI) |
-| `gaming` | NixOS | Steam, Proton, MangoHud, Gamemode, Wine |
+| `gaming` | NixOS | Steam, Proton, MangoHud, Gamemode, Wine, r2modman |
 | `printing` | NixOS+HM | CUPS + SANE (Brother DCP-1610W) + simple-scan |
-| `ollama` | NixOS | Ollama CUDA service, model preloading |
 | `lmstudio` | NixOS+HM | Firewall port 1234 + LM Studio |
 | `intellij` | NixOS+HM | Java (NixOS) + IntelliJ IDEA (HM) |
 | `hyprland` | NixOS+HM | Compositor, greetd/UWSM, keybinds, monitors, yazi, cursor |
 | `caelestia` | HM | Bar, launcher, lock, idle, wallpaper |
 | `theme` | HM | Catppuccin theme (GTK dark, shared `flake.lib.theme`) |
-| `alacritty` | HM | Alacritty GPU terminal |
+| `ghostty` | HM | Ghostty GPU terminal (D-Bus single-instance) |
 | `nvim` | HM | Neovim IDE: LSP, blink.cmp, Treesitter, Telescope |
 | `zsh` | NixOS+HM | Zsh (autosuggestion, syntax) + Starship |
 | `git` | HM | Git + SSH signing |
@@ -75,7 +74,7 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 
 | Shortcut | Action |
 |---|---|
-| `SUPER + Return` | Terminal (Alacritty) |
+| `SUPER + Return` | Terminal (Ghostty) |
 | `SUPER + D` | caelestia launcher |
 | `SUPER + M` | caelestia session menu |
 | `SUPER + E` | File explorer (Yazi) |
