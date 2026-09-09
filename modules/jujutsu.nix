@@ -1,5 +1,7 @@
 {
   den.aspects.jujutsu.homeManager = { pkgs, config, user, ... }: {
+    # Self-contained: its own copy of allowed-signers, not shared with
+    # den.aspects.git (which writes its own via programs.git.signing).
     home.file.".ssh/allowed-signers".text = "${user.email} ${user.signingKey}\n";
 
     # less (the default pager for `jj log`) displays "<U+XXXX>" for Nerd Font

@@ -1,3 +1,17 @@
+let
+  # Pierre's identity: permanent, host-independent data. Defined once here
+  # and reused via `users.pierre = pierre` on every host he has an account
+  # on — never duplicate name/email/key per host. Consumed by git.nix/
+  # jujutsu.nix/protonpass.nix via their `{ user, ... }:` context arg.
+  pierre = {
+    fullName = "Pierre Fraisse";
+    email = "pierre.fraisse@nebulous.fr";
+    signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKg9gmxgKvtgr3+UTVn5n/32QqW+8c+ueRxyN3hqKVWs";
+    # Proton Pass's own identity/vault label, not assumed to match fullName
+    # or the Unix username.
+    protonPassIdentity = "Pierre";
+  };
+in
 {
   den.hosts.x86_64-linux.furnace = {
     # Consumed by hyprland.nix via its `{ host, ... }:` context arg — keeps
@@ -22,16 +36,16 @@
       ];
       defaultMonitor = "DP-1";
       nvidia = true;
-      greetdUser = "pierre";
+      # A desktop, not a laptop: no lid, and the suspend key on this
+      # keyboard is easy to hit by accident. A laptop host should leave
+      # this unset and get systemd-logind's own suspend-on-lid-close default.
+      logindOverrides = {
+        HandleSuspendKey = "ignore";
+        HandleSuspendKeyLongPress = "ignore";
+        HandleLidSwitch = "ignore";
+      };
     };
 
-    users.pierre = {
-      # Consumed by git.nix/jujutsu.nix via their `{ user, ... }:` context
-      # arg — single source of truth instead of duplicating the same
-      # name/email/key literal in both aspect files.
-      fullName = "Pierre Fraisse";
-      email = "pierre.fraisse@nebulous.fr";
-      signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKg9gmxgKvtgr3+UTVn5n/32QqW+8c+ueRxyN3hqKVWs";
-    };
+    users.pierre = pierre;
   };
 }

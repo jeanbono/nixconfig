@@ -35,6 +35,7 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
     ├── furnace.nix            # Host aspect: hardware, boot, NixOS includes
     ├── pierre.nix             # User aspect: batteries, HM includes
     ├── theme.nix              # flake.lib.theme (flavor, ghostty theme) + GTK dark
+    ├── schema.nix             # Typed den.schema.user/host fields (identity, hyprland.*)
     ├── _nixos/
     │   └── hardware-configuration.nix  # Plain NixOS module, ignored by import-tree (`_` prefix)
     └── <feature>.nix          # One aspect per feature (see table below)
@@ -54,17 +55,18 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 | `printing` | NixOS+HM | CUPS + SANE (Brother DCP-1610W) + simple-scan |
 | `lmstudio` | NixOS+HM | Firewall port 1234 + LM Studio |
 | `intellij` | NixOS+HM | Java (NixOS) + IntelliJ IDEA (HM) |
-| `hyprland` | NixOS+HM | Compositor, greetd/UWSM, keybinds, monitors, yazi, cursor |
+| `hyprland` | NixOS+HM | Compositor, UWSM session, keybinds, monitors (from `host.hyprland`), yazi, cursor |
+| `greeter` | NixOS | greetd + tuigreet: real PAM authentication before the Hyprland session starts |
 | `caelestia` | HM | Bar, launcher, lock, idle, wallpaper |
 | `theme` | HM | Catppuccin theme (GTK dark, shared `flake.lib.theme`) |
 | `ghostty` | HM | Ghostty GPU terminal (D-Bus single-instance) |
 | `nvim` | HM | Neovim IDE: LSP, blink.cmp, Treesitter, Telescope |
 | `zsh` | NixOS+HM | Zsh (autosuggestion, syntax) + Starship |
-| `git` | HM | Git, SSH-signed commits/tags (name/email/key from `hosts.nix`'s `users.pierre`) |
-| `jujutsu` | HM | Jujutsu VCS (SSH signing, tug alias) |
-| `ssh` | HM | SSH client config (ProtonPass agent) |
+| `git` | HM | Git, SSH-signed commits/tags — self-contained (own `allowed_signers`) |
+| `jujutsu` | HM | Jujutsu VCS (SSH signing, tug alias) — self-contained (own `allowed_signers`) |
+| `ssh` | HM | Generic SSH client config, no agent assumed |
 | `brave` | NixOS+HM | Brave policies (uBlock, Catppuccin) + `programs.brave` |
-| `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent + Brave policy |
+| `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent + Brave policy; injects `IdentityAgent` into `ssh` when active |
 | `messaging` | HM | Vesktop (Discord), Element, Cinny |
 | `plex` | HM | Plex Desktop |
 | `claude-code` | HM | Claude Code CLI |
@@ -109,6 +111,6 @@ Create `modules/<name>.nix` with `den.aspects.<name> = { nixos = ...; homeManage
 
 ### Adding a new host
 
-1. Add `den.hosts.<system>.<hostname>.users.<user> = {};` to `modules/hosts.nix`
+1. In `modules/hosts.nix`, add `den.hosts.<system>.<hostname>.users.<user> = pierre;` — reuse the existing `pierre` `let` binding for identity instead of duplicating `fullName`/`email`/`signingKey`. Set host-specific data (e.g. `hyprland.monitors`, `hyprland.logindOverrides` — a laptop should leave `HandleLidSwitch` unset to get systemd-logind's own suspend-on-lid-close default) directly on the new host entry.
 2. Create `modules/<hostname>.nix` (host aspect, modeled on `furnace.nix`)
 3. Rebuild: `sudo nixos-rebuild switch --flake .#<hostname>`

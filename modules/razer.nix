@@ -1,9 +1,9 @@
 {
   den.aspects.razer = {
-    nixos = { ... }: {
+    nixos = { host, ... }: {
       hardware.openrazer = {
         enable = true;
-        users = [ "pierre" ];
+        users = builtins.attrNames host.users;
       };
     };
 

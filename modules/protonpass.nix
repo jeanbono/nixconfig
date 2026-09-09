@@ -11,10 +11,10 @@
       # the same managed policy across two separate *.json files.
     };
 
-    homeManager = { pkgs, ... }: {
-      # Socket path also hardcoded in den.aspects.ssh's identityAgent —
-      # keep both in sync if this changes.
+    homeManager = { pkgs, user, ... }: {
       home.sessionVariables.SSH_AUTH_SOCK = "$HOME/.ssh/proton-pass-agent.sock";
+
+      programs.ssh.settings."*".identityAgent = "~/.ssh/proton-pass-agent.sock";
 
       systemd.user.services.protonpass-ssh-agent = {
         Unit = {
@@ -23,7 +23,7 @@
         };
         Service = {
           ExecStartPre = "${pkgs.networkmanager}/bin/nm-online -q --timeout=30";
-          ExecStart = "${pkgs.proton-pass-cli}/bin/pass-cli ssh-agent start --create-new-identities Pierre";
+          ExecStart = "${pkgs.proton-pass-cli}/bin/pass-cli ssh-agent start --create-new-identities ${user.protonPassIdentity}";
           Restart = "on-failure";
           RestartSec = "5s";
           Environment = [

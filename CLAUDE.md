@@ -55,7 +55,7 @@ Every feature file in `modules/` declares a `den.aspects.<name>` with `nixos` an
 
 ### Per-entity data: `{ user, host, ... }`
 
-Data that belongs to a specific host or user (screens/GPU quirks, name/email/signing key…) is declared as extra freeform fields directly on that entity in `modules/hosts.nix`, not invented as a separate cross-cutting mechanism:
+Data that belongs to a specific host or user (screens/GPU quirks, name/email/signing key…) is declared as extra fields directly on that entity in `modules/hosts.nix`, not invented as a separate cross-cutting mechanism:
 
 ```nix
 den.hosts.x86_64-linux.furnace = {
@@ -64,7 +64,23 @@ den.hosts.x86_64-linux.furnace = {
 };
 ```
 
-den injects the resolved entity as a `{ user, host, ... }` module arg into every aspect's `nixos`/`homeManager` function it resolves for (`nixos` gets `host` only — a host has many users, so there's no single "current user"; `homeManager` gets both). Read it directly (`host.hyprland.monitors`, `user.email`) — no registry file, no `flake.lib` needed for this. Guard optional fields with `or` (`(host.hyprland or {}).monitors or []`) so an aspect stays usable on a host/user that doesn't set them.
+den injects the resolved entity as a `{ user, host, ... }` module arg into every aspect's `nixos`/`homeManager` function it resolves for (`nixos` gets `host` only — a host has many users, so there's no single "current user"; `homeManager` gets both). Read it directly (`host.hyprland.monitors`, `user.email`) — no registry file, no `flake.lib` needed for this.
+
+Identity that's permanent and host-independent (a user's `fullName`/`email`/`signingKey`) should be a `let`-bound value in `hosts.nix`, assigned to `users.<name>` on every host that user has an account on — not duplicated per host. See the `pierre` binding at the top of `hosts.nix`.
+
+### Typing per-entity data: `den.schema.<kind>.imports`
+
+The entity types (`den.schema.user`, `den.schema.host`) are `strict = false` — they accept arbitrary extra fields beyond what's declared, so a typo like `host.hyprland.monitorss` would otherwise silently evaluate to an unused extra key while `host.hyprland.monitors` stays at its default, with no error anywhere. `modules/schema.nix` types the fields that are actually load-bearing (identity, the major Hyprland knobs) by adding `lib.mkOption`-declared options via `den.schema.user.imports`/`den.schema.host.imports`:
+
+```nix
+{ lib, den, ... }:
+{
+  den.schema.user.imports = [ { options.fullName = lib.mkOption { type = lib.types.str; }; } ];
+  den.schema.host.imports = [ { options.hyprland = lib.mkOption { type = lib.types.submodule { ... }; default = { }; }; } ];
+}
+```
+
+A submodule option (unlike the top-level entity) is strict by default, so an unknown key inside it — `host.hyprland.monitorss` — is rejected outright at eval time with a "did you mean…" suggestion, instead of falling back silently. Don't type everything: only fields with a real typo/fallback-hiding risk, used across aspects, or otherwise structurally important — see the comment at the top of `schema.nix`.
 
 ### Cross-layer sharing: `flake.lib`
 
@@ -72,7 +88,10 @@ Values that aren't tied to one host/user entity, but still need to be read from 
 
 `flake.lib` itself has no type declared by flake-parts, so it defaults to a raw, non-mergeable value: a second module setting a different `flake.lib.<name>` key fails with "option `flake.lib' is defined multiple times... expected to be unique." Only `theme.nix` uses it today — if a second `flake.lib.<name>` contributor shows up, declare `options.flake.lib = lib.mkOption { type = lib.types.lazyAttrsOf lib.types.raw; };` somewhere first (a `modules/flake-lib.nix` was added and removed for this in a past session, when a second contributor came and went).
 
-A plain aspect-to-aspect implementation detail that isn't per-entity data or genuinely cross-layer (e.g. a hardcoded path one aspect creates and another consumes) doesn't need either mechanism — a short cross-referencing comment in both files (see `ssh.nix`/`protonpass.nix`, `brave.nix`/`protonpass.nix`) is enough; don't reach for `flake.lib` just to avoid a one-line duplication.
+A plain aspect-to-aspect implementation detail that isn't per-entity data or genuinely cross-layer doesn't need either mechanism. Two patterns depending on the actual coupling:
+
+- **One aspect owns a resource, another merely enriches it when both happen to be active** (e.g. `protonpass.nix` sets `programs.ssh.settings."*".identityAgent` — `ssh.nix` itself stays generic and never mentions Proton Pass, works standalone, and the setting is simply inert if `ssh.nix` isn't included). Prefer this when the dependency direction is real (SSH doesn't need Proton Pass; Proton Pass has something to add to SSH).
+- **A hardcoded value neither aspect can cleanly own without inventing a coupling that isn't real** (e.g. `brave.nix`/`protonpass.nix`'s ExtensionSettings — Chromium's own docs say merging the same managed policy from two files is undefined behavior, so exactly one file must own the whole value) — a short cross-referencing comment in both files is enough; don't reach for `flake.lib` just to avoid it.
 
 ### Adding a new aspect
 
@@ -97,6 +116,6 @@ Format: `:gitmoji: description of the changeset`. The description must be writte
 
 ### Adding a new host
 
-1. Add `den.hosts.<system>.<hostname>.users.<username> = {};` to `modules/hosts.nix`.
+1. Add `den.hosts.<system>.<hostname>.users.<username> = ...;` to `modules/hosts.nix` — reuse an existing identity `let` binding for a user who already has one elsewhere, rather than duplicating `fullName`/`email`/`signingKey`.
 2. Create `modules/<hostname>.nix` as the host aspect (mirror `modules/furnace.nix`), and `modules/<username>.nix` as the user aspect (mirror `modules/pierre.nix`) if it's a new user.
 3. Rebuild: `sudo nixos-rebuild switch --flake .#<hostname>`

@@ -3,11 +3,9 @@
     programs.ssh = {
       enable = true;
       enableDefaultConfig = false;
-      settings."*" = {
-        # Socket managed by den.aspects.protonpass — also hardcoded there
-        # (SSH_AUTH_SOCK), keep both in sync if this changes.
-        identityAgent = "~/.ssh/proton-pass-agent.sock";
-      };
     };
+    # IdentityAgent, when relevant, is injected by whichever agent aspect
+    # is active (e.g. den.aspects.protonpass) — this aspect stays a plain
+    # generic SSH client config and works standalone without one.
   };
 }
