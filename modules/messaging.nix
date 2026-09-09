@@ -9,7 +9,9 @@
         sha256 = "sha256-dHQhESjRhvlO24uzqgpQU+WYdkd93er2HNx8rJt6YbI=";
       };
       vencord.settings = {
-        autoUpdate = true;
+        # Version pinned by the vesktop package in nixpkgs, not by Vencord
+        # itself — leaves state changes to `nix flake update`.
+        autoUpdate = false;
         autoUpdateNotification = true;
         notifyAboutUpdates = true;
         useQuickCss = true;

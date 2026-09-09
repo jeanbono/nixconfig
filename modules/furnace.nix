@@ -24,7 +24,7 @@
       den.aspects.zsh
     ];
 
-    nixos = { pkgs, ... }: {
+    nixos = { pkgs, config, ... }: {
       imports = [ ./_nixos/hardware-configuration.nix ];
 
       nixpkgs.overlays = [ inputs.cachyos.overlays.pinned ];
@@ -56,10 +56,10 @@
         usbutils
       ];
 
+      # stdenv.cc.cc, zlib, curl, openssl are already in the module's own
+      # default library set — only list what that default doesn't cover.
       programs.nix-ld.enable = true;
       programs.nix-ld.libraries = with pkgs; [
-        stdenv.cc.cc
-        zlib
         glib
         pango
         cairo
@@ -74,8 +74,6 @@
         libXxf86vm
         fontconfig
         freetype
-        openssl
-        curl
         nss
         nspr
       ];
@@ -83,7 +81,13 @@
       fileSystems."/mnt/data" = {
         device = "/dev/disk/by-uuid/AE90AB7C90AB4A23";
         fsType = "ntfs-3g";
-        options = [ "rw" "uid=1000" "gid=100" "umask=002" "nofail" ];
+        options = [
+          "rw"
+          "uid=${toString config.users.users.pierre.uid}"
+          "gid=100" # standard "users" group, not user-specific
+          "umask=002"
+          "nofail"
+        ];
       };
     };
   };

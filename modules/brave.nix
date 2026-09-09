@@ -52,7 +52,7 @@ in
                   [ "advancedUserEnabled" "true" ]
                 ];
                 advancedSettings = [
-                  [ "userResourcesLocation" "https://raw.githubusercontent.com/pixeltris/TwitchAdSolutions/master/vaft/vaft-ublock-origin.js" ]
+                  [ "userResourcesLocation" "https://raw.githubusercontent.com/pixeltris/TwitchAdSolutions/c51ef2fe8f667f9dc9216eb550924cf0d732ce27/vaft/vaft-ublock-origin.js" ]
                 ];
                 toOverwrite = {
                   filters = [
