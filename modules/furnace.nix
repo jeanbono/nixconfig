@@ -21,7 +21,6 @@
 
       den.aspects.hyprland
 
-      den.aspects.ollama
       den.aspects.zsh
     ];
 
