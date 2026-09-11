@@ -5,6 +5,8 @@
 
     programs.nixvim = {
       enable = true;
+      # Intentionally use the flake's Nixpkgs revision instead of Nixvim's pin.
+      nixpkgs.source = inputs.nixpkgs;
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
