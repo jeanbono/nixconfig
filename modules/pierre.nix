@@ -6,7 +6,7 @@
       den.batteries.primary-user
       (den.batteries.user-shell "zsh")
 
-      den.aspects.claude-code
+      den.aspects.agents
       den.aspects.tools
       den.aspects.messaging
       den.aspects.git

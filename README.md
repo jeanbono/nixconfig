@@ -69,7 +69,7 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 | `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent + Brave policy; injects `IdentityAgent` into `ssh` when active |
 | `messaging` | HM | Vesktop (Discord), Element, Cinny |
 | `plex` | HM | Plex Desktop |
-| `claude-code` | HM | Claude Code CLI |
+| `agents` | HM | CLI coding agents (Claude Code, Codex, herdr) |
 | `tools` | HM | CLI packages (ripgrep, fd, jq, fastfetch, unzip) |
 
 ## Notable keybindings
