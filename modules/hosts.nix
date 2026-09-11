@@ -14,6 +14,11 @@ let
 in
 {
   den.hosts.x86_64-linux.furnace = {
+    lmstudio = {
+      interface = "enp7s0";
+      subnet = "192.168.1.0/24";
+    };
+
     # Consumed by hyprland.nix via its `{ host, ... }:` context arg — keeps
     # that aspect reusable on a host with a different screen/GPU setup
     # instead of hardcoding this machine's monitors in the feature file.

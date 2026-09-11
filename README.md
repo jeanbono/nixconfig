@@ -57,7 +57,7 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `razer` | NixOS+HM | OpenRazer (daemon + udev) + Polychromatic (GUI) |
 | `gaming` | NixOS | Steam, Proton, MangoHud, Gamemode, Wine, r2modman |
 | `printing` | NixOS+HM | CUPS + SANE (Brother DCP-1610W) + simple-scan |
-| `lmstudio` | NixOS+HM | Firewall port 1234 + LM Studio |
+| `lmstudio` | NixOS+HM | LM Studio; API port 1234 restricted to the host's IPv4 LAN (`host.lmstudio`) |
 | `intellij` | NixOS+HM | Java (NixOS) + IntelliJ IDEA (HM) |
 | `hyprland` | NixOS+HM | Compositor, UWSM session, keybinds, monitors (from `host.hyprland`), yazi, cursor |
 | `greeter` | NixOS | greetd + tuigreet: PAM login before Hyprland; console log level 3 to limit interference from driver messages |
