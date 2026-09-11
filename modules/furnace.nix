@@ -102,7 +102,8 @@
           "rw"
           "uid=${toString config.users.users.pierre.uid}"
           "gid=100" # standard "users" group, not user-specific
-          "umask=002"
+          # Personal volume: only the owning user can access its contents.
+          "umask=077"
           "nofail"
         ];
       };
