@@ -29,11 +29,7 @@ in
         appearance.rounding.scale = roundingScale;
         border.rounding = borderRounding;
         background.desktopClock.enabled = desktopClock;
-        # Which status icons are relevant is host hardware, not a Caelestia
-        # universal (e.g. a desktop has no battery) — see host.caelestia in
-        # hosts.nix. Falls back to caelestia-shell's own upstream defaults
-        # (plugin/src/Caelestia/Config/barconfig.hpp) for a host that
-        # doesn't override it.
+        # Host overrides, with defaults from Caelestia's barconfig.hpp.
         bar.statusIcons = (host.caelestia or { }).statusIcons or [
           { id = "lockStatus"; enabled = true; }
           { id = "audio"; enabled = false; }
@@ -43,11 +39,7 @@ in
           { id = "bluetooth"; enabled = true; }
           { id = "battery"; enabled = true; }
         ];
-        # --vt 1 forces a VT switch after Hyprland exits: on NVIDIA,
-        # greetd/tuigreet's own VT (services.greetd.settings.terminal.vt,
-        # fixed to 1) otherwise doesn't repaint and logout leaves a black
-        # screen instead of returning to the greeter (hyprshutdown --help
-        # documents this as "fixes NVIDIA+SDDM black screen").
+        # Switch to greetd's VT explicitly to avoid a black screen on NVIDIA.
         session.commands.logout   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Logging out..." "--vt" "1"];
         session.commands.shutdown = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Shutting down..." "-p" "poweroff" "--vt" "1"];
         session.commands.reboot   = ["systemd-run" "--user" "--scope" "hyprshutdown" "-t" "Restarting..."   "-p" "reboot" "--vt" "1"];

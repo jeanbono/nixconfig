@@ -36,9 +36,7 @@
     user = { ... }: {
       description = "pierre";
       extraGroups = [ "video" "audio" ];
-      # Pinned rather than left to NixOS's implicit first-normal-user
-      # allocation, so furnace.nix's /mnt/data mount can reference it
-      # instead of hardcoding uid=1000.
+      # Stable ownership for restored files and the /mnt/data mount.
       uid = 1000;
     };
   };

@@ -1,18 +1,10 @@
 let
-  # Google delisted classic uBlock Origin (cjpalhdlnbpafiamejdnhcphjbkeiagm)
-  # from the Web Store with the Manifest V2 sunset. Brave keeps its own MV2
-  # build alive under a different id — enable it once, manually, via
-  # brave://settings/extensions/v2 ("Manifest V2 extensions" toggle); it
-  # isn't force-installable through policy (not a Web Store listing, so
-  # ExtensionInstallForcelist/installation_mode can't fetch it). Once enabled,
-  # ExtensionSettings/3rdparty below still apply to it normally.
+  # Enable Brave's bundled uBlock Origin once at brave://settings/extensions/v2.
+  # It is not available through Web Store force-install policies.
   ublockId = "jcokkipkhhgiakinbnnplhkdbjbgcgpe";
   catppuccinMacchiatoId = "cmpdlhmnmjhihmcfnigoememnffkimlk";
-  # Owned here, not in protonpass.nix: Chromium's own docs say setting the
-  # same managed policy (ExtensionSettings) from two separate *.json files is
-  # UNDEFINED behavior, not a safe merge — verified the hard way (a prior
-  # split caused every forced extension, ProtonPass included, to silently
-  # stop installing). One aspect must own the whole ExtensionSettings value.
+  # Keep ExtensionSettings in one policy file: Chromium does not safely
+  # merge the same managed policy across multiple files.
   protonPassId = "ghmbeldphafepmbegfdlkpapadhbakde";
 in
 {

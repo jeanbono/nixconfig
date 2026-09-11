@@ -7,7 +7,7 @@ let
     sha256 = "sha256-ouuA8LVBXzrbYwPW2vNjh7fC9H2UBud/1tUiIM5vPvM=";
   };
 
-  # Catppuccin colors inlined (replaces the source = .conf file, no longer possible in Lua)
+  # Catppuccin border colors for the Lua configuration.
   catppuccinColors = {
     latte     = { mauve = "0xffdc8a78"; blue = "0xff1e66f5"; surface0 = "0xffccd0da"; };
     frappe    = { mauve = "0xffca9ee6"; blue = "0xff8caaee"; surface0 = "0xff414559"; };
@@ -60,10 +60,7 @@ in
     homeManager = { pkgs, lib, host, ... }:
       let
         colors = catppuccinColors.${inputs.self.lib.theme.flavor};
-        # Every field is optional — a host that doesn't set `hyprland` gets
-        # Hyprland's own auto-detected monitors and no GPU-specific tuning.
-        # Typed by schema.nix (den.schema.host.imports) — every field
-        # already has a default, no `or` fallbacks needed here.
+        # Host display settings and defaults are declared in schema.nix.
         hypr = host.hyprland;
       in
       {
@@ -193,10 +190,7 @@ in
               { leaf = "workspaces"; enabled = true; speed = 3; bezier = "ease"; }
             ];
           };
-          # Keybinds below assume ghostty/caelestia/wpctl(PipeWire) are also
-          # active — an accepted coupling, not accidental: pierre.nix always
-          # bundles the whole desktop stack together, and splitting this
-          # into per-command options would be config for its own sake.
+          # Desktop keybinds use Ghostty, Caelestia and PipeWire, included by pierre.
           extraConfig = ''
             -- Keybinds
             local mod = "SUPER"

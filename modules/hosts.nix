@@ -1,8 +1,5 @@
 let
-  # Pierre's identity: permanent, host-independent data. Defined once here
-  # and reused via `users.pierre = pierre` on every host he has an account
-  # on — never duplicate name/email/key per host. Consumed by git.nix/
-  # jujutsu.nix/protonpass.nix via their `{ user, ... }:` context arg.
+  # Shared identity for every host declaring users.pierre = pierre.
   pierre = {
     fullName = "Pierre Fraisse";
     email = "pierre.fraisse@nebulous.fr";
@@ -19,9 +16,7 @@ in
       subnet = "192.168.1.0/24";
     };
 
-    # Consumed by hyprland.nix via its `{ host, ... }:` context arg — keeps
-    # that aspect reusable on a host with a different screen/GPU setup
-    # instead of hardcoding this machine's monitors in the feature file.
+    # Host-specific display settings consumed by the Hyprland aspect.
     hyprland = {
       monitors = [
         { output = "DP-3"; mode = "2560x1440@165"; position = "0x0"; scale = 1; bitdepth = 10; cm = "hdr"; sdrbrightness = 2.3; }
@@ -51,9 +46,7 @@ in
       };
     };
 
-    # Consumed by caelestia.nix via its `{ host, ... }:` context arg — a
-    # desktop has no battery and no reason to show Bluetooth, so audio
-    # takes their place in the bar's status icons.
+    # Desktop status icons: show audio, hide unused battery and Bluetooth.
     caelestia.statusIcons = [
       { id = "lockStatus"; enabled = true; }
       { id = "audio"; enabled = true; }

@@ -14,10 +14,7 @@
         gtk-single-instance = true;
         quit-after-last-window-closed = true;
         quit-after-last-window-closed-delay = "5m";
-        # Default (true) shows an in-window "confirm close?" dialog when a
-        # foreground process is running — hyprshutdown can't interact with
-        # that dialog, so it hangs waiting for the window to actually close
-        # (e.g. logout with a `claude` session running in a Ghostty tab).
+        # Allow hyprshutdown to close terminals without an interactive prompt.
         confirm-close-surface = false;
       };
     };

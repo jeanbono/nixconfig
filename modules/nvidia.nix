@@ -3,11 +3,7 @@
     hardware.graphics = {
       enable = true;
       enable32Bit = true;
-      # Required for VA-API on proprietary NVIDIA: the NVIDIA driver has no
-      # native VA-API support, this shim translates VA-API calls to NVDEC.
-      # Without it, LIBVA_DRIVER_NAME=nvidia (set by hyprland.nix) points to
-      # a missing .so — hardware decoding silently broken (e.g. Plex Desktop:
-      # audio+subtitles OK but image entirely black).
+      # Provides the VA-API to NVDEC bridge for LIBVA_DRIVER_NAME=nvidia.
       extraPackages = [ pkgs.nvidia-vaapi-driver ];
     };
 

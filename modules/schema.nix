@@ -1,14 +1,7 @@
 { lib, den, ... }:
 {
-  # Types the freeform per-entity data consumed via `{ user, host, ... }:`
-  # (see hosts.nix, hyprland.nix, git.nix, jujutsu.nix, protonpass.nix,
-  # razer.nix). Without this, a typo like `monitorss` silently evaluates
-  # to an empty attrset and the `or [ ]` fallback in hyprland.nix hides it
-  # completely — Hyprland just falls back to auto-detected monitors with
-  # no error anywhere. Deliberately shallow: outer keys are typed (catches
-  # the typo), inner shapes stay loose (`attrsOf anything`) rather than
-  # fully-specified submodules — see CLAUDE.md's guidance against
-  # typing everything.
+  # Type shared identity fields and Hyprland options to catch misspelled keys.
+  # Monitor and workspace entry shapes remain flexible.
   den.schema.user.imports = [
     {
       options = {

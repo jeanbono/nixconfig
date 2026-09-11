@@ -25,9 +25,7 @@
         revset-aliases = {
           "closest_pushable(to)" = ''heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'';
         };
-        # Makes the native `jj bookmark advance` (alias `jj b a`) target the last
-        # described/non-empty ancestor instead of `@`, which is often a fresh
-        # empty commit — same effect as the old `tug` alias, without needing one.
+        # Advance bookmarks to a described, non-empty ancestor (or merge).
         revsets."bookmark-advance-to" = "closest_pushable(@)";
         ui.show-cryptographic-signatures = true;
         template-aliases."format_short_cryptographic_signature(sig)" = ''
