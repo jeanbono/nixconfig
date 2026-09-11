@@ -46,6 +46,19 @@ in
       };
     };
 
+    # Consumed by caelestia.nix via its `{ host, ... }:` context arg — a
+    # desktop has no battery and no reason to show Bluetooth, so audio
+    # takes their place in the bar's status icons.
+    caelestia.statusIcons = [
+      { id = "lockStatus"; enabled = true; }
+      { id = "audio"; enabled = true; }
+      { id = "microphone"; enabled = false; }
+      { id = "kbLayout"; enabled = false; }
+      { id = "network"; enabled = true; }
+      { id = "bluetooth"; enabled = false; }
+      { id = "battery"; enabled = false; }
+    ];
+
     users.pierre = pierre;
   };
 }
