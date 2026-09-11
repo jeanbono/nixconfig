@@ -4,7 +4,9 @@
     programs.vesktop = {
       enable = true;
       vencord.themes.catppuccin = pkgs.fetchurl {
-        url = "https://catppuccin.github.io/discord/dist/catppuccin-${inputs.self.lib.theme.flavor}.theme.css";
+        # Pin the compiled CSS from gh-pages so a fresh build can fetch it
+        # even after the published website changes.
+        url = "https://raw.githubusercontent.com/catppuccin/discord/0d8c7aaea33c655bb9e4c93d352a28f3baa69a75/dist/catppuccin-${inputs.self.lib.theme.flavor}.theme.css";
         # Hash is flavor-specific — update it if inputs.self.lib.theme.flavor changes.
         sha256 = "sha256-dHQhESjRhvlO24uzqgpQU+WYdkd93er2HNx8rJt6YbI=";
       };
