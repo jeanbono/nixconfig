@@ -33,10 +33,9 @@
         template-aliases."format_short_cryptographic_signature(sig)" = ''
           if(sig,
             label("signature status " ++ sig.status(),
-              if(sig.status() == "good", "",
-              if(sig.status() == "bad", "",
-              if(sig.status() == "unknown", "",
-              "")))
+              if(sig.status() == "good", "",
+              if(sig.status() == "bad", "",
+              if(sig.status() == "unknown", "", "")))
             ),
             label("signature status invalid", "(no sig)"),
           )
