@@ -1,5 +1,6 @@
+{ inputs, ... }:
 let
-  lockBeforeSleep = false;
+  lockBeforeSleep = true;
   roundingScale = 0.6;
   borderRounding = 12;
   desktopClock = true;
@@ -10,6 +11,8 @@ let
 in
 {
   den.aspects.caelestia.homeManager = { ... }: {
+    imports = [ inputs.caelestia-shell.homeManagerModules.default ];
+
     # Read by the dashboard as the profile picture (caelestia-shell convention).
     home.file.".face".source = ../assets/face.png;
 

@@ -8,6 +8,11 @@
   # multi-monitor/NVIDIA setup that a graphical greeter would have to
   # contend with.
   den.aspects.greeter.nixos = { pkgs, lib, ... }: {
+    # Driver errors printed after tuigreet starts can corrupt its TUI.
+    # Keep critical messages on the console; ordinary errors remain in
+    # the kernel journal (journalctl -k), including Bluetooth retries.
+    boot.consoleLogLevel = 3;
+
     services.greetd = {
       enable = true;
       useTextGreeter = true;

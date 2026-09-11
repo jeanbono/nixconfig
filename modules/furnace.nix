@@ -40,17 +40,33 @@
 
       boot.loader.systemd-boot.enable = false;
       boot.loader.efi.canTouchEfiVariables = true;
-      boot.loader.limine = {
+      # Keep kernels on the ext4 root; the 200 MiB ESP only holds EFI loaders.
+      boot.loader.efi.efiSysMountPoint = "/boot/efi";
+      boot.loader.grub = {
         enable = true;
-        maxGenerations = 2;
+        efiSupport = true;
+        device = "nodev";
+        configurationLimit = 10;
+        useOSProber = false;
         extraEntries = ''
-          /Windows
-            protocol: efi
-            path: boot():///EFI/Microsoft/Boot/bootmgfw.efi
+          menuentry "Windows" {
+            insmod part_gpt
+            insmod fat
+            insmod chain
+            search --no-floppy --fs-uuid --set=root 0624-17EE
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          }
         '';
       };
       boot.kernelModules = [ "atlantic" ];
       boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+
+      # Cache for the CachyOS kernel selected above, avoiding local builds
+      # when a substitute is available.
+      nix.settings = {
+        substituters = [ "https://attic.xuyh0120.win/lantian" ];
+        trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+      };
 
       environment.systemPackages = with pkgs; [
         pciutils

@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ lib, ... }:
 {
   systems = [ "x86_64-linux" ];
 
@@ -9,10 +9,6 @@
   den.default.nixos.home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    sharedModules = [
-      inputs.caelestia-shell.homeManagerModules.default
-      inputs.nixvim.homeModules.nixvim
-    ];
   };
 
   den.schema.user.classes = lib.mkDefault [ "homeManager" ];

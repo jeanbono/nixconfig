@@ -19,6 +19,7 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 - `modules/hosts.nix` declares which hosts/users exist: `den.hosts.x86_64-linux.furnace.users.pierre = {};`
 - `modules/furnace.nix` (**host** aspect) and `modules/pierre.nix` (**user** aspect) each contain an `includes` list — that's what "activates" aspects, not an `enable` option.
 - An aspect touching both layers is listed in both `includes`.
+- Feature-specific Home Manager modules are imported by their owning aspects (`caelestia`, `nvim`), so they are loaded only for users including those aspects.
 - `modules/_nixos/hardware-configuration.nix` (plain NixOS module, not flake-parts): the `_` prefix makes `import-tree` ignore it (den convention), it's imported explicitly in `furnace.nix`.
 
 ## Project structure
@@ -47,7 +48,7 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 |---|---|---|
 | `audio` | NixOS | PipeWire (ALSA, PulseAudio, JACK) |
 | `locale` | NixOS | `fr_FR.UTF-8` locale, French keyboard |
-| `network` | NixOS | NetworkManager, SSH, curl, wget |
+| `network` | NixOS | NetworkManager, curl, wget |
 | `nix` | NixOS | Flakes, auto-optimise-store, weekly GC |
 | `nvidia` | NixOS | NVIDIA driver, modesetting |
 | `razer` | NixOS+HM | OpenRazer (daemon + udev) + Polychromatic (GUI) |
@@ -63,7 +64,7 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 | `nvim` | HM | Neovim IDE: LSP, blink.cmp, Treesitter, Telescope |
 | `zsh` | NixOS+HM | Zsh (autosuggestion, syntax) + Starship |
 | `git` | HM | Git, SSH-signed commits/tags — self-contained (own `allowed_signers`) |
-| `jujutsu` | HM | Jujutsu VCS (SSH signing, tug alias) — self-contained (own `allowed_signers`) |
+| `jujutsu` | HM | Jujutsu VCS (SSH signing, configured `jj bookmark advance`) — self-contained (own `allowed_signers`) |
 | `ssh` | HM | Generic SSH client config, no agent assumed |
 | `brave` | NixOS+HM | Brave policies (uBlock, Catppuccin) + `programs.brave` |
 | `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent + Brave policy; injects `IdentityAgent` into `ssh` when active |
@@ -92,6 +93,10 @@ Each `modules/*.nix` file declares one or more **aspects** (`den.aspects.<name>`
 
 Intel + NVIDIA desktop machine running Hyprland/Wayland. CachyOS kernel, `/mnt/data` (NTFS) auto-mounted, nix-ld for standard binaries.
 
+GRUB provides the current NixOS entry, a submenu with older generations (up to ten retained system generations) and an explicit Windows entry. The 200 MiB EFI partition is mounted at `/boot/efi`; `/boot` stays on the ext4 root so kernels and initrds do not fill the EFI partition. Weekly garbage collection still removes generations older than fourteen days.
+
+The CachyOS overlay, kernel selection and binary cache are configured together in `modules/furnace.nix`.
+
 ## Usage
 
 ```bash
@@ -104,6 +109,28 @@ nix flake update
 # Regenerate flake.nix after editing modules/dendritic.nix
 nix run .#write-flake
 ```
+
+### Restoring after reinstalling
+
+This repository restores the declared system and Home Manager configuration. It does not contain a backup of personal files, application state or credentials, and does not configure automatic backups.
+
+Before reinstalling, keep an external backup of:
+
+- This repository, including `flake.lock`, uncommitted changes, `assets/` and `wallpapers/`.
+- Personal files and projects in `/home/pierre`, including unpushed Git/Jujutsu work, and the data on `/mnt/data`.
+- Application state you want to retain (browser profiles, local messaging data, LM Studio models and settings), including relevant hidden directories in the home directory. Keep credential-bearing backups encrypted.
+- Account recovery information and second-factor recovery codes, especially for Proton Pass. Verify that these are accessible independently of this machine.
+
+Restore in this order:
+
+1. Install NixOS and establish network access. Keep the newly generated hardware configuration and compare it with `modules/_nixos/hardware-configuration.nix`; update filesystem UUIDs and hardware settings to match the installation. Also check the NTFS UUID and Windows EFI entry in `modules/furnace.nix` before applying it.
+2. Restore this repository with its saved `flake.lock`. The `pierre` account is configured with UID 1000; restore home files with the matching ownership. Set a local login password during installation or from the installer: this repository does not declare one.
+3. Evaluate with `nix flake check --no-build`, then build with `nixos-rebuild build --flake .#furnace`. Once successful, apply with `sudo nixos-rebuild switch --flake .#furnace`.
+4. Restore personal files and application state selectively. Home Manager owns some configuration paths; avoid overwriting its generated symlinks with old configuration files.
+5. Sign in to Proton Pass and restore access to the SSH identity whose public key is declared in `modules/hosts.nix`. The public key and generated allowed-signers files cannot recreate the private key. Check the agent with `systemctl --user status protonpass-ssh-agent` and list its identities with `ssh-add -L` before relying on SSH or signed Git/Jujutsu operations.
+6. Sign in to other applications as needed. For Brave's classic uBlock Origin, enable it manually through `brave://settings/extensions/v2` as described in `modules/brave.nix`; this installation step is not automated by policy.
+
+Finally, verify login, access to `/mnt/data`, networking, audio and signing. These steps document recovery; a restore from an actual backup still needs to be tested.
 
 ### Adding an aspect
 

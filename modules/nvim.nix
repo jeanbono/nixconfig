@@ -1,6 +1,8 @@
 { inputs, ... }:
 {
   den.aspects.nvim.homeManager = { pkgs, ... }: {
+    imports = [ inputs.nixvim.homeModules.nixvim ];
+
     programs.nixvim = {
       enable = true;
       defaultEditor = true;
