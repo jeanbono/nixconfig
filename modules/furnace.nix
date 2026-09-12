@@ -17,6 +17,7 @@
       den.aspects.printing
 
       den.aspects.brave
+      den.aspects.keyring
       den.aspects.protonpass
 
       den.aspects.hyprland

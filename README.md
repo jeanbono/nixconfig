@@ -70,7 +70,8 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `jujutsu` | HM | Jujutsu VCS (SSH signing, configured `jj bookmark advance`) — self-contained (own `allowed_signers`) |
 | `ssh` | HM | Generic SSH client config, no agent assumed |
 | `brave` | NixOS+HM | Brave policies (uBlock, Catppuccin, Proton Pass extension) + `programs.brave` |
-| `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent; sets `SSH_AUTH_SOCK` and injects `IdentityAgent` into `ssh` when active |
+| `keyring` | NixOS | GNOME Keyring service + PAM (greetd) unlock — generic, not Proton Pass specific |
+| `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent; sets `SSH_AUTH_SOCK` and injects `IdentityAgent` into `ssh` when active; uses D-Bus credential storage when GNOME Keyring is enabled, otherwise filesystem storage |
 | `messaging` | HM | Vesktop (Discord), Element, Cinny |
 | `plex` | HM | Plex Desktop |
 | `agents` | HM | CLI coding agents (Claude Code, Codex) |
