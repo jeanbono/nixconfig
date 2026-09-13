@@ -177,8 +177,6 @@ in
               cursor =
                 lib.optionalAttrs (hypr.defaultMonitor != null) { default_monitor = hypr.defaultMonitor; }
                 // lib.optionalAttrs hypr.nvidia { no_hardware_cursors = 2; };
-            } // lib.optionalAttrs hypr.nvidia {
-              render = { use_fp16 = 2; ctm_animation = false; };
             };
 
             curve = { _args = [ "ease" { type = "bezier"; points = [ [ 0.25 0.1 ] [ 0.25 1 ] ]; } ]; };

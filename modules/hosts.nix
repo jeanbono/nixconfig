@@ -18,6 +18,11 @@ in
 
     # Host-specific display settings consumed by the Hyprland aspect.
     hyprland = {
+      # sdrbrightness this high compensates for a known, closed "not
+      # planned" Hyprland bug (hyprwm/Hyprland#16220): sdrbrightness is
+      # applied after PQ encoding instead of before it in linear light,
+      # so it's not a real calibration value and may need retuning across
+      # Hyprland versions.
       monitors = [
         { output = "DP-3"; mode = "2560x1440@165"; position = "0x0"; scale = 1; bitdepth = 10; cm = "hdr"; sdrbrightness = 2.3; }
         { output = "DP-1"; mode = "2560x1440@300"; position = "2560x0"; scale = 1; bitdepth = 10; cm = "hdr"; sdrbrightness = 2.3; }
