@@ -6,6 +6,8 @@ let
   # Keep ExtensionSettings in one policy file: Chromium does not safely
   # merge the same managed policy across multiple files.
   protonPassId = "ghmbeldphafepmbegfdlkpapadhbakde";
+  returnYoutubeDislikeId = "gebbhagfogifgggkldgodflihgfeippi";
+  cookieEditorId = "hlkenndednhfkekhgcdicdfddnkalmdm";
 in
 {
   den.aspects.brave = {
@@ -32,6 +34,15 @@ in
               update_url = "https://clients2.google.com/service/update2/crx";
             };
             ${protonPassId} = {
+              installation_mode = "force_installed";
+              update_url = "https://clients2.google.com/service/update2/crx";
+              toolbar_pin = "force_pinned";
+            };
+            ${returnYoutubeDislikeId} = {
+              installation_mode = "force_installed";
+              update_url = "https://clients2.google.com/service/update2/crx";
+            };
+            ${cookieEditorId} = {
               installation_mode = "force_installed";
               update_url = "https://clients2.google.com/service/update2/crx";
               toolbar_pin = "force_pinned";
