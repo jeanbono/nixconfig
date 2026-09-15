@@ -29,7 +29,7 @@ This config uses the [**den**](https://github.com/denful/den) flake framework (p
 
 - `flake.nix` — **auto-generated** by `flake-file` from `flake-file.inputs` declared in `modules/dendritic.nix`. Never edit it by hand; run `nix run .#write-flake` after changing inputs.
 - `modules/dendritic.nix` — imports `flake-file` and `den`'s dendritic flake-parts modules, declares all flake inputs.
-- `modules/defaults.nix` — flake-wide defaults: `system.stateVersion`, `home.stateVersion`, `nixpkgs.config.allowUnfree`, `home-manager.{useGlobalPkgs,useUserPackages}`, `systems`. Feature-specific Home Manager modules are imported in their owning aspects (`caelestia.nix`, `nvim.nix`).
+- `modules/defaults.nix` — flake-wide defaults: `system.stateVersion`, `home.stateVersion`, `nixpkgs.config.allowUnfree`, `home-manager.{useGlobalPkgs,useUserPackages}`, `systems`. Feature-specific Home Manager modules are imported in their owning aspects (`noctalia.nix`, `nvim.nix`).
 - `modules/hosts.nix` — declares which hosts and users exist: `den.hosts.x86_64-linux.furnace.users.pierre = {};`. The host/user entries take arbitrary extra fields (freeform) beyond the ones den's schema declares — see "Per-entity data" below.
 - `modules/furnace.nix` — the **host aspect** for `furnace`: hardware import, boot/kernel and its CachyOS binary cache, networking, and an `includes` list of every NixOS-facing aspect active on this machine.
 - `modules/pierre.nix` — the **user aspect** for `pierre`: `den.batteries.*` (user account creation, shell) and an `includes` list of every Home-Manager-facing aspect active for this user.

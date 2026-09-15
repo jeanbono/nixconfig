@@ -21,7 +21,7 @@
       den.aspects.protonpass
 
       den.aspects.hyprland
-      den.aspects.greeter
+      den.aspects.noctalia-greeter
 
       den.aspects.zsh
     ];

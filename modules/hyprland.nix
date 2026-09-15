@@ -188,17 +188,17 @@ in
               { leaf = "workspaces"; enabled = true; speed = 3; bezier = "ease"; }
             ];
           };
-          # Desktop keybinds use Ghostty, Caelestia and PipeWire, included by pierre.
+          # Desktop keybinds use Ghostty, Noctalia and PipeWire, included by pierre.
           extraConfig = ''
             -- Keybinds
             local mod = "SUPER"
 
             hl.bind(mod .. " + Return", hl.dsp.exec_cmd("uwsm app -- ghostty +new-window --working-directory=home"))
             hl.bind(mod .. " + Q",      hl.dsp.window.close())
-            hl.bind(mod .. " + M",      hl.dsp.exec_cmd("caelestia shell drawers toggle session"))
+            hl.bind(mod .. " + M",      hl.dsp.exec_cmd("noctalia msg panel-toggle session"))
             hl.bind(mod .. " + E",      hl.dsp.exec_cmd("uwsm app -- ghostty +new-window -e yazi"))
             hl.bind(mod .. " + V",      hl.dsp.window.float({ action = "toggle" }))
-            hl.bind(mod .. " + D",      hl.dsp.exec_cmd("caelestia shell drawers toggle launcher"))
+            hl.bind(mod .. " + D",      hl.dsp.exec_cmd("noctalia msg panel-toggle launcher"))
             hl.bind(mod .. " + F",      hl.dsp.window.fullscreen())
             hl.bind(mod .. " + S",      hl.dsp.layout("togglesplit"))
 

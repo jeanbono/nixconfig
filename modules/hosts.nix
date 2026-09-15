@@ -51,16 +51,6 @@ in
       };
     };
 
-    # Desktop status icons: show audio, hide unused battery and Bluetooth.
-    caelestia.statusIcons = [
-      { id = "lockStatus"; enabled = true; }
-      { id = "audio"; enabled = true; }
-      { id = "microphone"; enabled = false; }
-      { id = "kbLayout"; enabled = false; }
-      { id = "network"; enabled = true; }
-      { id = "bluetooth"; enabled = false; }
-      { id = "battery"; enabled = false; }
-    ];
 
     users.pierre = pierre;
   };

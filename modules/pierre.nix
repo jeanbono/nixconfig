@@ -27,7 +27,7 @@
       den.aspects.nvim
 
       den.aspects.hyprland
-      den.aspects.caelestia
+      den.aspects.noctalia
       den.aspects.zsh
 
       den.aspects.plex
