@@ -50,6 +50,25 @@
         enable = true;
         settings = {
           flavour = inputs.self.lib.theme.flavor;
+          custom_highlights.__raw = ''
+            function(c)
+              local accent = c.${inputs.self.lib.theme.accent}
+              return {
+                Directory = { fg = accent },
+                NvimTreeFolderName = { fg = accent },
+                NvimTreeOpenedFolderName = { fg = accent },
+                NvimTreeEmptyFolderName = { fg = accent },
+                NvimTreeFolderIcon = { fg = accent },
+                NvimTreeRootFolder = { fg = accent, bold = true },
+                FloatBorder = { fg = accent },
+                TelescopeBorder = { fg = accent },
+                PmenuSel = { bg = accent, fg = c.base },
+                CursorLineNr = { fg = accent },
+                BufferLineIndicatorSelected = { fg = accent },
+                BufferLineBufferSelected = { fg = accent, bold = true },
+              }
+            end
+          '';
           integrations = {
             nvim_tree = true;
             treesitter = true;
@@ -69,7 +88,14 @@
         lualine = {
           enable = true;
           settings.options = {
-            theme = "auto";
+            theme.__raw = ''
+              (function()
+                local theme = require('lualine.themes.catppuccin-${inputs.self.lib.theme.flavor}')
+                local c = require('catppuccin.palettes').get_palette('${inputs.self.lib.theme.flavor}')
+                theme.normal.a = { bg = c.${inputs.self.lib.theme.accent}, fg = c.base, gui = 'bold' }
+                return theme
+              end)()
+            '';
             component_separators = { left = ""; right = ""; };
             section_separators = { left = ""; right = ""; };
           };

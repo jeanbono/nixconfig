@@ -1,20 +1,4 @@
-{ inputs, ... }:
-let
-  rose-pine-hyprcursor = { pkgs }: pkgs.fetchFromGitHub {
-    owner = "ndom91";
-    repo = "rose-pine-hyprcursor";
-    rev = "4b02963d0baf0bee18725cf7c5762b3b3c1392f1";
-    sha256 = "sha256-ouuA8LVBXzrbYwPW2vNjh7fC9H2UBud/1tUiIM5vPvM=";
-  };
-
-  # Catppuccin border colors for the Lua configuration.
-  catppuccinColors = {
-    latte     = { mauve = "0xffdc8a78"; blue = "0xff1e66f5"; surface0 = "0xffccd0da"; };
-    frappe    = { mauve = "0xffca9ee6"; blue = "0xff8caaee"; surface0 = "0xff414559"; };
-    macchiato = { mauve = "0xffc6a0f6"; blue = "0xff8aadf4"; surface0 = "0xff363a4f"; };
-    mocha     = { mauve = "0xffcba6f7"; blue = "0xff89b4fa"; surface0 = "0xff313244"; };
-  };
-in
+{ ... }:
 {
   den.aspects.hyprland = {
     nixos = { pkgs, host, ... }: {
@@ -60,18 +44,14 @@ in
 
     homeManager = { pkgs, lib, host, ... }:
       let
-        colors = catppuccinColors.${inputs.self.lib.theme.flavor};
         # Host display settings and defaults are declared in schema.nix.
         hypr = host.hyprland;
       in
       {
         home.sessionVariables = {
           NIXOS_OZONE_WL = "1";
-          HYPRCURSOR_THEME = "rose-pine-hyprcursor";
-          HYPRCURSOR_SIZE = "24";
         };
 
-        home.file.".local/share/icons/rose-pine-hyprcursor".source = rose-pine-hyprcursor { inherit pkgs; };
         home.file."Images/Wallpapers/wallpaper.png".source = ../wallpapers/wallpaper.png;
 
         home.packages = with pkgs; [
@@ -80,14 +60,7 @@ in
           slurp
           pavucontrol
           brightnessctl
-          hyprcursor
         ];
-
-        gtk.cursorTheme = {
-          name = "BreezeX-RosePine-Linux";
-          package = pkgs.rose-pine-cursor;
-          size = 24;
-        };
 
         wayland.windowManager.hyprland = {
           enable = true;
@@ -95,7 +68,8 @@ in
           configType = "lua";
           # Deterministic render order for `settings` below (module default is
           # alphabetical + a fixed prefix list that doesn't match our keys).
-          importantPrefixes = [ "monitor" "workspace_rule" "env" "config" "curve" "animation" ];
+          # `colors` is catppuccin's Lua palette, needed before `config` uses it.
+          importantPrefixes = [ "colors" "monitor" "workspace_rule" "env" "config" "curve" "animation" ];
           settings = {
             monitor = hypr.monitors;
             workspace_rule = hypr.workspaceRules;
@@ -119,8 +93,8 @@ in
                 gaps_out = 8;
                 border_size = 2;
                 col = {
-                  active_border = { colors = [ colors.mauve colors.blue ]; angle = 45; };
-                  inactive_border = colors.surface0;
+                  active_border = lib.generators.mkLuaInline "colors.accent";
+                  inactive_border = lib.generators.mkLuaInline "colors.surface0";
                 };
                 layout = "dwindle";
               };

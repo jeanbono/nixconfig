@@ -8,6 +8,10 @@
       url = "github:xddxdd/nix-cachyos-kernel";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    catppuccin = {
+      url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     den.url = "github:denful/den/v0.18.0";
     flake-file.url = "github:vic/flake-file";
     flake-parts = {

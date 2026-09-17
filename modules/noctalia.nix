@@ -14,14 +14,19 @@
       settings = {
         theme = {
           mode = "dark";
-          # "builtin" Catppuccin is actually Mocha-shaded; the community
-          # palette below matches the Macchiato flavor used elsewhere
-          # (theme.nix, ghostty.nix, brave.nix).
+          # Noctalia downloads and caches the community palette natively.
           source = "community";
-          community_palette = "Catppuccin Macchiato Blue";
+          community_palette = inputs.self.lib.theme.name;
           wallpaper_scheme = "m3-content";
+          # Only GTK follows Noctalia (catppuccin/nix has no GTK theme); other
+          # applications are themed by catppuccin/nix.
+          templates = {
+            enable_builtin_templates = true;
+            builtin_ids = [ "gtk3" "gtk4" ];
+            enable_community_templates = false;
+          };
         };
-        shell.font_family = "MonaspiceNe Nerd Font";
+        shell.font_family = inputs.self.lib.theme.font;
         # No other polkit authentication agent runs in this session, so an
         # interactive prompt (e.g. the greeter's appearance-sync fallback)
         # has nowhere to render without this.

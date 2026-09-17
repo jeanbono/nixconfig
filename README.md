@@ -36,7 +36,7 @@ Feature files in `modules/` declare **aspects** (`den.aspects.<name>`), with a `
     ├── hosts.nix              # den.hosts.<system>.<host>.users.<user> + freeform per-entity data
     ├── furnace.nix            # Host aspect: hardware, boot, NixOS includes
     ├── pierre.nix             # User aspect: batteries, HM includes
-    ├── theme.nix              # flake.lib.theme (flavor, ghostty theme) + GTK dark
+    ├── theme.nix              # Catppuccin flavor/accent (catppuccin/nix), GTK/Qt, cursor
     ├── schema.nix             # Typed den.schema.user/host fields (identity, hyprland.*)
     ├── _nixos/
     │   └── hardware-configuration.nix  # Plain NixOS module, ignored by import-tree (`_` prefix)
@@ -62,15 +62,15 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `hyprland` | NixOS+HM | Compositor, UWSM session, keybinds, monitors (from `host.hyprland`), cursor |
 | `noctalia-greeter` | NixOS | greetd + noctalia-greeter: PAM login before Hyprland, pinned to the DP-1 monitor, French keyboard layout, passwordless appearance sync from the desktop session, an ACL letting the greeter user read `~/.face` for the login avatar |
 | `noctalia` | HM | Native (non-QtQuick) Wayland shell: top bar (macOS-style layout, clock with date), launcher, wallpaper, Catppuccin Macchiato theme, embedded polkit agent; lock after 5 minutes idle, screen off after 10 minutes idle; native logout/reboot/shutdown actions |
-| `theme` | HM | Shared Catppuccin Macchiato selection via `flake.lib.theme`, GTK dark preference and Papirus icons |
+| `theme` | HM | Catppuccin Macchiato **mauve** through catppuccin/nix, GTK/Qt, cursor and Papirus folders |
 | `ghostty` | HM | Ghostty GPU terminal (D-Bus single-instance) |
 | `nvim` | HM | Neovim IDE: LSP, blink.cmp, Treesitter, Telescope |
-| `yazi` | HM | File manager, Zsh integration (`y`), Catppuccin flavor and syntax preview theme |
+| `yazi` | HM | File manager, Zsh integration (`y`) |
 | `zsh` | NixOS+HM | Zsh (autosuggestion, syntax) + Starship |
 | `git` | HM | Git, SSH-signed commits/tags — self-contained (own `allowed_signers`) |
 | `jujutsu` | HM | Jujutsu VCS (SSH signing, configured `jj bookmark advance`) — self-contained (own `allowed_signers`) |
 | `ssh` | HM | Generic SSH client config, no agent assumed |
-| `brave` | NixOS+HM | Brave policies (uBlock, Catppuccin, Proton Pass, Return YouTube Dislike, Cookie-Editor) + `programs.brave` |
+| `brave` | NixOS+HM | Brave policies (uBlock, Proton Pass, Return YouTube Dislike, Cookie-Editor) + `programs.brave` |
 | `keyring` | NixOS | GNOME Keyring service + PAM (greetd) unlock — generic, not Proton Pass specific |
 | `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent; sets `SSH_AUTH_SOCK` and injects `IdentityAgent` into `ssh` when active; uses D-Bus credential storage when GNOME Keyring is enabled, otherwise filesystem storage |
 | `messaging` | HM | Vesktop (Discord), Element, Cinny |
@@ -79,11 +79,24 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `herdr` | HM | Agent workspace manager, with Python available to its session hooks through its process PATH |
 | `tools` | HM | CLI packages (ripgrep, fd, jq, fastfetch, unzip) |
 
-Catppuccin's shared flavor does not impose a shared accent: Yazi uses mauve,
-Noctalia uses its Macchiato Blue community palette, and Neovim keeps its theme's
-per-component colors. Brave's theme extension and Noctalia's palette are selected
-explicitly; changing `flake.lib.theme.flavor` alone does not change them. Vesktop's
-CSS hash must also be updated when changing flavor.
+### Theme
+
+`modules/theme.nix` selects **Catppuccin Macchiato + mauve** once:
+
+- Applications use the official ports through
+  [catppuccin/nix](https://github.com/catppuccin/nix) (`catppuccin.enable`):
+  Brave, Ghostty, Hyprland borders, Yazi, Starship, Vesktop, Qt (qtct palette
+  with the Fusion style), Papirus folder icons and a neutral light cursor.
+  Neovim uses nixvim's Catppuccin colorscheme.
+- Noctalia and its greeter use Noctalia's community palette of the same name.
+- GTK (catppuccin/nix no longer ships a GTK theme) uses adw-gtk3 dark, recolored
+  by Noctalia's built-in GTK3/GTK4 templates; they are Noctalia's only enabled
+  templates. Home Manager's `gtk.css` imports the generated `noctalia.css`.
+
+Changing the flavor or accent means editing `theme.nix` and rebuilding; a
+palette picked in Noctalia's UI only recolors Noctalia and GTK. Applications
+with their own theme systems (IntelliJ, LM Studio, Proton Pass, Steam) are not
+themed.
 
 Proton Pass selects its CLI credential backend at configuration time from
 `services.gnome.gnome-keyring.enable`. Disabling that service selects filesystem

@@ -22,6 +22,26 @@
         "type": "github"
       }
     },
+    "catppuccin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789553013,
+        "narHash": "sha256-W5dvgFOuVs24X3G5tUb8C2IHU7ICXNvyGPiWWFjfbuo=",
+        "owner": "catppuccin",
+        "repo": "nix",
+        "rev": "89b3eacf59d6b5eefbc2d69c3a4eb5aaf66d63bc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "nix",
+        "type": "github"
+      }
+    },
     "den": {
       "locked": {
         "lastModified": 1781621963,
@@ -259,6 +279,7 @@
     "root": {
       "inputs": {
         "cachyos": "cachyos",
+        "catppuccin": "catppuccin",
         "den": "den",
         "flake-file": "flake-file",
         "flake-parts": "flake-parts_2",
