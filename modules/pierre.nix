@@ -25,6 +25,7 @@
       den.aspects.theme
       den.aspects.ghostty
       den.aspects.nvim
+      den.aspects.yazi
 
       den.aspects.hyprland
       den.aspects.noctalia

@@ -59,12 +59,13 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `printing` | NixOS+HM | CUPS + SANE (Brother DCP-1610W) + simple-scan |
 | `lmstudio` | NixOS+HM | LM Studio; API port 1234 restricted to the host's IPv4 LAN (`host.lmstudio`) |
 | `intellij` | NixOS+HM | Java (NixOS) + IntelliJ IDEA (HM) |
-| `hyprland` | NixOS+HM | Compositor, UWSM session, keybinds, monitors (from `host.hyprland`), yazi, cursor |
+| `hyprland` | NixOS+HM | Compositor, UWSM session, keybinds, monitors (from `host.hyprland`), cursor |
 | `noctalia-greeter` | NixOS | greetd + noctalia-greeter: PAM login before Hyprland, pinned to the DP-1 monitor, French keyboard layout, passwordless appearance sync from the desktop session, an ACL letting the greeter user read `~/.face` for the login avatar |
 | `noctalia` | HM | Native (non-QtQuick) Wayland shell: top bar (macOS-style layout, clock with date), launcher, wallpaper, Catppuccin Macchiato theme, embedded polkit agent; lock after 5 minutes idle, screen off after 10 minutes idle; native logout/reboot/shutdown actions |
 | `theme` | HM | Shared Catppuccin Macchiato selection via `flake.lib.theme`, GTK dark preference and Papirus icons |
 | `ghostty` | HM | Ghostty GPU terminal (D-Bus single-instance) |
 | `nvim` | HM | Neovim IDE: LSP, blink.cmp, Treesitter, Telescope |
+| `yazi` | HM | File manager, Zsh integration (`y`), Catppuccin flavor and syntax preview theme |
 | `zsh` | NixOS+HM | Zsh (autosuggestion, syntax) + Starship |
 | `git` | HM | Git, SSH-signed commits/tags — self-contained (own `allowed_signers`) |
 | `jujutsu` | HM | Jujutsu VCS (SSH signing, configured `jj bookmark advance`) — self-contained (own `allowed_signers`) |
