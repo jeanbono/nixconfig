@@ -34,7 +34,8 @@ in
         extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };
 
-      # greetd/tuigreet own the actual login flow — see greeter.nix.
+      # greetd/noctalia-greeter own the actual login flow — see
+      # noctalia-greeter.nix.
       services.displayManager.defaultSession = "hyprland-uwsm";
 
       # Suspend-key/lid-switch behavior is a host preference (e.g. a laptop

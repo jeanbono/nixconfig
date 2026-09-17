@@ -22,26 +22,18 @@
           wallpaper_scheme = "m3-content";
         };
         shell.font_family = "MonaspiceNe Nerd Font";
-        # No other polkit authentication agent runs in this session (there
-        # never was one under Caelestia+tuigreet either, but nothing
-        # exercised an interactive polkit prompt until Noctalia Greeter's
-        # appearance-sync fallback). Without an agent, an interactive
-        # prompt has nowhere to render.
+        # No other polkit authentication agent runs in this session, so an
+        # interactive prompt (e.g. the greeter's appearance-sync fallback)
+        # has nowhere to render without this.
         shell.polkit_agent = true;
         # Auto-push wallpaper/palette/font/output config to
         # noctalia-greeter's sync.toml on every change instead of requiring
         # a manual "Sync Now" (see noctalia-greeter.nix's
         # passwordless-sync-users).
         shell.greeter_sync.auto_sync = true;
-        # Detached panels (control center, session menu, ...) have their
-        # own separate transparency mechanism, unrelated to bar.default's
-        # opacity slider: 3 discrete presets, not a continuous value.
-        # "soft" resolves to background opacity 0.80
-        # (detachedPanelBackgroundOpacityForTransparencyMode() in
-        # config_types.cpp), matching bar.default.background_opacity below
-        # ("glass" would be 0.55, "solid" -- the default -- is fully
-        # opaque, which is why panels didn't match the bar after only
-        # tuning bar.default).
+        # Detached panels (control center, session menu, ...) use this
+        # separate 3-preset transparency setting, not bar.default's
+        # opacity slider. "soft" ~= 0.80 opacity, matching the bar below.
         shell.panel.transparency_mode = "soft";
         bar.default = {
           background_opacity = 0.8;
@@ -68,21 +60,16 @@
             "session"
           ];
         };
-        # Per-widget instance settings live in a separate top-level
-        # [widget.<name>] table, not nested under bar.default. Format is
-        # C++'s chrono/std::format spec (locale-aware: %a/%b render in
-        # fr_FR, e.g. "mar. 15 sept. 16:04"), matching macOS's menu-bar
-        # clock style.
+        # Per-widget settings live in a top-level [widget.<name>] table,
+        # not nested under bar.default. macOS-style clock with date
+        # (locale-aware, e.g. "mar. 15 sept. 16:04").
         widget.clock.format = "{:%a %d %b %H:%M}";
         lockscreen = {
           blurred_desktop = true;
           blur_intensity = 0.75;
         };
-        # All of noctalia's default idle behaviors ship disabled
-        # (defaultIdleBehaviors() in config_types.cpp) -- restores
-        # Caelestia's old general.idle.timeouts: lock at 5min, screen off
-        # (DPMS) at 10min. Never actually suspended to RAM under Caelestia
-        # either, despite the "lock-and-suspend" behavior existing here.
+        # noctalia's default idle behaviors ship disabled: lock at 5min,
+        # screen off (DPMS) at 10min. No RAM suspend.
         idle.behavior = {
           lock = {
             enabled = true;
@@ -103,12 +90,10 @@
           directory = "${config.home.homeDirectory}/Images/Wallpapers";
           fill_mode = "crop";
         };
-        # Switch to greetd's VT explicitly to avoid a black screen on
-        # NVIDIA, showing hyprshutdown's splash during the transition.
-        # Declaring any entry replaces noctalia's default session.actions
-        # wholesale (defaultSessionPanelActions() in config_types.cpp), so
-        # lock/lock_and_suspend are repeated here unmodified, matching that
-        # default (including their keybinds).
+        # hyprshutdown shows a splash and switches VT explicitly, avoiding
+        # a black screen on NVIDIA. Declaring any entry here replaces
+        # noctalia's whole default session.actions array, so lock/
+        # lock_and_suspend are repeated unmodified to keep them.
         shell.session.actions = [
           { action = "lock"; shortcut = "1"; }
           {

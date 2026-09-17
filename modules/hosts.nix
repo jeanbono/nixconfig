@@ -51,7 +51,6 @@ in
       };
     };
 
-
     users.pierre = pierre;
   };
 }
