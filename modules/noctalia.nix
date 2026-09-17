@@ -90,30 +90,8 @@
           directory = "${config.home.homeDirectory}/Images/Wallpapers";
           fill_mode = "crop";
         };
-        # hyprshutdown shows a splash and switches VT explicitly, avoiding
-        # a black screen on NVIDIA. Declaring any entry here replaces
-        # noctalia's whole default session.actions array, so lock/
-        # lock_and_suspend are repeated unmodified to keep them.
-        shell.session.actions = [
-          { action = "lock"; shortcut = "1"; }
-          {
-            action = "logout";
-            shortcut = "2";
-            command = "systemd-run --user --scope hyprshutdown -t 'Logging out...' --vt 1";
-          }
-          { action = "lock_and_suspend"; shortcut = "3"; }
-          {
-            action = "reboot";
-            shortcut = "4";
-            command = "systemd-run --user --scope hyprshutdown -t 'Restarting...' -p reboot --vt 1";
-          }
-          {
-            action = "shutdown";
-            shortcut = "5";
-            variant = "destructive";
-            command = "systemd-run --user --scope hyprshutdown -t 'Shutting down...' -p poweroff --vt 1";
-          }
-        ];
+        # Keep native session actions: an external logout splash conflicts
+        # with the session lock when invoked from the lockscreen.
       };
     };
   };

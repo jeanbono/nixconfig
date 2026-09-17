@@ -7,7 +7,6 @@
     environment.systemPackages = with pkgs; [
       faugus-launcher
       mangohud
-      gamemode
       protonplus
       vulkan-tools
       wineWow64Packages.stable

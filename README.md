@@ -61,7 +61,7 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `intellij` | NixOS+HM | Java (NixOS) + IntelliJ IDEA (HM) |
 | `hyprland` | NixOS+HM | Compositor, UWSM session, keybinds, monitors (from `host.hyprland`), yazi, cursor |
 | `noctalia-greeter` | NixOS | greetd + noctalia-greeter: PAM login before Hyprland, pinned to the DP-1 monitor, French keyboard layout, passwordless appearance sync from the desktop session, an ACL letting the greeter user read `~/.face` for the login avatar |
-| `noctalia` | HM | Native (non-QtQuick) Wayland shell: top bar (macOS-style layout, clock with date), launcher, wallpaper, Catppuccin Macchiato theme, embedded polkit agent; lock after 5 minutes idle, screen off after 10 minutes idle; `hyprshutdown` splash on logout/reboot/shutdown |
+| `noctalia` | HM | Native (non-QtQuick) Wayland shell: top bar (macOS-style layout, clock with date), launcher, wallpaper, Catppuccin Macchiato theme, embedded polkit agent; lock after 5 minutes idle, screen off after 10 minutes idle; native logout/reboot/shutdown actions |
 | `theme` | HM | Shared Catppuccin Macchiato selection via `flake.lib.theme`, GTK dark preference and Papirus icons |
 | `ghostty` | HM | Ghostty GPU terminal (D-Bus single-instance) |
 | `nvim` | HM | Neovim IDE: LSP, blink.cmp, Treesitter, Telescope |
@@ -69,7 +69,7 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `git` | HM | Git, SSH-signed commits/tags — self-contained (own `allowed_signers`) |
 | `jujutsu` | HM | Jujutsu VCS (SSH signing, configured `jj bookmark advance`) — self-contained (own `allowed_signers`) |
 | `ssh` | HM | Generic SSH client config, no agent assumed |
-| `brave` | NixOS+HM | Brave policies (uBlock, Catppuccin, Proton Pass extension) + `programs.brave` |
+| `brave` | NixOS+HM | Brave policies (uBlock, Catppuccin, Proton Pass, Return YouTube Dislike, Cookie-Editor) + `programs.brave` |
 | `keyring` | NixOS | GNOME Keyring service + PAM (greetd) unlock — generic, not Proton Pass specific |
 | `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent; sets `SSH_AUTH_SOCK` and injects `IdentityAgent` into `ssh` when active; uses D-Bus credential storage when GNOME Keyring is enabled, otherwise filesystem storage |
 | `messaging` | HM | Vesktop (Discord), Element, Cinny |
@@ -77,6 +77,17 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `agents` | HM | CLI coding agents (Claude Code, Codex) |
 | `herdr` | HM | Agent workspace manager, with Python available to its session hooks through its process PATH |
 | `tools` | HM | CLI packages (ripgrep, fd, jq, fastfetch, unzip) |
+
+Catppuccin's shared flavor does not impose a shared accent: Yazi uses mauve,
+Noctalia uses its Macchiato Blue community palette, and Neovim keeps its theme's
+per-component colors. Brave's theme extension and Noctalia's palette are selected
+explicitly; changing `flake.lib.theme.flavor` alone does not change them. Vesktop's
+CSS hash must also be updated when changing flavor.
+
+Proton Pass selects its CLI credential backend at configuration time from
+`services.gnome.gnome-keyring.enable`. Disabling that service selects filesystem
+storage; an unavailable or locked keyring at runtime does not trigger a fallback.
+Changing backend does not migrate existing credentials; a new login may be needed.
 
 ## Notable keybindings
 

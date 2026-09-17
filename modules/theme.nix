@@ -30,9 +30,5 @@ in
         size = 11;
       };
     };
-
-    home.packages = with pkgs; [
-      papirus-icon-theme
-    ];
   };
 }

@@ -81,8 +81,6 @@ in
           pavucontrol
           brightnessctl
           hyprcursor
-          hyprshutdown
-          rose-pine-cursor
         ];
 
         gtk.cursorTheme = {
@@ -258,7 +256,7 @@ in
 
             -- Screenshot
             hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd(
-              'mkdir -p ~/Pictures/Screenshots && f=~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png && grim -g "$(slurp -d)" "$f" && wl-copy < "$f"'
+              'geometry=$(slurp -d) && test -n "$geometry" && mkdir -p ~/Pictures/Screenshots && f=~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png && grim -g "$geometry" "$f" && wl-copy < "$f"'
             ))
 
             -- Audio

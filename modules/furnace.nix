@@ -102,7 +102,7 @@
         options = [
           "rw"
           "uid=${toString config.users.users.pierre.uid}"
-          "gid=100" # standard "users" group, not user-specific
+          "gid=${toString config.users.groups.users.gid}"
           # Personal volume: only the owning user can access its contents.
           "umask=077"
           "nofail"

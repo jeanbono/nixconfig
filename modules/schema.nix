@@ -36,12 +36,12 @@
             monitors = lib.mkOption {
               type = lib.types.listOf (lib.types.attrsOf lib.types.anything);
               default = [ ];
-              description = "wayland.windowManager.hyprland.settings.monitor entries.";
+              description = "Lua hl.monitor entries.";
             };
             workspaceRules = lib.mkOption {
               type = lib.types.listOf (lib.types.attrsOf lib.types.anything);
               default = [ ];
-              description = "wayland.windowManager.hyprland.settings.workspace_rule entries.";
+              description = "Lua hl.workspace_rule entries.";
             };
             nvidia = lib.mkOption {
               type = lib.types.bool;

@@ -14,7 +14,7 @@
         gtk-single-instance = true;
         quit-after-last-window-closed = true;
         quit-after-last-window-closed-delay = "5m";
-        # Allow hyprshutdown to close terminals without an interactive prompt.
+        # Close terminals without an interactive confirmation prompt.
         confirm-close-surface = false;
       };
     };

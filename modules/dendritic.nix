@@ -1,8 +1,8 @@
 { inputs, ... }:
 {
   imports = [
-    (inputs.flake-file.flakeModules.dendritic or { })
-    (inputs.den.flakeModules.dendritic or { })
+    inputs.flake-file.flakeModules.dendritic
+    inputs.den.flakeModules.dendritic
   ];
 
   flake-file.inputs = {
