@@ -103,6 +103,9 @@
                 blur = { enabled = true; size = 6; passes = 2; brightness = 1.2; contrast = 1.0; vibrancy = 0.0; };
                 shadow = { enabled = true; range = 12; render_power = 3; color = "0x66000000"; };
               };
+              # Outputs already use HDR. Automatic fullscreen switching causes
+              # washed-out Brave video; keep the configured output color mode.
+              render.cm_auto_hdr = 0;
               animations = { enabled = true; };
               dwindle = { preserve_split = true; };
               misc = { force_default_wallpaper = 0; disable_hyprland_logo = true; };
