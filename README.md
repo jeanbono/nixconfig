@@ -72,6 +72,7 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `ssh` | HM | Generic SSH client config, no agent assumed |
 | `brave` | NixOS+HM | Brave policies (uBlock, Proton Pass, Return YouTube Dislike, Cookie-Editor) + `programs.brave` |
 | `keyring` | NixOS | GNOME Keyring service + PAM (greetd) unlock — generic, not Proton Pass specific |
+| `protonmail` | HM | Proton Mail Bridge GUI and local IMAP/SMTP backend; uses the existing GNOME Keyring |
 | `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent; sets `SSH_AUTH_SOCK` and injects `IdentityAgent` into `ssh` when active; uses D-Bus credential storage when GNOME Keyring is enabled, otherwise filesystem storage |
 | `messaging` | HM | Vesktop (Discord), Element, Cinny |
 | `plex` | HM | Plex Desktop |
@@ -102,6 +103,19 @@ Proton Pass selects its CLI credential backend at configuration time from
 `services.gnome.gnome-keyring.enable`. Disabling that service selects filesystem
 storage; an unavailable or locked keyring at runtime does not trigger a fallback.
 Changing backend does not migrate existing credentials; a new login may be needed.
+
+Proton Mail Bridge requires a paid Proton Mail plan. After rebuilding, launch
+**Proton Mail Bridge** from the application launcher (or `protonmail-bridge-gui`)
+and sign in. Configure your mail client with the local server addresses, ports
+and credentials shown by Bridge, not your Proton account password. Bridge must
+remain running while the mail client is in use; this configuration installs the
+application and starts it without opening a window at graphical login, using
+the `protonmail-bridge` user service. It stops with the graphical session and
+restarts on failure. Home Manager disables the application's own autostart;
+systemd manages startup exclusively. Keep Bridge's autostart option disabled.
+Check the service with
+`systemctl --user status protonmail-bridge`. Account setup and credentials remain
+outside Nix, with GNOME Keyring available for secret storage.
 
 ## Notable keybindings
 
