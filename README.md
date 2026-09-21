@@ -73,6 +73,7 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `brave` | NixOS+HM | Brave policies (uBlock, Proton Pass, Return YouTube Dislike, Cookie-Editor) + `programs.brave` |
 | `keyring` | NixOS | GNOME Keyring service + PAM (greetd) unlock — generic, not Proton Pass specific |
 | `protonmail` | HM | Proton Mail Bridge GUI and local IMAP/SMTP backend; uses the existing GNOME Keyring |
+| `tidemail` | HM | TideMail terminal mail client, official GitHub binary pinned by version and hash in a local derivation |
 | `protonpass` | NixOS+HM | CLI + GUI + systemd SSH agent; sets `SSH_AUTH_SOCK` and injects `IdentityAgent` into `ssh` when active; uses D-Bus credential storage when GNOME Keyring is enabled, otherwise filesystem storage |
 | `messaging` | HM | Vesktop (Discord), Element, Cinny |
 | `plex` | HM | Plex Desktop |
@@ -116,6 +117,17 @@ systemd manages startup exclusively. Keep Bridge's autostart option disabled.
 Check the service with
 `systemctl --user status protonmail-bridge`. Account setup and credentials remain
 outside Nix, with GNOME Keyring available for secret storage.
+
+TideMail is packaged in `modules/_packages/tidemail.nix` and exposed as
+`packages.x86_64-linux.tidemail`. Run `nix run .#tidemail` before rebuilding,
+or `tidemail` once the Home Manager configuration is activated. The wrapper
+provides Secret Service, clipboard, notification and URL-opening tools.
+Accounts are configured interactively; no mail credentials are stored in Nix.
+Proton Bridge connectivity still needs validation with your account and its TLS
+certificate. The package uses the official Linux x86-64 release, including its
+embedded Google OAuth client configuration, without compiling Go locally.
+Update the version and archive hash in the derivation to upgrade TideMail; use
+Nix rather than the application's self-updater.
 
 ## Notable keybindings
 

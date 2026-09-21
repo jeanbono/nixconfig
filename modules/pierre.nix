@@ -22,6 +22,7 @@
       den.aspects.brave
       den.aspects.protonpass
       den.aspects.protonmail
+      den.aspects.tidemail
 
       den.aspects.theme
       den.aspects.ghostty
