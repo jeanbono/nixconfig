@@ -12,6 +12,11 @@
       enable = true;
       systemd.enable = true;
       settings = {
+        location.auto_locate = true;
+        weather = {
+          enabled = true;
+          unit = "celsius";
+        };
         theme = {
           mode = "dark";
           # Noctalia downloads and caches the community palette natively.
