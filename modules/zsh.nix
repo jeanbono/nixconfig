@@ -13,6 +13,9 @@
         syntaxHighlighting.enable = true;
       };
 
+      # Scoped to the prompt; ANSI cyan follows the terminal palette.
+      programs.jujutsu.settings.colors.prompt_description = "cyan";
+
       programs.starship = {
         enable = true;
         enableZshIntegration = true;
@@ -82,7 +85,7 @@
               style = "";
               when = "jj --ignore-working-copy root";
               symbol = "🥋 ";
-              command = "jj log --revisions @ --no-graph --ignore-working-copy --color always --limit 1 --template ' separate(\" \", change_id.shortest(4), bookmarks, \"|\", concat( if(conflict, \"💥\"), if(divergent, \"🚧\"), if(hidden, \"👻\"), if(immutable, \"🔒\"), ), if(empty, \"(empty)\"), coalesce( truncate_end(29, description.first_line(), \"…\"), \"(no description set)\", ), ) '";
+              command = "jj log --revisions @ --no-graph --ignore-working-copy --color always --limit 1 --template ' separate(\" \", change_id.shortest(4), bookmarks, \"|\", concat( if(conflict, \"💥\"), if(divergent, \"🚧\"), if(hidden, \"👻\"), if(immutable, \"🔒\"), ), if(empty, \"(empty)\"), label(\"prompt_description\", coalesce( truncate_end(29, description.first_line(), \"…\"), \"(no description set)\", )), ) '";
               shell = [ "sh" "--norc" "--noprofile" ];
             };
             git_status = {
