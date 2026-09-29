@@ -6,13 +6,18 @@
         proton-pass-cli
       ];
 
+      # gnome-keyring enables gcr's SSH agent by default, which would export a
+      # competing SSH_AUTH_SOCK into the systemd user environment.
+      services.gnome.gcr-ssh-agent.enable = false;
+
       # The Brave force-install policy for the ProtonPass extension is owned
       # by den.aspects.brave (see its comment): Chromium doesn't safely merge
       # the same managed policy across two separate *.json files.
     };
 
-    homeManager = { pkgs, lib, user, osConfig, ... }:
+    homeManager = { pkgs, lib, config, user, osConfig, ... }:
       let
+        agentSocket = "${config.home.homeDirectory}/.ssh/proton-pass-agent.sock";
         # Match the credential backend to the host's keyring service.
         keyringEnvironment =
           if osConfig.services.gnome.gnome-keyring.enable then {
@@ -25,8 +30,11 @@
       {
         # Interactive login and the agent must use the same persistent backend.
         home.sessionVariables = keyringEnvironment // {
-          SSH_AUTH_SOCK = "$HOME/.ssh/proton-pass-agent.sock";
+          SSH_AUTH_SOCK = agentSocket;
         };
+        # Apps launched outside a shell (launcher, IDE) only see the systemd
+        # user environment; ssh-keygen -Y sign ignores IdentityAgent.
+        systemd.user.sessionVariables.SSH_AUTH_SOCK = agentSocket;
 
         programs.ssh.settings."*".identityAgent = "~/.ssh/proton-pass-agent.sock";
 
