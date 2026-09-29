@@ -70,6 +70,7 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `git` | HM | Git, SSH-signed commits/tags — self-contained (own `allowed_signers`) |
 | `jujutsu` | HM | Jujutsu VCS (SSH signing, configured `jj bookmark advance`) — self-contained (own `allowed_signers`) |
 | `ssh` | HM | Generic SSH client config, no agent assumed |
+| `xdg` | HM | English XDG user directories (Desktop, Downloads, Pictures…), `~/Development` as the projects directory |
 | `brave` | NixOS+HM | Brave policies (uBlock, Proton Pass, Return YouTube Dislike, Cookie-Editor) + `programs.brave` |
 | `keyring` | NixOS | GNOME Keyring service + PAM (greetd) unlock — generic, not Proton Pass specific |
 | `protonmail` | HM | Proton Mail Bridge GUI and local IMAP/SMTP backend; uses the existing GNOME Keyring |

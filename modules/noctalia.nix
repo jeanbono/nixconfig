@@ -92,15 +92,13 @@
             action = "screen_off";
           };
         };
-        # A fixed path: noctalia can't target a subfolder of the XDG pictures
-        # directory (~/Images under the French locale).
-        shell.screenshot.directory = "~/Images/Screenshots";
+        shell.screenshot.directory = "${config.xdg.userDirs.pictures}/Screenshots";
         wallpaper = {
           enabled = true;
-          # Same file hyprland.nix deploys to ~/Images/Wallpapers; picked
+          # Same directory hyprland.nix deploys the wallpaper to; picked
           # over the repo's own ../wallpapers store path directly from
           # Noctalia's settings UI, which browses under $HOME.
-          directory = "${config.home.homeDirectory}/Images/Wallpapers";
+          directory = "${config.xdg.userDirs.pictures}/Wallpapers";
           fill_mode = "crop";
         };
         # Keep native session actions: an external logout splash conflicts

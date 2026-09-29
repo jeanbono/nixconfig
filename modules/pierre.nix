@@ -13,6 +13,7 @@
       den.aspects.git
       den.aspects.jujutsu
       den.aspects.ssh
+      den.aspects.xdg
 
       den.aspects.lmstudio
       den.aspects.intellij

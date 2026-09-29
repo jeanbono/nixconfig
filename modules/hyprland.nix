@@ -42,7 +42,7 @@
       };
     };
 
-    homeManager = { pkgs, lib, host, ... }:
+    homeManager = { config, pkgs, lib, host, ... }:
       let
         # Host display settings and defaults are declared in schema.nix.
         hypr = host.hyprland;
@@ -52,7 +52,7 @@
           NIXOS_OZONE_WL = "1";
         };
 
-        home.file."Images/Wallpapers/wallpaper.png".source = ../wallpapers/wallpaper.png;
+        home.file."${config.xdg.userDirs.pictures}/Wallpapers/wallpaper.png".source = ../wallpapers/wallpaper.png;
 
         home.packages = with pkgs; [
           wl-clipboard
