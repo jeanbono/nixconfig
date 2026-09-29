@@ -56,8 +56,6 @@
 
         home.packages = with pkgs; [
           wl-clipboard
-          grim
-          slurp
           pavucontrol
           brightnessctl
         ];
@@ -191,9 +189,7 @@
             hl.bind(mod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 
             -- Screenshot
-            hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd(
-              'geometry=$(slurp -d) && test -n "$geometry" && mkdir -p ~/Pictures/Screenshots && f=~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png && grim -g "$geometry" "$f" && wl-copy < "$f"'
-            ))
+            hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("noctalia msg screenshot-region"))
 
             -- Audio
             hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 2%+"), { locked = true, repeating = true })

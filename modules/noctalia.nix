@@ -92,6 +92,9 @@
             action = "screen_off";
           };
         };
+        # A fixed path: noctalia can't target a subfolder of the XDG pictures
+        # directory (~/Images under the French locale).
+        shell.screenshot.directory = "~/Images/Screenshots";
         wallpaper = {
           enabled = true;
           # Same file hyprland.nix deploys to ~/Images/Wallpapers; picked
