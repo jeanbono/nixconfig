@@ -66,7 +66,16 @@ in
     };
 
     homeManager = { ... }: {
-      programs.brave.enable = true;
+      programs.brave = {
+        enable = true;
+        commandLineArgs = [
+          # Chromium keeps only the last --disable-features, so this repeats
+          # the nixpkgs wrapper's own list (update blocker, VA-API fix).
+          # WaylandWpColorManagerV1: color-managed surfaces take a different
+          # HDR path in Hyprland and come out ~2x too bright in screenshots.
+          "--disable-features=OutdatedBuildDetector,UseChromeOSDirectVideoDecoder,WaylandWpColorManagerV1"
+        ];
+      };
     };
   };
 }
