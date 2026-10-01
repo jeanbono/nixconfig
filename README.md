@@ -19,7 +19,7 @@ Feature files in `modules/` declare **aspects** (`den.aspects.<name>`), with a `
 - `modules/hosts.nix` declares the `x86_64-linux` host `furnace` and assigns `users.pierre = pierre`, using a shared identity binding containing name, email and signing key.
 - `modules/furnace.nix` (**host** aspect) and `modules/pierre.nix` (**user** aspect) each contain an `includes` list — that's what "activates" aspects, not an `enable` option.
 - An aspect touching both layers is listed in both `includes`.
-- Feature-specific Home Manager modules are imported by their owning aspects (`noctalia`, `nvim`), so they are loaded only for users including those aspects.
+- Feature-specific Home Manager modules are imported by their owning aspects (`nvim`, `theme`), so they are loaded only for users including those aspects.
 - `modules/_nixos/hardware-configuration.nix` (plain NixOS module, not flake-parts): the `_` prefix makes `import-tree` ignore it (den convention), it's imported explicitly in `furnace.nix`.
 
 ## Project structure

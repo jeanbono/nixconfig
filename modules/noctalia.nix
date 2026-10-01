@@ -1,8 +1,6 @@
 { inputs, ... }:
 {
   den.aspects.noctalia.homeManager = { config, ... }: {
-    imports = [ inputs.noctalia.homeModules.default ];
-
     # AccountsService (used by both noctalia-shell and noctalia-greeter for
     # the profile picture) defaults to $HOME/.face when a user has no
     # explicit Icon= override (accountsservice's user_reset_icon_file()).
