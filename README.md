@@ -67,7 +67,7 @@ All feature aspects below are included by `furnace.nix`, `pierre.nix`, or both a
 | `nvim` | HM | Neovim IDE: LSP, blink.cmp, Treesitter, Telescope |
 | `yazi` | HM | File manager, Zsh integration (`y`) |
 | `zsh` | NixOS+HM | Zsh (autosuggestion, syntax) + Starship |
-| `git` | HM | Git, SSH-signed commits/tags — self-contained (own `allowed_signers`) |
+| `git` | HM | Git (SSH-signed commits/tags) and the GitLab CLI (`glab`) — self-contained (own `allowed_signers`) |
 | `jujutsu` | HM | Jujutsu VCS (SSH signing, configured `jj bookmark advance`) — self-contained (own `allowed_signers`) |
 | `ssh` | HM | Generic SSH client config, no agent assumed |
 | `xdg` | HM | English XDG user directories (Desktop, Downloads, Pictures…), `~/Development` as the projects directory |
