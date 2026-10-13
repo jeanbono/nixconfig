@@ -148,11 +148,11 @@ Nix rather than the application's self-updater.
 
 ## Host: `furnace`
 
-Intel + NVIDIA desktop machine running Hyprland/Wayland. CachyOS kernel, `/mnt/data` (NTFS) auto-mounted, nix-ld for standard binaries.
+Intel + NVIDIA desktop machine running Hyprland/Wayland. Zen kernel, `/mnt/data` (NTFS) auto-mounted, nix-ld for standard binaries.
 
 GRUB provides the current NixOS entry, a submenu with older generations (up to ten retained system generations) and an explicit Windows entry. The 200 MiB EFI partition is mounted at `/boot/efi`; GRUB's menu stays in `/boot/grub` on the ext4 root and references kernels and initrds directly in `/nix/store`. The weekly GC uses `--delete-older-than 14d`, so the menu limit does not guarantee ten surviving generations.
 
-The CachyOS overlay, kernel selection and binary cache are configured together in `modules/furnace.nix`.
+The kernel is selected in `modules/furnace.nix`.
 
 ## Usage
 

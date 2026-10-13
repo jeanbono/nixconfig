@@ -1,4 +1,4 @@
-{ inputs, den, ... }:
+{ den, ... }:
 {
   den.aspects.furnace = {
     includes = [
@@ -29,8 +29,6 @@
     nixos = { pkgs, config, ... }: {
       imports = [ ./_nixos/hardware-configuration.nix ];
 
-      nixpkgs.overlays = [ inputs.cachyos.overlays.pinned ];
-
       time.timeZone = "Europe/Paris";
 
       zramSwap = {
@@ -60,14 +58,8 @@
         '';
       };
       boot.kernelModules = [ "atlantic" ];
-      boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
-
-      # Cache for the CachyOS kernel selected above, avoiding local builds
-      # when a substitute is available.
-      nix.settings = {
-        substituters = [ "https://attic.xuyh0120.win/lantian" ];
-        trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
-      };
+      # Zen: desktop-tuned scheduling, built by cache.nixos.org.
+      boot.kernelPackages = pkgs.linuxPackages_zen;
 
       environment.systemPackages = with pkgs; [
         pciutils
