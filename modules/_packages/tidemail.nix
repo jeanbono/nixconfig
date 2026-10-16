@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tidemail";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://github.com/allisonhere/tidemail/releases/download/v${version}/tidemail-linux-x86_64.tar.gz";
-    hash = "sha256-HQd2ZtBKiEaOrobS8fEudb8v4KyDU3UNdsTl09Pj5l8=";
+    hash = "sha256-d2E+Dn/qtvGtv3CMWgT/wiZuP979rUM5MabEfbA3WTY=";
   };
   sourceRoot = ".";
   dontConfigure = true;
