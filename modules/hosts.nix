@@ -42,9 +42,11 @@ in
       defaultMonitor = "DP-1";
       nvidia = true;
       # A desktop, not a laptop: no lid, and the suspend key on this
-      # keyboard is easy to hit by accident. A laptop host should leave
-      # this unset and get systemd-logind's own suspend-on-lid-close default.
+      # keyboard and the case's power button are easy to hit by accident.
+      # A laptop host should leave this unset and get systemd-logind's own
+      # suspend-on-lid-close default.
       logindOverrides = {
+        HandlePowerKey = "ignore";
         HandleSuspendKey = "ignore";
         HandleSuspendKeyLongPress = "ignore";
         HandleLidSwitch = "ignore";
