@@ -8,7 +8,7 @@
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    den.url = "github:denful/den/v0.18.0";
+    den.url = "github:denful/den/v0.19.0";
     flake-file.url = "github:vic/flake-file";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";

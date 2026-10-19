@@ -23,7 +23,7 @@ nix run .#write-flake
 
 ## Architecture
 
-This config uses the [**den**](https://github.com/denful/den) flake framework (pinned to tag `v0.18.0`), built on flake-parts + `import-tree` + `flake-file`. NixOS system config and Home Manager user config live in the same tree, split into **aspects** rather than boolean-toggled modules.
+This config uses the [**den**](https://github.com/denful/den) flake framework (pinned to tag `v0.19.0`), built on flake-parts + `import-tree` + `flake-file`. NixOS system config and Home Manager user config live in the same tree, split into **aspects** rather than boolean-toggled modules.
 
 ### Entry points
 
@@ -51,6 +51,7 @@ Every feature file in `modules/` declares a `den.aspects.<name>` with `nixos` an
 - `nixos` only takes effect when the aspect is included on a **host** (directly or via that host's `includes`).
 - `homeManager` only takes effect when the aspect is included on a **user** (directly or via that user's `includes`).
 - Activate a feature by adding `den.aspects.<name>` to the host and/or user `includes`. A feature touching both layers is listed in both places.
+- den currently also delivers the `nixos` part of a user-included aspect to the host. Upstream treats this as a bug ([#694](https://github.com/denful/den/issues/694)) that will become opt-in, so do not drop the host include.
 - `{ den, ... }:` is only needed in a file's top-level signature when it references `den.batteries.*`/`den.aspects.*`/`den.lib.*`; otherwise `{ ... }:` or `{ pkgs, lib, ... }:` suffices.
 
 ### Per-entity data: `{ user, host, ... }`

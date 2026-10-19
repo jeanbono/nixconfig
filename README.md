@@ -1,6 +1,6 @@
 # nixconfig
 
-NixOS configuration based on the [**den**](https://github.com/denful/den) framework (pinned to `v0.18.0`): `flake-parts` + `import-tree` + `flake-file`, unifying NixOS and Home Manager in a single module tree.
+NixOS configuration based on the [**den**](https://github.com/denful/den) framework (pinned to `v0.19.0`): `flake-parts` + `import-tree` + `flake-file`, unifying NixOS and Home Manager in a single module tree.
 
 ## Architecture
 
